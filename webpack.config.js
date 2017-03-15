@@ -84,7 +84,6 @@ config.plugins = [
   }),
 
   // Fix for angular2 critical dependency warning
-  // https://github.com/r-park/todo-angular2-firebase/issues/96
   new ContextReplacementPlugin(
     // The (\\|\/) piece accounts for path separators in *nix and Windows
     /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,

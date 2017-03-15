@@ -13,3 +13,21 @@ import { AuthGuard } from '../auth';
 const routes: Routes = [
     {path: 'reading', component: ReadingComponent, canActivate: [AuthGuard]}
 ];
+
+@NgModule({
+    declarations: [
+
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule.forChild(routes)
+    ],
+    providers: [
+
+    ]
+})
+
+export class SentenceModule {}
+
+export { ReadingService };
