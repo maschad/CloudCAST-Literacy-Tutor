@@ -8,10 +8,13 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from '../auth';
+import { SentenceComponent } from './components/sentence';
+import { ParagraphComponent } from './components/paragraph';
+import { ReadingService } from './services/reading-service'
 
 
 const routes: Routes = [
-    {path: 'reading', component: ReadingComponent, canActivate: [AuthGuard]}
+    {path: 'reading', component: ParagraphComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

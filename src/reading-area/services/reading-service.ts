@@ -14,5 +14,6 @@ import  { ISentence , Sentence } from '../models/sentence';
 
 @Injectable()
 export class ReadingService {
-    visibleSentences$: Observable<ISentence[]>;
+
+
 }
