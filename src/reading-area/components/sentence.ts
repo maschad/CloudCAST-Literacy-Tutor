@@ -1,23 +1,31 @@
 /**
- * Created by carlos on 3/11/17.
+ * Created by carlos on 3/21/17.
  */
 
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {IWord, Word} from '../models/word';
 
 @Component({
-    template: `
-    <div class="g-row"> 
-        <div class="g-col">
-            
-        </div> 
-    </div> `
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    styles: [
+        require('./sentence.scss')
+    ],
+    template: require('./sentence.html')
 })
 
-
 export class SentenceComponent {
+    strikethrough: boolean;
+    @Input() words: IWord[];
+    @Output() remove = new EventEmitter(false);
+    @Output() update = new EventEmitter(false);
 
+    addWord(word: Word): void {
+        this.words.push(word);
+    }
+
+    completeSentence(): void {
+       this.strikethrough = true;
+    }
 
 }
