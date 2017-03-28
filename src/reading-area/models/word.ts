@@ -1,5 +1,6 @@
 
 export interface IWord {
+    title: string,
     correctness: number,
     phonemes : string[],
     color : string,
@@ -7,12 +8,14 @@ export interface IWord {
 }
 
 export class Word implements IWord {
+    title: string;
     correctness: number;
     completed: boolean = false;
     color: string = 'grey';
     phonemes: string[];
 
-    constructor(phonemes: string[]){
+    constructor(title:string,phonemes: string[]){
+        this.title = title;
         this.phonemes = phonemes;
     }
 }

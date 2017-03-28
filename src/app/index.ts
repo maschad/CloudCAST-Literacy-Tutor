@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { AuthModule } from '../auth';
 import { FirebaseModule } from '../firebase';
 import { TasksModule } from '../tasks';
+import { ElasticModule } from 'angular2-elastic';
+
 
 import { AppComponent } from './components/app';
 import { AppHeaderComponent } from './components/app-header';
@@ -20,6 +22,7 @@ import { AppHeaderComponent } from './components/app-header';
   ],
   imports: [
     BrowserModule,
+    ElasticModule,
     RouterModule.forRoot([], {useHash: false}),
     AuthModule,
     FirebaseModule,

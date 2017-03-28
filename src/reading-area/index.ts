@@ -10,10 +10,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../auth';
 
 import { ReadingService } from './services/reading-service'
+import {HighlightDirective} from "./directives/highlight-directive";
+import {ReadingAreaComponent} from "./components/reading-area";
 
 
 const routes: Routes = [
-    {path: 'reading', component: ParagraphComponent, canActivate: [AuthGuard]}
+    {path: 'reading', component: ReadingAreaComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
@@ -21,6 +23,7 @@ const routes: Routes = [
 
     ],
     imports: [
+        HighlightDirective,
         CommonModule,
         FormsModule,
         RouterModule.forChild(routes)

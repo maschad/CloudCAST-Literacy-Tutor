@@ -5,33 +5,50 @@ import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/switchMap';
 
 import { Injectable } from '@angular/core';
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
-import { Observable } from 'rxjs/Observable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { AuthService } from '../../auth';
-import {IWord, Word} from '../models/word';
+import {Word, IWord} from "../models/word";
+import {AngularFire, FirebaseListObservable} from "angularfire2";
+import {AuthService} from "../../auth/services/auth-service";
 
 
 @Injectable()
 export class ReadingService {
-    sentences : Observable<IWord[]>;
-    private strikethrough: ReplaySubject<any>  = new ReplaySubject(1);
-    private readSentence : FirebaseListObservable<IWord[]>;
-    private currentSentence: FirebaseListObservable<IWord[]>;
 
-    constructor(af: AngularFire, auth:AuthService){
+    private sentence: Word[];
+    private sentenceToBeRead: string[];
+    private weakPhonemes: string;
+
+    constructor(af: AngularFire, auth: AuthService){
         const path = `/reading-area/${auth.id}`;
 
-        this.readSentence = af.database.list(path);
-    }
-
-    createSentence(words: Word[]): firebase.Promise<any> {
+        this.weakPhonemes = '';
 
     }
 
-    readSentence(words: Word[]): void {
-
+    createWord(phonemes: string[]){
+        return this.sentence.push(new Word(phonemes));
     }
+
+
+    createSentenceToBeRead(words: string[]): void {
+        this.sentenceToBeRead = words;
+    }
+
+    processSentenceToBeRead(): string[] {
+        return this.sentenceToBeRead;
+    }
+
+    readFromText(inputValue: any) : void {
+        let file: File = inputValue.files[0];
+        const myReader: FileReader = new FileReader();
+
+        myReader.onloadend = function(e){
+            // you can perform an action with readed data here
+        };
+
+        myReader.readAsText(file);
+    }
+
+
 
 
 
