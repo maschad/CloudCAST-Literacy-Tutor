@@ -1,8 +1,12 @@
 <div>
-    <input type="file" (change)="addWord($event)">
+    <textarea
+            ng-model="paragraph">
+    </textarea>
     <form>
         <div class="form-group">
-            <word></word>
+            <div *ngFor="let word of words">
+                <word></word>
+            </div>
         </div>
     </form>
 </div>

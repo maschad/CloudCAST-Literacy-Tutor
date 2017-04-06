@@ -50,6 +50,6 @@ export class SignInComponent {
   }
 
   private postSignIn(): void {
-    this.router.navigate(['/tasks']);
+    this.router.navigate(['/reading']);
   }
 }

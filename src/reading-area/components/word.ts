@@ -8,7 +8,7 @@ import 'rxjs/add/operator/pluck';
 import {Component, ChangeDetectionStrategy} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import {ReadingService} from "../services/reading-service";
+import { ReadingService } from "../services/reading-service";
 
 
 @Component({

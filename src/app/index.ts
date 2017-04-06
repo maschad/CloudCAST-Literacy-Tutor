@@ -10,6 +10,7 @@ import { ElasticModule } from 'angular2-elastic';
 
 import { AppComponent } from './components/app';
 import { AppHeaderComponent } from './components/app-header';
+import { ReadingModule } from "../reading-area";
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { AppHeaderComponent } from './components/app-header';
     RouterModule.forRoot([], {useHash: false}),
     AuthModule,
     FirebaseModule,
+    ReadingModule,
     TasksModule
   ]
 })

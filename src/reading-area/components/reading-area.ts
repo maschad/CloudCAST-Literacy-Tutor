@@ -2,7 +2,7 @@
  * Created by carlos on 3/24/17.
  */
 
-import {Component, Output, EventEmitter} from "@angular/core";
+import {Component, Output, EventEmitter, OnInit} from "@angular/core";
 import {Word, IWord} from "../models/word";
 import {ReadingService} from "../services/reading-service";
 
@@ -12,7 +12,10 @@ import {ReadingService} from "../services/reading-service";
 })
 
 
-export class ReadingAreaComponent {
+export class ReadingAreaComponent implements OnInit{
+    private paragraph: string[];
+    private words: Word[];
+    private errorMessage : string;
 
     @Output() _sentenceUpdated = new EventEmitter(false);
     private sentences: IWord[];
@@ -20,17 +23,28 @@ export class ReadingAreaComponent {
     constructor(private readingService: ReadingService){
     }
 
-    addWord($event): void {
-        this.readWord(event.target);
+
+    ngOnInit(): void {
+        this.readParagraph();
+    }
+
+    readParagraph(): void {
+        this.readingService.loadParagraph().subscribe(paragraph => this.paragraph = paragraph, error =>  this.errorMessage = <any>error);
+
     }
 
     readWord(file:any): Word {
         let title = '';
         let phonemes = [];
         this.readingService.readFromText(file);
-        let word = new Word(title,phonemes);
-        return word;
+        return new Word(title,phonemes);
     }
+
+    addWord($event): void {
+        this.readWord(event.target);
+    }
+
+
 
 
 }

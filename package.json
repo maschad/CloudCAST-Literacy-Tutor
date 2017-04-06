@@ -27,6 +27,7 @@
     "@angular/compiler": "2.2.0",
     "@angular/core": "2.2.0",
     "@angular/forms": "2.2.0",
+    "@angular/http": "^4.0.1",
     "@angular/platform-browser": "2.2.0",
     "@angular/platform-browser-dynamic": "2.2.0",
     "@angular/router": "3.2.0",
@@ -39,7 +40,7 @@
     "zone.js": "~0.6.26"
   },
   "devDependencies": {
-    "@types/core-js": "~0.9.34",
+    "@types/core-js": "0.9.35",
     "@types/jasmine": "~2.5.36",
     "@types/node": "~6.0.46",
     "@types/request": "0.0.30",
