@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import {InMemoryDataService} from "./services/in-memory-data.service";
 
 import { AuthGuard } from '../auth';
 
@@ -31,6 +33,7 @@ const routes: Routes = [
         FormsModule,
         HttpModule,
         JsonpModule,
+        InMemoryWebApiModule.forRoot(InMemoryDataService),
         RouterModule.forChild(routes)
     ],
     providers: [

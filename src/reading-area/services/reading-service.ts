@@ -2,15 +2,16 @@
 /**
  * Created by carlos on 3/15/17.
  */
-import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/toPromise';
+
 
 import { Injectable } from '@angular/core';
 import {Word, IWord} from "../models/word";
 import {AngularFire, FirebaseListObservable} from "angularfire2";
 import {AuthService} from "../../auth/services/auth-service";
-import {Observable} from "rxjs";
-import {Http, Response} from "@angular/http";
+import {Http, Response, Headers} from "@angular/http";
+import {onScreenSentence} from "../models/onScreenSentence";
 
 
 @Injectable()
@@ -19,7 +20,8 @@ export class ReadingService {
     private sentence: Word[];
     private sentenceToBeRead: string[];
     private weakPhonemes: string;
-    private path: string = '../../../assets/paraprapgh.txt';
+    private headers = new Headers({'Content-Type': 'application/json'});
+    private sentencesUrl = 'api/onScreenSentences';
 
 
     constructor(af: AngularFire, auth: AuthService, private http: Http){
@@ -27,53 +29,17 @@ export class ReadingService {
         this.weakPhonemes = '';
     }
 
-    createWord(title:string,  phonemes: string[]){
-        return this.sentence.push(new Word(title,phonemes));
+
+    getOnScreenSentences(): Promise<onScreenSentence[]> {
+        return this.http.get(this.sentencesUrl)
+            .toPromise()
+            .then(response => response.json().data as onScreenSentence[])
+            .catch(ReadingService.handleError);
     }
 
-
-    createSentenceToBeRead(words: string[]): void {
-        this.sentenceToBeRead = words;
-    }
-
-    processSentenceToBeRead(): string[] {
-        return this.sentenceToBeRead;
-    }
-
-    loadParagraph(): Observable<string[]> {
-        return this.http.get(this.path).map(this.extractData).catch(this.handleError);
-    }
-
-    private extractData(res: Response) {
-        let body = res.json();
-        return body.data || { };
-    }
-    private handleError (error: Response | any) {
-        // In a real world app, you might use a remote logging infrastructure
-        let errMsg: string;
-        if (error instanceof Response) {
-            const body = error.json() || '';
-            const err = body.error || JSON.stringify(body);
-            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-        } else {
-            errMsg = error.message ? error.message : error.toString();
-        }
-        console.error(errMsg);
-        return Observable.throw(errMsg);
-    }
-
-    readFromText(inputValue: any) : Word[] {
-        let words: Array<Word>;
-        let file: File = inputValue.files[0];
-        const myReader: FileReader = new FileReader();
-
-        myReader.onloadend = function(e){
-            // you can perform an action with readed data here
-        };
-
-        myReader.readAsText(file);
-
-        return words;
+    private static handleError(error: any): Promise<any> {
+        console.error('An error occurred', error); // for demo purposes only
+        return Promise.reject(error.message || error);
     }
 
 

@@ -1,12 +1,5 @@
 <div>
-    <textarea
-            ng-model="paragraph">
-    </textarea>
-    <form>
-        <div class="form-group">
-            <div *ngFor="let word of words">
-                <word></word>
-            </div>
-        </div>
-    </form>
+    <div *ngFor="let sentence of paragraph">
+        <p>{{sentence.text}}</p>
+    </div>
 </div>
