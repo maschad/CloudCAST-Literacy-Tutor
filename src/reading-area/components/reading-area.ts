@@ -9,6 +9,9 @@ import {onScreenSentence} from "../models/onScreenSentence";
 
 @Component({
     selector: 'reading-area',
+    styles : [
+        require('./reading-area.scss')
+    ],
     template: require('./reading-area.html')
 })
 

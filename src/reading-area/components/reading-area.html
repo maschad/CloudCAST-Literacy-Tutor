@@ -1,5 +1,10 @@
-<div>
-    <div *ngFor="let sentence of paragraph">
-        <p>{{sentence.text}}</p>
+<div class="g-col">
+    <h1>Welcome to UWI Cloudcast Literacy Tutor</h1>
+    <h2>Below a text will appear and you will be instructed to read it.</h2>
+    <div class="cell">
+        <div *ngFor="let sentence of paragraph">
+            <p>{{sentence.text}}</p>
+        </div>
     </div>
 </div>
+
