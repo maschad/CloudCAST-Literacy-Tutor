@@ -1,13 +1,15 @@
 <div class="g-col">
-    <h1>Welcome to UWI Cloudcast Literacy Tutor</h1>
-    <h2>Below a text will appear and you will be instructed to read it.</h2>
-    <div class="cell">
+    <div class="g-row">
+        <h1>Welcome to UWI Cloudcast Literacy Tutor</h1>
+        <h2>Below a text will appear and you will be instructed to read it.</h2>
+    </div>
+    <div class="boxed">
         <div *ngFor="let sentence of paragraph">
             <p>{{sentence.text}}</p>
         </div>
     </div>
     <h3>To begin reading, click the start button, press Stop when you are finished reading.</h3>
-    <button [disabled]="isRecording" (click)='start()'>Start</button>
-    <button [disabled]="!isRecording" (click)='stop()'>Stop</button>
+    <button class="button" [disabled]="isRecording" (click)='start()'>Start</button>
+    <button class="button" [disabled]="!isRecording" (click)='stop()'>Stop</button>
 </div>
 
