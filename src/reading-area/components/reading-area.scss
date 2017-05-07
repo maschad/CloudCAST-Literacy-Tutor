@@ -3,6 +3,10 @@
 "~minx/src/functions",
 "~minx/src/mixins";
 
+//Variables
+$light-grey: #686866;
+$dark-grey: rgba(85, 85, 85, 0.5);
+$white : #FFF;
 
 body{
   background-color: white;
@@ -20,7 +24,6 @@ body{
   display: flex;
   background-color: #393636;
   width: 300px;
-  border: 5px solid gray;
   border-radius: 5px;
   box-shadow: 0 0 5px #333;
   padding: 25px;
@@ -35,9 +38,36 @@ body{
 
 //Sidebar content
 .sidebar-content {
-  background-color: #686866;
+  &.ng-sidebar--opened {
+    width: 300px;
+    padding: 25px;
+    align-content: center;
+    outline-color: gray;
+    background-color: $light-grey;
+  }
+
+
+  &.ng-sidebar--opened.ng-sidebar--over {
+    box-shadow: 0 0 2.5em rgba(85, 85, 85, 0.5);
+  }
 
 }
+
+.menu-button {
+  background-color: $white;
+  cursor: pointer;
+  border: none;
+  margin-bottom: 0.5em;
+  padding: 0.5em 2em;
+  transition: background-color 0.15s;
+
+  &:hover {
+    background-color: $dark-grey;
+    color: $white;
+  }
+}
+
+
 
 //Button style
 .button {
