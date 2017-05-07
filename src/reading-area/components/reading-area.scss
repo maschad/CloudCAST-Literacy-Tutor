@@ -33,6 +33,12 @@ body{
   }
 }
 
+//Sidebar content
+.sidebar-content {
+  background-color: #686866;
+
+}
+
 //Button style
 .button {
   @include button-base;
@@ -76,5 +82,36 @@ h5,h6{
     margin-bottom: 50px;
     color: #6B6B6B;
 }
+
+.container {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.bar1, .bar2, .bar3 {
+  background-color: white;
+  width: 35px;
+  height: 5px;
+  margin: 5px 5px;
+  transition: 0.4s;
+}
+
+/* Rotate first bar */
+.change .bar1 {
+  -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
+  transform: rotate(-45deg) translate(-9px, 6px) ;
+}
+
+/* Fade out the second bar */
+.change .bar2 {
+  opacity: 0;
+}
+
+/* Rotate last bar */
+.change .bar3 {
+  -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
+  transform: rotate(45deg) translate(-8px, -8px) ;
+}
+
 
 

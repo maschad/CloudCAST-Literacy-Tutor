@@ -22,6 +22,8 @@ declare const MediaRecorder: any;
 
 
 export class ReadingAreaComponent implements OnInit{
+    //Sidebar
+    private _opened: boolean = false;
     public isRecording: boolean = false;
     private chunks: any = [];
     private mediaRecorder: any;
@@ -84,6 +86,11 @@ export class ReadingAreaComponent implements OnInit{
     private  download(): void {
 
     }
+
+    private openMenu() {
+        this._opened = !this._opened;
+    }
+
 
 
 

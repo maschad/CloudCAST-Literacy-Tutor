@@ -13,6 +13,7 @@ import { AuthGuard } from '../auth';
 
 import { ReadingService } from './services/reading-service'
 import {HighlightDirective} from "./directives/highlight-directive";
+import { SidebarModule } from 'ng-sidebar';
 import {ReadingAreaComponent} from "./components/reading-area";
 import {WordComponent} from "./components/word";
 import { HttpModule, JsonpModule} from "@angular/http";
@@ -34,6 +35,7 @@ const routes: Routes = [
         HttpModule,
         JsonpModule,
         InMemoryWebApiModule.forRoot(InMemoryDataService),
+        SidebarModule.forRoot(),
         RouterModule.forChild(routes)
     ],
     providers: [
