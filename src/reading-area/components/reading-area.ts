@@ -43,7 +43,7 @@ export class ReadingAreaComponent implements OnInit{
                 document.body.appendChild(a);
                 a.click();
                 setTimeout(function() {
-                    document.body.removeChild(a);
+                    document.body.removeChild(a); 
                     window.URL.revokeObjectURL(url);
                 }, 100);
 
