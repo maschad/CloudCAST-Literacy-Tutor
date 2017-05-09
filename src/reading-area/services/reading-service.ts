@@ -22,6 +22,7 @@ export class ReadingService {
     private weakPhonemes: string;
     private headers = new Headers({'Content-Type': 'application/json'});
     private sentencesUrl = 'api/onScreenSentences';
+    private serverUrl = '';
 
 
     constructor(af: AngularFire, auth: AuthService, private http: Http){
@@ -43,7 +44,6 @@ export class ReadingService {
             .then(response => response.json().data as onScreenSentence)
             .catch(ReadingService.handleError);
     }
-
 
     private static handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // for demo purposes only

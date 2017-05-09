@@ -6,7 +6,6 @@ import {Component, OnInit} from "@angular/core";
 import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {Word} from "../models/word";
-import {HighlightDirective} from "../directives/highlight-directive";
 const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
@@ -38,6 +37,7 @@ export class ReadingAreaComponent implements OnInit{
         this.words = [];
         this.erroneousIndices = [];
     };
+
 
 
     ngOnInit(): void {
@@ -157,7 +157,6 @@ export class ReadingAreaComponent implements OnInit{
         }
         console.log('erroneous words', this.erroneousIndices);
         this.updateWords();
-
     }
 
 
