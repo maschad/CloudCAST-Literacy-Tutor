@@ -1,15 +1,17 @@
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Just+Me+Again+Down+Here" />
 <div class="g-col">
     <div class="g-row">
-        <h1>Welcome to UWI Cloudcast Literacy Tutor</h1>
-        <h2>Below a text will appear and you will be instructed to read it.</h2>
-    </div>
-    <div class="boxed">
+        <h3>Welcome to UWI Cloudcast Literacy Tutor</h3>
+        <h5>Below a text will appear and you will be instructed to read it.</h5>
+        
+        <div class="boxed">
         <div *ngFor="let sentence of paragraph">
             <p>{{sentence.text}}</p>
         </div>
+        </div>
+        <h6>To begin reading, click the start button, press Stop when you are finished reading.</h6>
+        <button class="button but_col_1" [disabled]="isRecording" (click)='start()'>Start</button>
+        <button class="button but_col_2" [disabled]="!isRecording" (click)='stop()'>Stop</button>
     </div>
-    <h3>To begin reading, click the start button, press Stop when you are finished reading.</h3>
-    <button class="button" [disabled]="isRecording" (click)='start()'>Start</button>
-    <button class="button" [disabled]="!isRecording" (click)='stop()'>Stop</button>
 </div>
 
