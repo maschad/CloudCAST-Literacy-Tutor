@@ -1,7 +1,108 @@
+@import
+"~minx/src/settings",
+"~minx/src/functions",
+"~minx/src/mixins";
+
 //===================================================================
 //  APP
 //===================================================================
 
 .main {
   padding-bottom: 90px;
+}
+
+//Variables
+$light-grey: #686866;
+$dark-grey: rgba(85, 85, 85, 0.5);
+$white : #FFF;
+
+//Box Class
+.boxed {
+  display: flex;
+  background-color: #393636;
+  width: 300px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #333;
+  padding: 25px;
+  margin: 25px;
+
+  @include media-query(540) {
+    font-size: rem(24px);
+  }
+}
+
+//Sidebar content
+.sidebar-content {
+  &.ng-sidebar--opened {
+    width: 300px;
+    padding: 25px;
+    align-content: center;
+    outline-color: gray;
+    background-color: $light-grey;
+  }
+
+
+  &.ng-sidebar--opened.ng-sidebar--over {
+    box-shadow: 0 0 2.5em rgba(85, 85, 85, 0.5);
+  }
+
+}
+
+.menu-button {
+  background-color: $white;
+  cursor: pointer;
+  border: none;
+  margin-bottom: 0.5em;
+  padding: 0.5em 2em;
+  transition: background-color 0.15s;
+
+  &:hover {
+    background-color: $dark-grey;
+    color: $white;
+  }
+}
+
+//Button style
+.button {
+  @include button-base;
+  margin-left: 5px;
+  outline: gray;
+  border: 3px;
+  border-radius: 1px;
+  padding: 3px;
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  background: #e0dfe2;
+  transform: translate(0, 0);
+}
+
+.container {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.bar1, .bar2, .bar3 {
+  background-color: white;
+  width: 35px;
+  height: 5px;
+  margin: 5px 5px;
+  transition: 0.4s;
+}
+
+/* Rotate first bar */
+.change .bar1 {
+  -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
+  transform: rotate(-45deg) translate(-9px, 6px) ;
+}
+
+/* Fade out the second bar */
+.change .bar2 {
+  opacity: 0;
+}
+
+/* Rotate last bar */
+.change .bar3 {
+  -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
+  transform: rotate(45deg) translate(-8px, -8px) ;
 }

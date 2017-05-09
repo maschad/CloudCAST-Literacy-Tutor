@@ -86,5 +86,4 @@ export class ReadingAreaComponent implements OnInit{
     }
 
 
-
 }

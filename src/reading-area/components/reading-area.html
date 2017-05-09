@@ -1,4 +1,27 @@
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Just+Me+Again+Down+Here" />
+<ng-sidebar-container>
+    <!-- A sidebar -->
+    <ng-sidebar [(opened)]="_opened"  [closeOnClickOutside]="true" [showBackdrop]="true" [sidebarClass]="'sidebar-content'" [autoFocus]="false">
+        <div class="g-row">
+            <button routerLink="/reading" class="menu-button fa fa-book">Reading area</button>
+        </div>
+        <div class="g-row">
+            <button routerLink="/practice" class="menu-button fa fa-pencil">Practice</button>
+        </div>
+        <div class="g-row">
+            <button routerLink="/results" class="menu-button fa fa-line-chart">Results</button>
+        </div>
+    </ng-sidebar>
+
+    <!-- Hamburger menu -->
+    <div class="container" (click)="openMenu()">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </div>
+
+</ng-sidebar-container>
+
 <div class="g-col">
     <div class="g-row">
         <h3>Welcome to UWI Cloudcast Literacy Tutor</h3>
