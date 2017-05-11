@@ -11,6 +11,11 @@ const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
 
+<<<<<<< HEAD
+=======
+//for avatar speech
+
+>>>>>>> avatar  added to pages and some more styles
 declare var responsiveVoice: any;
 
 @Component({
