@@ -22,9 +22,6 @@ module.exports = config => {
 
     singleRun: false,
 
-    browser: ['PhantomJS'],
-    hostname: process.env.IP,
-    port: process.env.PORT,
-    runnerPort: 0
+    browsers: ['Chrome']
   });
 };

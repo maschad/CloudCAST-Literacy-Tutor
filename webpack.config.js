@@ -70,7 +70,8 @@ config.module = {
   loaders: [
     loaders.typescript,
     loaders.html,
-    loaders.componentStyles
+    loaders.componentStyles,
+    { test: /\.css$/, loader: 'raw!postcss' }
   ]
 };
 
