@@ -11,7 +11,7 @@ declare var responsiveVoice: any;
   ],
   template: `
    <div class="anim_cont">
-        <div class="chat_bubble tri-right btm-left-in"><p>Welcome to lit tutor</p></div>
+        <div class="chat_bubble tri-right btm-left-in"><p>Welcome to literacy tutor</p></div>
         <div class="va"></div>
     </div>
     <div class="g-row sign-in">
