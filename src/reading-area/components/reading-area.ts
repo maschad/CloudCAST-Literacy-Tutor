@@ -6,11 +6,8 @@ import {Component, OnInit} from "@angular/core";
 import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {Word} from "../models/word";
+import {HighlightDirective} from "../directives/highlight-directive";
 const {webkitSpeechRecognition} = (window as any);
-
-//For recording Audio
-declare const navigator: any;
-declare const MediaRecorder: any;
 
 
 @Component({
@@ -25,14 +22,14 @@ declare const MediaRecorder: any;
 export class ReadingAreaComponent implements OnInit{
     public isRecording: boolean = false;
     private words: Word[];
-    private erroneousWords: string[];
+    private erroneousIndices: number[];
     private paragraph: onScreenSentence;
 
 
     constructor(private readingService: ReadingService){
         this.paragraph = new onScreenSentence(1, '');
         this.words = [];
-        this.erroneousWords = [];
+        this.erroneousIndices = [];
     };
 
 
@@ -61,12 +58,11 @@ export class ReadingAreaComponent implements OnInit{
     updateWords(): void {
         console.log('updating words');
         for(let index in this.words){
-            if(this.erroneousWords.indexOf(this.words[index].title) == -1){
-                this.words[index].changeColor('green');
-                console.log('word', this.words[index].title, 'color', this.words[index].color);
-            } else {
-                this.words[index].changeColor('red');
-            }
+           if(this.erroneousIndices[index]){
+               this.words[index].changeColor('red');
+           }else {
+               this.words[index].changeColor('green');
+           }
         }
     }
 
@@ -78,12 +74,10 @@ export class ReadingAreaComponent implements OnInit{
 
         for(let index in splitTranscript) {
             if(text[index].toLowerCase() != splitTranscript[index].toLowerCase()){
-                console.log('text at index', index, 'is', text[index]);
-                console.log('transcript text at index', index, 'is', splitTranscript[index]);
-                this.erroneousWords.push(splitTranscript[index]);
+                this.erroneousIndices.push(+index);
             }
         }
-        console.log('erroneous words', this.erroneousWords);
+        console.log('erroneous words', this.erroneousIndices);
         this.updateWords();
 
     }

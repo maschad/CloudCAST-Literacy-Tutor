@@ -26,9 +26,7 @@ body{
   box-shadow: 0 0 5px #333;
   padding: 25px;
   margin: 25px;
-  
-  
-  
+
   @include media-query(540) {
     font-size: rem(24px);
   }

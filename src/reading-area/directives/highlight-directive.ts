@@ -1,23 +1,20 @@
-import {Directive, ElementRef, Input} from '@angular/core';
+import {Directive, ElementRef, Input, HostBinding} from '@angular/core';
 
 @Directive({
     selector: '[myHighlight]'
 })
 export class HighlightDirective {
 
-    constructor(private el: ElementRef) { }
+    constructor(private el: ElementRef) {}
 
     @Input() defaultColor: string;
 
     @Input('myHighlight') highlightColor: string;
 
-    onColorThisWord() {
-        this.highlight(this.highlightColor);
+    @HostBinding('highlight')
+    private  highlight(color): string {
+        return this.el.nativeElement.style.backgroundColor = color;
     }
 
-
-    private highlight(color: string) {
-        this.el.nativeElement.style.color = color;
-    }
 }
 

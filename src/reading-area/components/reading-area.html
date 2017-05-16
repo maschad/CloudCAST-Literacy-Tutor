@@ -5,7 +5,7 @@
         
         <div class="boxed">
             <div *ngFor="let word of words">
-                <div [myHighlight]="word.color">{{word.title}}</div>
+                <div [ngStyle]= "{'backgroundColor' : word.color}">{{word.title}}</div>
             </div>
         </div>
         <h6>To begin reading, click the start button, press Stop when you are finished reading.</h6>
