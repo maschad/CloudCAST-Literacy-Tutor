@@ -40,6 +40,7 @@ export class ReadingAreaComponent implements OnInit{
 
 
 
+
     ngOnInit(): void {
         this.getOnScreenParagraph();
     }
