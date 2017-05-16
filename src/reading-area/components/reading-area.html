@@ -4,7 +4,9 @@
         <h5>Below a text will appear and you will be instructed to read it.</h5>
         
         <div class="boxed">
-            <word></word>
+            <div *ngFor="let word of words">
+                <div [myHighlight]="word.color">{{word.title}}</div>
+            </div>
         </div>
         <h6>To begin reading, click the start button, press Stop when you are finished reading.</h6>
         <button class="button but_col_1 fa fa-microphone" [disabled]="isRecording" (click)='startConverting()'>Start</button>

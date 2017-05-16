@@ -14,7 +14,6 @@ import { AuthGuard } from '../auth';
 import { ReadingService } from './services/reading-service'
 import {HighlightDirective} from "./directives/highlight-directive";
 import {ReadingAreaComponent} from "./components/reading-area";
-import {WordComponent} from "./components/word";
 import { HttpModule, JsonpModule} from "@angular/http";
 
 
@@ -25,8 +24,7 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         HighlightDirective,
-        ReadingAreaComponent,
-        WordComponent
+        ReadingAreaComponent
     ],
     imports: [
         CommonModule,

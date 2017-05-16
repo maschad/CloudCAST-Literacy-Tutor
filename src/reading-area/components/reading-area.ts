@@ -5,6 +5,7 @@
 import {Component, OnInit} from "@angular/core";
 import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
+import {Word} from "../models/word";
 const {webkitSpeechRecognition} = (window as any);
 
 //For recording Audio
@@ -23,13 +24,15 @@ declare const MediaRecorder: any;
 
 export class ReadingAreaComponent implements OnInit{
     public isRecording: boolean = false;
-    private erroneousIndices: number[];
+    private words: Word[];
+    private erroneousWords: string[];
     private paragraph: onScreenSentence;
 
 
     constructor(private readingService: ReadingService){
         this.paragraph = new onScreenSentence(1, '');
-        this.erroneousIndices = [];
+        this.words = [];
+        this.erroneousWords = [];
     };
 
 
@@ -37,18 +40,34 @@ export class ReadingAreaComponent implements OnInit{
         this.getOnScreenParagraph();
     }
 
-    getOnScreenSentences() : void {
-        //this.readingService.getOnScreenSentences().then(paragraph => this.paragraph = paragraph);
-    }
 
     getOnScreenParagraph() : void {
-        this.readingService.getOnScreenParagraph(this.paragraph.getCurrentId()).then(paragraph => this.paragraph = paragraph);
-        this.paragraph.incrementId();
-        this.addWords();
+        this.readingService.getOnScreenParagraph(this.paragraph.getCurrentId()).then(paragraph =>
+        {
+            this.paragraph.setText(paragraph.text);
+            this.addWords();
+            this.paragraph.incrementId();
+        });
+
     }
 
     addWords() : void {
+        let titles = this.paragraph.text.split(' ');
+        for(let title of titles){
+            this.words.push(new Word(title));
+        }
+    }
 
+    updateWords(): void {
+        console.log('updating words');
+        for(let index in this.words){
+            if(this.erroneousWords.indexOf(this.words[index].title) == -1){
+                this.words[index].changeColor('green');
+                console.log('word', this.words[index].title, 'color', this.words[index].color);
+            } else {
+                this.words[index].changeColor('red');
+            }
+        }
     }
 
 
@@ -61,10 +80,11 @@ export class ReadingAreaComponent implements OnInit{
             if(text[index].toLowerCase() != splitTranscript[index].toLowerCase()){
                 console.log('text at index', index, 'is', text[index]);
                 console.log('transcript text at index', index, 'is', splitTranscript[index]);
-                this.erroneousIndices.push(+index);
+                this.erroneousWords.push(splitTranscript[index]);
             }
         }
-        console.log('erroneous indices', this.erroneousIndices);
+        console.log('erroneous words', this.erroneousWords);
+        this.updateWords();
 
     }
 
