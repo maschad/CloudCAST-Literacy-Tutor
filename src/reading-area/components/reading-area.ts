@@ -58,7 +58,7 @@ export class ReadingAreaComponent implements OnInit{
     updateWords(): void {
         console.log('updating words');
         for(let index in this.words){
-           if(this.erroneousIndices[index]){
+           if(this.erroneousIndices.includes(+index)){
                this.words[index].changeColor('red');
            }else {
                this.words[index].changeColor('green');
