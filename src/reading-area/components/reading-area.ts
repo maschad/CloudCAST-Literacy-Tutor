@@ -2,10 +2,10 @@
  * Created by carlos on 3/24/17.
  */
 
-import {Component, Output, EventEmitter, OnInit} from "@angular/core";
-import {Word, IWord} from "../models/word";
+import {Component, OnInit} from "@angular/core";
 import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
+const {webkitSpeechRecognition} = (window as any);
 
 //For recording Audio
 declare const navigator: any;
@@ -23,67 +23,85 @@ declare const MediaRecorder: any;
 
 export class ReadingAreaComponent implements OnInit{
     public isRecording: boolean = false;
-    private chunks: any = [];
-    private mediaRecorder: any;
-    private paragraph: onScreenSentence[];
+    private erroneousIndices: number[];
+    private paragraph: onScreenSentence;
 
 
     constructor(private readingService: ReadingService){
-        const onSuccess = stream => {
-            this.mediaRecorder = new MediaRecorder(stream);
-            this.mediaRecorder.onstop = e => {
-                const audio = new Audio();
-                const blob = new Blob(this.chunks, {'type': 'audio/wav; codecs=opus'});
-                this.chunks.length = 0;
-                let url = window.URL.createObjectURL(blob);
-                let a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = 'test.wav';
-                document.body.appendChild(a);
-                a.click();
-                setTimeout(function() {
-                    document.body.removeChild(a); 
-                    window.URL.revokeObjectURL(url);
-                }, 100);
-
-            };
-
-            this.mediaRecorder.ondataavailable = e => this.chunks.push(e.data);
-        };
-
-        navigator.getUserMedia = (navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia);
-
-        navigator.getUserMedia({ audio: true }, onSuccess, e => console.log(e));
-
+        this.paragraph = new onScreenSentence(1, '');
+        this.erroneousIndices = [];
     };
 
 
     ngOnInit(): void {
-        this.getOnScreenSentences();
+        this.getOnScreenParagraph();
     }
 
     getOnScreenSentences() : void {
-        this.readingService.getOnScreenSentences().then(paragraph => this.paragraph = paragraph);
+        //this.readingService.getOnScreenSentences().then(paragraph => this.paragraph = paragraph);
     }
 
-    start(): void {
-        this.isRecording = true;
-        this.mediaRecorder.start();
+    getOnScreenParagraph() : void {
+        this.readingService.getOnScreenParagraph(this.paragraph.getCurrentId()).then(paragraph => this.paragraph = paragraph);
+        this.paragraph.incrementId();
+        this.addWords();
     }
 
-    stop(): void {
-        this.isRecording = false;
-        this.mediaRecorder.stop();
-        this.download();
-    }
-
-    private  download(): void {
+    addWords() : void {
 
     }
+
+
+    compareTranscript (transcript: string) : void {
+        let text = this.paragraph.text.split(' ');
+        let splitTranscript = transcript.split(' ');
+
+
+        for(let index in splitTranscript) {
+            if(text[index].toLowerCase() != splitTranscript[index].toLowerCase()){
+                console.log('text at index', index, 'is', text[index]);
+                console.log('transcript text at index', index, 'is', splitTranscript[index]);
+                this.erroneousIndices.push(+index);
+            }
+        }
+        console.log('erroneous indices', this.erroneousIndices);
+
+    }
+
+    startConverting() {
+        let finalTranscripts = '';
+        let component = this;
+        if ('webkitSpeechRecognition' in window) {
+            let speechRecognizer = new webkitSpeechRecognition();
+            speechRecognizer.continuous = false;
+            speechRecognizer.interimResults = false;
+            speechRecognizer.lang = 'en-GB';
+            speechRecognizer.start();
+            speechRecognizer.onresult = function (event) {
+                let interimTranscripts = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    let transcript = event.results[i][0].transcript;
+                    transcript.replace("\n", "<br>");
+                    if (event.results[i].isFinal) {
+                        finalTranscripts += transcript;
+                    } else {
+                        interimTranscripts += transcript;
+                    }
+
+                }
+                component.compareTranscript(finalTranscripts);
+
+            };
+
+            speechRecognizer.onerror = function (event) {
+                console.log('error')
+            };
+        } else {
+            console.log('Your browser is not supported. If google chrome, please upgrade!');
+        }
+
+    }
+
 
 
 }

@@ -1,4 +1,4 @@
-import {Directive, ElementRef, HostListener, Input} from '@angular/core';
+import {Directive, ElementRef, Input} from '@angular/core';
 
 @Directive({
     selector: '[myHighlight]'
@@ -11,12 +11,8 @@ export class HighlightDirective {
 
     @Input('myHighlight') highlightColor: string;
 
-    @HostListener('mouseenter') onMouseEnter() {
-        this.highlight(this.highlightColor || this.defaultColor || 'grey');
-    }
-
-    @HostListener('mouseleave') onMouseLeave() {
-        this.highlight(null);
+    onColorThisWord() {
+        this.highlight(this.highlightColor);
     }
 
 

@@ -5,14 +5,11 @@
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/pluck';
 
-import {Component, ChangeDetectionStrategy} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { ReadingService } from "../services/reading-service";
+import {Component} from '@angular/core';
+
 
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'word',
     styles: [
         require('./word.scss')
@@ -21,9 +18,7 @@ import { ReadingService } from "../services/reading-service";
 })
 
 export class WordComponent {
-    strikethrough: Observable<any>;
 
-    constructor(public route: ActivatedRoute, public wordService: ReadingService) {
-    }
+
 }
 
