@@ -10,7 +10,7 @@
             </div>
         </div>
         <h6>To begin reading, click the start button, press Stop when you are finished reading.</h6>
-        <button class="button but_col_1 fa fa-microphone" (click)='startConverting()'>Start</button>
+        <button [ngStyle]="{'background-color': buttonColor}" class="button but_col_1 fa fa-microphone" (click)='record()'>{{buttonText}}</button>
     </div>
 </div>
 

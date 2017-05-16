@@ -20,14 +20,17 @@ const {webkitSpeechRecognition} = (window as any);
 
 
 export class ReadingAreaComponent implements OnInit{
-    public isRecording: boolean = false;
     private words: Word[];
     private erroneousIndices: number[];
     private paragraph: onScreenSentence;
+    private buttonText: string;
+    private buttonColor: string;
 
 
     constructor(private readingService: ReadingService){
         this.paragraph = new onScreenSentence(1, '');
+        this.buttonText ='Start';
+        this.buttonColor = 'Blue';
         this.words = [];
         this.erroneousIndices = [];
     };
@@ -43,46 +46,41 @@ export class ReadingAreaComponent implements OnInit{
         {
             this.paragraph.setText(paragraph.text);
             this.addWords();
-            this.paragraph.incrementId();
         });
 
     }
 
-    addWords() : void {
-        let titles = this.paragraph.text.split(' ');
-        for(let title of titles){
-            this.words.push(new Word(title));
-        }
+    resetState(): void {
+        this.paragraph = new onScreenSentence(1, '');
+        this.buttonText ='Start';
+        this.buttonColor = 'Blue';
+        this.words = [];
+        this.erroneousIndices = [];
+        this.getOnScreenParagraph();
     }
 
-    updateWords(): void {
-        console.log('updating words');
-        for(let index in this.words){
-           if(this.erroneousIndices.includes(+index)){
-               this.words[index].changeColor('red');
-           }else {
-               this.words[index].changeColor('green');
-           }
+    record() : void {
+        switch (this.buttonText){
+            case 'Start':
+                this.startConverting();
+                break;
+
+            case 'Try again?':
+                this.resetState();
+                this.startConverting();
+                break;
+
+            case 'Well done!':
+                this.paragraph.incrementId();
+                this.getOnScreenParagraph();
+                this.startConverting();
+                break;
         }
-    }
-
-
-    compareTranscript (transcript: string) : void {
-        let text = this.paragraph.text.split(' ');
-        let splitTranscript = transcript.split(' ');
-
-
-        for(let index in splitTranscript) {
-            if(text[index].toLowerCase() != splitTranscript[index].toLowerCase()){
-                this.erroneousIndices.push(+index);
-            }
-        }
-        console.log('erroneous words', this.erroneousIndices);
-        this.updateWords();
-
     }
 
     startConverting() {
+        this.buttonText = 'Recording';
+        this.buttonColor = 'Red';
         let finalTranscripts = '';
         let component = this;
         if ('webkitSpeechRecognition' in window) {
@@ -115,6 +113,49 @@ export class ReadingAreaComponent implements OnInit{
         }
 
     }
+
+    addWords() : void {
+        let titles = this.paragraph.text.split(' ');
+        for(let title of titles){
+            this.words.push(new Word(title));
+        }
+    }
+
+    updateWords(): void {
+        console.log('updating words');
+
+        for(let index in this.words){
+           if(this.erroneousIndices.includes(+index)){
+               this.words[index].changeColor('red');
+           }else {
+               this.words[index].changeColor('green');
+           }
+        }
+        if(this.erroneousIndices.length == 0){
+            this.buttonText = 'Well done!';
+            this.buttonColor = 'green';
+        } else {
+            this.buttonText = 'Try again?';
+            this.buttonColor = 'yellow';
+        }
+    }
+
+
+    compareTranscript (transcript: string) : void {
+        let text = this.paragraph.text.split(' ');
+        let splitTranscript = transcript.split(' ');
+
+
+        for(let index in splitTranscript) {
+            if(text[index].toLowerCase() != splitTranscript[index].toLowerCase()){
+                this.erroneousIndices.push(+index);
+            }
+        }
+        console.log('erroneous words', this.erroneousIndices);
+        this.updateWords();
+
+    }
+
 
 
 
