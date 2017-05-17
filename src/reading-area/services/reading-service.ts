@@ -17,17 +17,12 @@ import {onScreenSentence} from "../models/onScreenSentence";
 @Injectable()
 export class ReadingService {
 
-    private sentence: Word[];
-    private sentenceToBeRead: string[];
-    private weakPhonemes: string;
     private headers = new Headers({'Content-Type': 'application/json'});
     private sentencesUrl = 'api/onScreenSentences';
-    private serverUrl = '';
 
 
     constructor(af: AngularFire, auth: AuthService, private http: Http){
         const path = `/reading-area/${auth.id}`;
-        this.weakPhonemes = '';
     }
 
 
