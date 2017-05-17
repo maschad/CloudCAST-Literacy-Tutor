@@ -37,6 +37,14 @@ export class ReadingService {
             .catch(ReadingService.handleError);
     }
 
+    getOnScreenParagraph(id: number): Promise<onScreenSentence> {
+        return this.http.get(this.sentencesUrl + '/' + id)
+            .toPromise()
+            .then(response => response.json().data as onScreenSentence)
+            .catch(ReadingService.handleError);
+    }
+
+
     private static handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);

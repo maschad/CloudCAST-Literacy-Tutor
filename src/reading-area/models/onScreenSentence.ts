@@ -10,4 +10,24 @@ export class onScreenSentence {
         this.id = id;
         this.text = text;
     }
+
+    setText(text: string) : void {
+        this.text = text;
+    }
+
+    getText(): string {
+        return this.text;
+    }
+
+    getCurrentId() : number {
+        return this.id;
+    }
+
+    setCurrentId(id: number) : void {
+        this.id = id;
+    }
+
+    incrementId() : void {
+        this.id++;
+    }
 }
