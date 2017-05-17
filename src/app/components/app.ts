@@ -17,7 +17,7 @@ import { AuthService } from '../../auth';
            <ng-sidebar-container>
                 <!-- A sidebar -->
                 <ng-sidebar [(opened)]="_opened"  [closeOnClickOutside]="true" [showBackdrop]="true" [sidebarClass]="'sidebar-content'" [autoFocus]="false">
-                    <div class="g-row">
+                    <div class="g-row top_but">
                         <button routerLink="/reading" class="menu-button fa fa-book">Reading area</button>
                     </div>
                     <div class="g-row">
@@ -29,7 +29,7 @@ import { AuthService } from '../../auth';
                 </ng-sidebar>
 
                 <!-- Hamburger menu -->
-                <div class="container" (click)="openMenu()">
+                <div class="container barP" (click)="openMenu()">
                     <div class="bar1"></div>
                     <div class="bar2"></div>
                     <div class="bar3"></div>
