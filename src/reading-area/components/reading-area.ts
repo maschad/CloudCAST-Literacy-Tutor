@@ -9,11 +9,15 @@ import {Word} from "../models/word";
 import {HighlightDirective} from "../directives/highlight-directive";
 const {webkitSpeechRecognition} = (window as any);
 
+//for avatar speech
+
+declare var responsiveVoice: any;
 
 @Component({
     selector: 'reading-area',
     styles : [
-        require('./reading-area.scss')
+        require('./reading-area.scss'),
+        require('../../common/anim.css')
     ],
     template: require('./reading-area.html')
 })
