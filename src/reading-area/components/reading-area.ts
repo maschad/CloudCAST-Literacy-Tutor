@@ -50,7 +50,7 @@ export class ReadingAreaComponent implements OnInit{
         this.getOnScreenParagraph();
     }
 
-    addOn="You are to say: ";
+    addOn="You are to say:   ";
     speak(mystring: string): void {
         if(!this.bubble)
         {
