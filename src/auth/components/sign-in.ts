@@ -6,18 +6,19 @@ declare let responsiveVoice: any;
 
 @Component({
   styles: [
-    require('./sign-in.scss')
+    require('./sign-in.scss'),
+    require('../../common/anim2.scss')
   ],
   template: `
    <div class="anim_cont">
-        <div class="chat_bubble tri-right btm-left-in"><p>Welcome to UWICloudCast literacy tutor</p></div>
-        <div class="va"></div>
+        <div class="chat_bubble tri-right btm-left-in"><p>{{speechText}}</p></div>
+        <div class="va" (click)="speak()"></div>
     </div>
     <div class="g-row sign-in">
       <div class="g-col">
         <h1 class="sign-in__heading">Sign in</h1>
         <button class="sign-in__button" (click)="signInAnonymously()" type="button">Anonymously</button>
-        <button class="sign-in__button" (click)="signInWithGithub()" type="button">GitHub</button>
+        <!--<button class="sign-in__button" (click)="signInWithGithub()" type="button">GitHub</button>-->
         <button class="sign-in__button" (click)="signInWithGoogle()" type="button">Google</button>
         <button class="sign-in__button" (click)="signInWithTwitter()" type="button">Twitter</button>
         <button class="sign-in__button" (click)="signInWithFacebook()" type="button">Facebook</button>
@@ -27,8 +28,15 @@ declare let responsiveVoice: any;
 })
 
 export class SignInComponent {
-  constructor(private auth: AuthService, private router: Router) {responsiveVoice.speak('Welcome to literacy tutor','US English Female',{pitch: 1.32});}
-
+  
+  speechText= "Welcome to UWI CloudCast literacy tutor";
+  
+  constructor(private auth: AuthService, private router: Router) {responsiveVoice.speak(this.speechText,'US English Female',{pitch: 1.32});}
+  
+  speak(): void {
+    responsiveVoice.speak(this.speechText,'US English Female',{pitch: 1.32});
+  }
+  
   signInAnonymously(): void {
     this.auth.signInAnonymously()
       .then(() => this.postSignIn());
