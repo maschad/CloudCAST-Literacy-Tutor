@@ -34,7 +34,7 @@ export class ReadingAreaComponent implements OnInit{
     constructor(private readingService: ReadingService){
         this.paragraph = new onScreenSentence(1, '');
         this.buttonText ='Start';
-        this.buttonColor = 'Blue';
+        this.buttonColor = '#4279BD';
         this.words = [];
         this.erroneousIndices = [];
         this.score = new Score();
@@ -112,10 +112,10 @@ export class ReadingAreaComponent implements OnInit{
         }
         if(this.erroneousIndices.length == 0){
             this.buttonText = 'Well done!';
-            this.buttonColor = 'green';
+            this.buttonColor = '#63b648';
         } else {
             this.buttonText = 'Try again?';
-            this.buttonColor = 'yellow';
+            this.buttonColor = '#d4ad25';
         }
 
         this.score.updateScore(totalCorrect,totalWrong,incorrectWords);
@@ -124,7 +124,7 @@ export class ReadingAreaComponent implements OnInit{
 
     startConverting() {
         this.buttonText = 'Recording';
-        this.buttonColor = 'Red';
+        this.buttonColor = '#ba3e4e';
         let finalTranscripts = '';
         let component = this;
         if ('webkitSpeechRecognition' in window) {
