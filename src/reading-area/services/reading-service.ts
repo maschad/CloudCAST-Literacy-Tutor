@@ -8,10 +8,11 @@ import 'rxjs/add/operator/toPromise';
 
 import { Injectable } from '@angular/core';
 import {Word, IWord} from "../models/word";
-import {AngularFire, FirebaseListObservable} from "angularfire2";
+import {AngularFire, FirebaseListObservable, AngularFireDatabase, FirebaseObjectObservable} from "angularfire2";
 import {AuthService} from "../../auth/services/auth-service";
 import {Http, Response, Headers} from "@angular/http";
 import {onScreenSentence} from "../models/onScreenSentence";
+import {Score, IScore} from "../models/score";
 
 
 @Injectable()
@@ -19,10 +20,12 @@ export class ReadingService {
 
     private headers = new Headers({'Content-Type': 'application/json'});
     private sentencesUrl = 'api/onScreenSentences';
+    private results: FirebaseObjectObservable<IScore>;
 
 
-    constructor(af: AngularFire, auth: AuthService, private http: Http){
-        const path = `/reading-area/${auth.id}`;
+    constructor(db: AngularFireDatabase, auth: AuthService, private http: Http){
+        const path = `/results/${auth.id}`;
+        this.results = db.object(path);
     }
 
 
@@ -38,6 +41,14 @@ export class ReadingService {
             .toPromise()
             .then(response => response.json().data as onScreenSentence)
             .catch(ReadingService.handleError);
+    }
+
+    saveScore(newScore: Score) {
+        this.results.set({score: newScore});
+    }
+
+    retrieveScore(): FirebaseObjectObservable<Score> {
+        return this.results;
     }
 
     private static handleError(error: any): Promise<any> {

@@ -4,7 +4,8 @@
 
 <div class="g-col">
     <div class="score">
-        Total Correct : {{score.totalCorrect}} , Total Wrong : {{score.totalWrong}}
+        Total Correct : {{(currentScore| async)?.score.totalCorrect}},
+        Total Wrong : {{(currentScore| async)?.score.totalWrong}}
     </div>
     <div class="g-row">
         <h3>Welcome to UWI Cloudcast Literacy Tutor</h3>

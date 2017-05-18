@@ -6,12 +6,11 @@ import {Component, OnInit} from "@angular/core";
 import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {Word} from "../models/word";
-import {IScore, Score} from "../models/score";
+import {Score} from "../models/score";
 const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
-
-declare var responsiveVoice: any;
+declare let responsiveVoice: any;
 
 @Component({
     selector: 'reading-area',
@@ -29,6 +28,7 @@ export class ReadingAreaComponent implements OnInit{
     private buttonText: string;
     private buttonColor: string;
     private score: Score;
+    private currentScore: any;
 
 
     constructor(private readingService: ReadingService){
@@ -44,6 +44,8 @@ export class ReadingAreaComponent implements OnInit{
 
 
     ngOnInit(): void {
+        this.currentScore = this.readingService.retrieveScore();
+        console.log('score', this.currentScore);
         this.getOnScreenParagraph();
     }
 
@@ -117,7 +119,7 @@ export class ReadingAreaComponent implements OnInit{
         }
 
         this.score.updateScore(totalCorrect,totalWrong,incorrectWords);
-
+        this.readingService.saveScore(this.score);
     }
 
     startConverting() {
