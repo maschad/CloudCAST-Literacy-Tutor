@@ -2,16 +2,15 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth-service';
 
-declare var responsiveVoice: any;
+declare let responsiveVoice: any;
 
 @Component({
   styles: [
-    require('./sign-in.scss'),
-    require('../../common/anim.css')
+    require('./sign-in.scss')
   ],
   template: `
    <div class="anim_cont">
-        <div class="chat_bubble tri-right btm-left-in"><p>Welcome to literacy tutor</p></div>
+        <div class="chat_bubble tri-right btm-left-in"><p>Welcome to UWICloudCast literacy tutor</p></div>
         <div class="va"></div>
     </div>
     <div class="g-row sign-in">
