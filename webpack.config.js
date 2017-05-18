@@ -22,8 +22,8 @@ const ENV_DEVELOPMENT = NODE_ENV === 'development';
 const ENV_PRODUCTION = NODE_ENV === 'production';
 const ENV_TEST = NODE_ENV === 'test';
 
-const HOST = '0.0.0.0';
-const PORT = 3000;
+const HOST = process.env.IP;
+const PORT = process.env.PORT;
 
 
 //=========================================================
