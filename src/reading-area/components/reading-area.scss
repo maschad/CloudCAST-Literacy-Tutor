@@ -8,6 +8,8 @@ $light-grey: #686866;
 $dark-grey: rgba(85, 85, 85, 0.5);
 $white : #FFF;
 
+$font_stack:"Francois One", Calibri;
+
 body{
   background-color: white;
   
@@ -17,8 +19,8 @@ body{
 
 //Box Class
 .boxed {
-  font-family: "Just Me Again Down Here";
-  font-size:14pt;
+  font-family: $font_stack;
+  font-size: 12pt;
   display: flex;
   background-color: #393636;
   width: 300px;
@@ -26,7 +28,8 @@ body{
   box-shadow: 0 0 5px #333;
   padding: 25px;
   margin: 25px;
-
+  
+  color:white;
   @include media-query(540) {
     font-size: rem(24px);
   }
@@ -82,7 +85,7 @@ body{
   cursor: pointer;
   
   &:hover{
-    margin-top: -13px;
+    margin-top: -1px;
   }
 }
 
