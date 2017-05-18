@@ -1,6 +1,3 @@
-<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
-<link rel="stylesheet" href="../../common/anim.css" type="text/css" />
-
 <div class="anim_cont">
     <div class="va"></div>
 </div>
@@ -15,12 +12,11 @@
         
         <div class="boxed">
             <div *ngFor="let word of words">
-                <div [ngStyle]= "">{{word.title}}</div>
-                <div style="padding: 20px;"></div>
+                <div [ngStyle]= "{'backgroundColor' : word.color}">{{word.title}}</div>
             </div>
         </div>
         <h6>To begin reading, click the start button, press Stop when you are finished reading.</h6>
-        <button [ngStyle]="" class="button but_col_1 fa fa-microphone" (click)='record()'>{{buttonText}}</button>
+        <button [ngStyle]="{'backgroundColor' : buttonColor}" class="button but_col_1 fa fa-microphone" (click)='record()'>{{buttonText}}</button>
     </div>
 </div>
 
