@@ -6,38 +6,35 @@ import {Injectable} from "@angular/core";
 import {FirebaseObjectObservable, AngularFireDatabase, FirebaseListObservable} from "angularfire2";
 import {IScore} from "../../reading-area/models/score";
 import {AuthService} from "../../auth/services/auth-service";
-import {Http, Headers} from "@angular/http";
+import {Http, Headers, RequestOptions} from "@angular/http";
+import {type} from "os";
 
 @Injectable()
 export class ResultService {
     private headers = new Headers({'Content-Type': 'application/json'});
+    private options = new RequestOptions({ headers: this.headers });
     private sentencesUrl = 'api/onScreenSentences';
-
     private userResults: FirebaseObjectObservable<IScore>;
-    private allResults : FirebaseListObservable<IScore>;
-    private highestResults: FirebaseListObservable<IScore[]>;
-    private auth: AuthService;
+    private authPath = `/results/${this.auth.id}`;
 
 
-    constructor(db:AngularFireDatabase, auth:AuthService, private http:Http){
-        const path = `/results/`;
-        const authPath = `/results/${auth.id}`;
-        this.userResults = db.object(authPath);
-        this.highestResults = db.list(path, {
-            query: {
-                orderByChild: 'totalCorrect',
-                limitToFirst: 1
-            }
-        })
 
+    constructor(private db:AngularFireDatabase, private auth:AuthService, private http:Http){}
+
+    getUserScoreforParagraph(id) : number {
+        this.db.object(this.authPath + `/${id}`, { preserveSnapshot: true }).subscribe(snapshot => {
+            console.log('Snapshot type result: ' + snapshot.key);
+            console.log(snapshot.val());
+        });
+
+        return 0;
     }
 
-    getUserResults() : FirebaseObjectObservable<IScore> {
-        return this.userResults;
-    }
-
-    getHighestResult() : FirebaseListObservable<IScore[]> {
-        return this.highestResults;
+    getHighestResult(id) : Promise<number> {
+        return this.http.get(this.sentencesUrl + '/' + id + '/highestScore')
+            .toPromise()
+            .then(response => response.json().data as number)
+            .catch(ResultService.handleError)
     }
 
     getLabels(): Promise<any[]> {

@@ -21,22 +21,27 @@ export class ResultsAreaComponent implements OnInit{
     };
     private barChartType:string = 'bar';
     private barChartLegend:boolean = true;
-    private barChartLabels:string[] = ['2006'];
-    private barChartData:any[] = [
-        {data: [65, 59, 80, 81, 56, 55, 40], label: 'Your score'},
-        {data: [28, 48, 40, 19, 86, 27, 90], label: 'Highest Score'}
-    ];
-
+    private barChartLabels:string[] = [];
+    /*private barChartData:any[] = [
+     {data: [65, 59, 80, 81, 56, 55, 40], label: 'Your score'},
+     {data: [28, 48, 40, 19, 86, 27, 90], label: 'Highest Score'}
+     ]; */
+    private barChartData: any[] = [];
 
     constructor(private resultService: ResultService){}
 
     ngOnInit(): void {
-        this.highestResults = this.resultService.getHighestResult();
+        let highestScoreData = [];
+        let userScoreData = [];
         this.resultService.getLabels().then(response => {
             for(let index of response){
-                this.barChartLabels.push(index.id.toString());
+                this.barChartLabels.push("Paragraph " + index.id);
+                userScoreData.push(this.resultService.getUserScoreforParagraph(index.id));
+                this.resultService.getHighestResult(index.id).then(score => highestScoreData.push(score));
             }
         });
+        this.barChartData.push({data: userScoreData, label: 'Your score'},{data: highestScoreData, label: 'Highest Score'});
+        console.log('barChartLabels', this.barChartLabels);
 
     }
 

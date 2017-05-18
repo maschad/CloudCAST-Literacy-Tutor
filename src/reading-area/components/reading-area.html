@@ -4,8 +4,11 @@
 
 <div class="g-col">
     <div class="score">
-        Total Correct : {{(currentScore| async)?.score.totalCorrect}} ,
-        Total Wrong : {{(currentScore| async)?.score.totalWrong}}
+        <div class="g-row">
+            <h3>Here are your total scores for this paragraph</h3>
+            Total Correct : {{(currentScore| async)?.score.totalCorrect}} ,
+            Total Wrong : {{(currentScore| async)?.score.totalWrong}}
+        </div>
     </div>
     <div class="g-row">
         <h3>Welcome to UWI Cloudcast Literacy Tutor</h3>
@@ -13,10 +16,10 @@
         
         <div class="boxed">
             <div *ngFor="let word of words">
-                <div [ngStyle]= "{'backgroundColor' : word.color}">{{word.title}}</div>
+                <div style="padding: 5px;" [ngStyle]= "{'backgroundColor' : word.color}">{{word.title}}</div>
             </div>
         </div>
-        <h6>To begin reading, click the start button, press Stop when you are finished reading.</h6>
+        <h6>To begin reading, click the start button, the microphone will detect when you have finished reading.</h6>
         <button [ngStyle]="{'backgroundColor': buttonColor}" class="button fa fa-microphone" (click)='record()'>{{buttonText}}</button>
     </div>
 </div>

@@ -5,10 +5,13 @@
 export class onScreenSentence {
     id: number;
     text: string;
+    highestScore: number;
 
     constructor(id:number, text:string){
         this.id = id;
         this.text = text;
+        this.highestScore = 0;
+
     }
 
     setText(text: string) : void {
@@ -30,4 +33,11 @@ export class onScreenSentence {
     incrementId() : void {
         this.id++;
     }
+
+    setHighestScore(score:number){
+        if(score > this.highestScore){
+            this.highestScore = score;
+        }
+    }
+
 }

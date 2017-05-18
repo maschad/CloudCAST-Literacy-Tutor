@@ -44,8 +44,7 @@ export class ReadingAreaComponent implements OnInit{
 
 
     ngOnInit(): void {
-        this.currentScore = this.readingService.retrieveScore();
-        console.log('score', this.currentScore);
+        this.currentScore = this.readingService.retrieveScore(this.paragraph.id);
         this.getOnScreenParagraph();
     }
 
@@ -60,12 +59,9 @@ export class ReadingAreaComponent implements OnInit{
     }
 
     resetState(): void {
-        this.paragraph = new onScreenSentence(1, '');
         this.buttonText ='Start';
-        this.buttonColor = 'Blue';
-        this.words = [];
+        this.buttonColor = '#4279BD';
         this.erroneousIndices = [];
-        this.getOnScreenParagraph();
     }
 
     record() : void {
@@ -81,6 +77,7 @@ export class ReadingAreaComponent implements OnInit{
 
             case 'Well done!':
                 this.paragraph.incrementId();
+                this.currentScore = this.readingService.retrieveScore(this.paragraph.id);
                 this.getOnScreenParagraph();
                 this.startConverting();
                 break;
@@ -89,6 +86,7 @@ export class ReadingAreaComponent implements OnInit{
 
     addWords() : void {
         let titles = this.paragraph.text.split(' ');
+        this.words = [];
         for(let title of titles){
             this.words.push(new Word(title));
         }
@@ -119,7 +117,9 @@ export class ReadingAreaComponent implements OnInit{
         }
 
         this.score.updateScore(totalCorrect,totalWrong,incorrectWords);
-        this.readingService.saveScore(this.score);
+        this.paragraph.setHighestScore(this.score.totalCorrect);
+        this.readingService.setHighestScore(this.paragraph.highestScore,this.paragraph.id);
+        this.readingService.saveScore(this.score, this.paragraph.id);
     }
 
     startConverting() {
@@ -163,7 +163,6 @@ export class ReadingAreaComponent implements OnInit{
     compareTranscript (transcript: string) : void {
         let text = this.paragraph.text.split(' ');
         let splitTranscript = transcript.split(' ');
-
 
         for(let index in splitTranscript) {
             if(text[index].toLowerCase() != splitTranscript[index].toLowerCase()){
