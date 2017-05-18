@@ -47,7 +47,7 @@ export class ReadingService {
         this.results.set({score: newScore});
     }
 
-    retrieveScore(): FirebaseObjectObservable<Score> {
+    retrieveScore(): FirebaseObjectObservable<IScore> {
         return this.results;
     }
 

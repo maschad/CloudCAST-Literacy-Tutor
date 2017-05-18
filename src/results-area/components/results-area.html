@@ -1,4 +1,5 @@
 <div>
+    <div>{{(highestResults| async | json)}}</div>
     <div style="display: block">
         <canvas baseChart
                 [datasets]="barChartData"
@@ -6,8 +7,6 @@
                 [options]="barChartOptions"
                 [legend]="barChartLegend"
                 [chartType]="barChartType"
-                (chartHover)="chartHovered($event)"
-                (chartClick)="chartClicked($event)"></canvas>
+        ></canvas>
     </div>
-    <button (click)="randomize()">Update</button>
 </div>
