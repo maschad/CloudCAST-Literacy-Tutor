@@ -6,6 +6,7 @@ import {Component, OnInit} from "@angular/core";
 import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {Word} from "../models/word";
+import {IScore, Score} from "../models/score";
 const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
@@ -15,8 +16,7 @@ declare var responsiveVoice: any;
 @Component({
     selector: 'reading-area',
     styles : [
-        require('./reading-area.scss'),
-        require('../../common/anim.css')
+        require('./reading-area.scss')
     ],
     template: require('./reading-area.html')
 })
@@ -28,6 +28,7 @@ export class ReadingAreaComponent implements OnInit{
     private paragraph: onScreenSentence;
     private buttonText: string;
     private buttonColor: string;
+    private score: Score;
 
 
     constructor(private readingService: ReadingService){
@@ -36,6 +37,7 @@ export class ReadingAreaComponent implements OnInit{
         this.buttonColor = 'Blue';
         this.words = [];
         this.erroneousIndices = [];
+        this.score = new Score();
     };
 
 
@@ -83,6 +85,41 @@ export class ReadingAreaComponent implements OnInit{
         }
     }
 
+    addWords() : void {
+        let titles = this.paragraph.text.split(' ');
+        for(let title of titles){
+            this.words.push(new Word(title));
+        }
+    }
+
+    updateWords(): void {
+        console.log('updating words');
+        let totalCorrect = 0;
+        let totalWrong = 0;
+        let incorrectWords = [];
+
+        for(let index in this.words){
+            if(this.erroneousIndices.includes(+index)){
+                this.words[index].changeColor('red');
+                totalWrong++;
+                incorrectWords.push(this.words[index]);
+            }else {
+                totalCorrect++;
+                this.words[index].changeColor('green');
+            }
+        }
+        if(this.erroneousIndices.length == 0){
+            this.buttonText = 'Well done!';
+            this.buttonColor = 'green';
+        } else {
+            this.buttonText = 'Try again?';
+            this.buttonColor = 'yellow';
+        }
+
+        this.score.updateScore(totalCorrect,totalWrong,incorrectWords);
+
+    }
+
     startConverting() {
         this.buttonText = 'Recording';
         this.buttonColor = 'Red';
@@ -119,31 +156,6 @@ export class ReadingAreaComponent implements OnInit{
 
     }
 
-    addWords() : void {
-        let titles = this.paragraph.text.split(' ');
-        for(let title of titles){
-            this.words.push(new Word(title));
-        }
-    }
-
-    updateWords(): void {
-        console.log('updating words');
-
-        for(let index in this.words){
-           if(this.erroneousIndices.includes(+index)){
-               this.words[index].changeColor('red');
-           }else {
-               this.words[index].changeColor('green');
-           }
-        }
-        if(this.erroneousIndices.length == 0){
-            this.buttonText = 'Well done!';
-            this.buttonColor = 'green';
-        } else {
-            this.buttonText = 'Try again?';
-            this.buttonColor = 'yellow';
-        }
-    }
 
 
     compareTranscript (transcript: string) : void {
