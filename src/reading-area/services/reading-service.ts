@@ -49,10 +49,13 @@ export class ReadingService {
     }
 
     setHighestScore(score:number, id:number): void{
+        console.log('setting highest score');
         this.http.post(this.sentencesUrl + '/' + id, {highestScore:score}, this.options)
             .toPromise()
             .catch(ReadingService.handleError)
     }
+
+
 
     retrieveScore(id:number): FirebaseObjectObservable<IScore> {
         return this.db.object(this.path + `/${id}`);

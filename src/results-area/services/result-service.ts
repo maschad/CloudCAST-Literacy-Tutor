@@ -21,19 +21,24 @@ export class ResultService {
 
     constructor(private db:AngularFireDatabase, private auth:AuthService, private http:Http){}
 
-    getUserScoreforParagraph(id) : number {
+    getUserScoreforParagraph(id) : any {
         this.db.object(this.authPath + `/${id}`, { preserveSnapshot: true }).subscribe(snapshot => {
             console.log('Snapshot type result: ' + snapshot.key);
-            console.log(snapshot.val());
+            if(snapshot.val()){
+                return snapshot.val().score.totalCorrect;
+            } else {
+                return 0;
+            }
+
         });
 
-        return 0;
+
     }
 
-    getHighestResult(id) : Promise<number> {
+    getHighestResult(id) : Promise<any> {
         return this.http.get(this.sentencesUrl + '/' + id + '/highestScore')
             .toPromise()
-            .then(response => response.json().data as number)
+            .then(response => response.json().data)
             .catch(ResultService.handleError)
     }
 
