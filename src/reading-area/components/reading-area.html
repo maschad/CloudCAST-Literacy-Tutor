@@ -1,5 +1,9 @@
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Francois+One" />
+<link rel="stylesheet" href="../../common/anim2.scss" type="text/css" />
+
 <div class="anim_cont">
-    <div class="va"></div>
+    <div *ngIf="bubble" class="chat_bubble tri-right btm-left-in"><strong>{{all_words}}</strong></div>
+    <div class="va" (click)='speak(all_words)'></div>
 </div>
 
 <div class="g-col">
