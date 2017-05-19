@@ -10,6 +10,7 @@ export interface IScore {
 
 
 export class Score implements IScore {
+    paragraphId: number;
     totalCorrect: number;
     totalWrong: number;
     incorrectWords: string[];

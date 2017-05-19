@@ -12,17 +12,16 @@ $font_stack:"Francois One", Calibri;
 
 body{
   background-color: white;
-  
   font-size: 13pt;
-  
 }
 
 .score{
-  text-align: center;
-  margin: 25px;
+  text-align: right;
+  margin-left: 60%;
   display: flex;
   padding: 5px;
 }
+
 
 //Box Class
 .boxed {
@@ -30,12 +29,12 @@ body{
   font-size: 12pt;
   display: flex;
   background-color: #393636;
-  width: 300px;
+  width: 800px;
+  height: 200px;
   border-radius: 5px;
   box-shadow: 0 0 5px #333;
   padding: 25px;
-  margin: 25px;
-  
+
   color:white;
   @include media-query(540) {
     font-size: rem(24px);
@@ -78,7 +77,6 @@ body{
 //Button style
 .button {
   @include button-base;
-  margin-left: 5px;
   outline: none;
   border: 3px solid #BEC6D0;
   border-radius: 5px;
@@ -88,24 +86,13 @@ body{
   overflow: hidden;
   background: #e0dfe2;
   transform: translate(0, 0);
-  
+  color: white;
   cursor: pointer;
+  margin-left: 15%;
   
   &:hover{
     margin-top: -1px;
   }
-}
-
-.but_col_1{
-  background-color: #4279BD;
-  color: white;
-  
-  margin-left: 15%;
-}
-
-.but_col_2{
-  background-color: #D5655D;
-  color: white;
 }
 
 h3{

@@ -8,22 +8,25 @@ import 'rxjs/add/operator/toPromise';
 
 import { Injectable } from '@angular/core';
 import {Word, IWord} from "../models/word";
-import {AngularFire, FirebaseListObservable} from "angularfire2";
+import {AngularFire, FirebaseListObservable, AngularFireDatabase, FirebaseObjectObservable} from "angularfire2";
 import {AuthService} from "../../auth/services/auth-service";
-import {Http, Response, Headers} from "@angular/http";
+import {Http, Response, Headers, RequestOptions} from "@angular/http";
 import {onScreenSentence} from "../models/onScreenSentence";
+import {Score, IScore} from "../models/score";
 
 
 @Injectable()
 export class ReadingService {
 
     private headers = new Headers({'Content-Type': 'application/json'});
+    private options = new RequestOptions({ headers: this.headers });
     private sentencesUrl = 'api/onScreenSentences';
+    private results: FirebaseObjectObservable<IScore>;
+    private path = `/results/${this.auth.id}`;
 
 
-    constructor(af: AngularFire, auth: AuthService, private http: Http){
-        const path = `/reading-area/${auth.id}`;
-    }
+
+    constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http){}
 
 
     getOnScreenSentences(): Promise<onScreenSentence[]> {
@@ -38,6 +41,24 @@ export class ReadingService {
             .toPromise()
             .then(response => response.json().data as onScreenSentence)
             .catch(ReadingService.handleError);
+    }
+
+    saveScore(newScore: Score , id:number) {
+        this.results = this.db.object(this.path + `/${id}`);
+        this.results.update({score:newScore});
+    }
+
+    setHighestScore(score:number, id:number): void{
+        console.log('setting highest score');
+        this.http.post(this.sentencesUrl + '/' + id, {highestScore:score}, this.options)
+            .toPromise()
+            .catch(ReadingService.handleError)
+    }
+
+
+
+    retrieveScore(id:number): FirebaseObjectObservable<IScore> {
+        return this.db.object(this.path + `/${id}`);
     }
 
     private static handleError(error: any): Promise<any> {

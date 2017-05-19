@@ -6,12 +6,11 @@ import {Component, OnInit} from "@angular/core";
 import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {Word} from "../models/word";
-import {IScore, Score} from "../models/score";
+import {Score} from "../models/score";
 const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
-
-declare var responsiveVoice: any;
+declare let responsiveVoice: any;
 
 @Component({
     selector: 'reading-area',
@@ -29,12 +28,13 @@ export class ReadingAreaComponent implements OnInit{
     private buttonText: string;
     private buttonColor: string;
     private score: Score;
+    private currentScore: any;
 
 
     constructor(private readingService: ReadingService){
         this.paragraph = new onScreenSentence(1, '');
         this.buttonText ='Start';
-        this.buttonColor = 'Blue';
+        this.buttonColor = '#4279BD';
         this.words = [];
         this.erroneousIndices = [];
         this.score = new Score();
@@ -44,6 +44,7 @@ export class ReadingAreaComponent implements OnInit{
 
 
     ngOnInit(): void {
+        this.currentScore = this.readingService.retrieveScore(this.paragraph.id);
         this.getOnScreenParagraph();
     }
 
@@ -58,12 +59,10 @@ export class ReadingAreaComponent implements OnInit{
     }
 
     resetState(): void {
-        this.paragraph = new onScreenSentence(1, '');
         this.buttonText ='Start';
-        this.buttonColor = 'Blue';
-        this.words = [];
+        this.buttonColor = '#4279BD';
         this.erroneousIndices = [];
-        this.getOnScreenParagraph();
+        this.score = new Score();
     }
 
     record() : void {
@@ -79,6 +78,9 @@ export class ReadingAreaComponent implements OnInit{
 
             case 'Well done!':
                 this.paragraph.incrementId();
+                this.score = new Score();
+                this.erroneousIndices = [];
+                this.currentScore = this.readingService.retrieveScore(this.paragraph.id);
                 this.getOnScreenParagraph();
                 this.startConverting();
                 break;
@@ -87,6 +89,7 @@ export class ReadingAreaComponent implements OnInit{
 
     addWords() : void {
         let titles = this.paragraph.text.split(' ');
+        this.words = [];
         for(let title of titles){
             this.words.push(new Word(title));
         }
@@ -110,19 +113,21 @@ export class ReadingAreaComponent implements OnInit{
         }
         if(this.erroneousIndices.length == 0){
             this.buttonText = 'Well done!';
-            this.buttonColor = 'green';
+            this.buttonColor = '#63b648';
         } else {
             this.buttonText = 'Try again?';
-            this.buttonColor = 'yellow';
+            this.buttonColor = '#d4ad25';
         }
 
         this.score.updateScore(totalCorrect,totalWrong,incorrectWords);
-
+        this.paragraph.setHighestScore(this.score.totalCorrect);
+        this.readingService.setHighestScore(this.paragraph.highestScore,this.paragraph.id);
+        this.readingService.saveScore(this.score, this.paragraph.id);
     }
 
     startConverting() {
         this.buttonText = 'Recording';
-        this.buttonColor = 'Red';
+        this.buttonColor = '#ba3e4e';
         let finalTranscripts = '';
         let component = this;
         if ('webkitSpeechRecognition' in window) {
@@ -161,7 +166,6 @@ export class ReadingAreaComponent implements OnInit{
     compareTranscript (transcript: string) : void {
         let text = this.paragraph.text.split(' ');
         let splitTranscript = transcript.split(' ');
-
 
         for(let index in splitTranscript) {
             if(text[index].toLowerCase() != splitTranscript[index].toLowerCase()){

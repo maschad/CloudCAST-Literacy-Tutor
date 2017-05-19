@@ -2,7 +2,8 @@
  * Created by carlos on 5/7/17.
  */
 
-import {Component} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
+import {ResultService} from "../services/result-service";
 
 @Component({
     selector: 'results',
@@ -12,47 +13,40 @@ import {Component} from "@angular/core";
     ]
 })
 
-export class ResultsAreaComponent {
+export class ResultsAreaComponent implements OnInit{
     public barChartOptions:any = {
         scaleShowVerticalLines: false,
         responsive: true
     };
-    public barChartLabels:string[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
     public barChartType:string = 'bar';
     public barChartLegend:boolean = true;
-
+    public barChartLabels:string[] = [ "Paragraph 1",  "Paragraph 2",  "Paragraph 3" , "Paragraph 4" , "Paragraph 5",  "Paragraph 6" ,  "Paragraph 7",  "Paragraph 8"];
     public barChartData:any[] = [
-        {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-        {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}
+    {data: [0, 0, 0, 0, 0, 0, 0], label: 'Your score'},
+    {data: [0, 0, 0, 0, 0, 0, 0], label: 'Highest Score'}
     ];
+    // private barChartData: any[] = [];
 
-    // events
-    public chartClicked(e:any):void {
-        console.log(e);
+    constructor(private resultService: ResultService){}
+
+    ngOnInit(): void {
+        let userScoreData = [];
+        let highestScoreData = [];
+        let component = this;
+        this.resultService.getUserScoreforParagraphs(function (results) {
+            userScoreData = results;
+            component.resultService.getHighestResults().then(sentences => {
+                for(let sentence of sentences){
+                    highestScoreData.push(sentence.highestScore);
+                }
+                component.barChartData = [{data: userScoreData, label: 'Your score'}, {data: highestScoreData, label: 'Highest Score'}];
+            });
+        });
+
     }
 
-    public chartHovered(e:any):void {
-        console.log(e);
-    }
 
-    public randomize():void {
-        // Only Change 3 values
-        let data = [
-            Math.round(Math.random() * 100),
-            59,
-            80,
-            (Math.random() * 100),
-            56,
-            (Math.random() * 100),
-            40];
-        let clone = JSON.parse(JSON.stringify(this.barChartData));
-        clone[0].data = data;
-        this.barChartData = clone;
-        /**
-         * (My guess), for Angular to recognize the change in the dataset
-         * it has to change the dataset variable directly,
-         * so one way around it, is to clone the data, change it and then
-         * assign it;
-         */
-    }
+
+
+
 }
