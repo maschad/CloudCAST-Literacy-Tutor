@@ -23,6 +23,9 @@ export class ReadingService {
     private sentencesUrl = 'api/onScreenSentences';
     private results: FirebaseObjectObservable<IScore>;
     private path = `/results/${this.auth.id}`;
+    private kaldiPath = 'http://52.34.157.194/home/ubuntu/';
+    private weakWordsPath = `/weakwords/${this.auth.id}`;
+
 
 
 
@@ -45,7 +48,7 @@ export class ReadingService {
 
     saveScore(newScore: Score , id:number) {
         this.results = this.db.object(this.path + `/${id}`);
-        this.results.update({score:newScore});
+        this.results.set({score:newScore});
     }
 
     setHighestScore(score:number, id:number): void{
@@ -56,9 +59,19 @@ export class ReadingService {
     }
 
 
-
     retrieveScore(id:number): FirebaseObjectObservable<IScore> {
         return this.db.object(this.path + `/${id}`);
+    }
+
+    retrieveKaldiScore(audio: any) : any {
+        return this.http.post(this.kaldiPath,{audioUrl:audio}, this.options)
+            .toPromise()
+            .catch(ReadingService.handleError)
+    }
+
+    saveWeakWords(words: string[]){
+        let saveWeakWords = this.db.object(this.weakWordsPath);
+        saveWeakWords.set(words);
     }
 
     private static handleError(error: any): Promise<any> {

@@ -12,6 +12,7 @@ import { AppHeaderComponent } from './components/app-header';
 import { ReadingModule } from "../reading-area";
 import {ResultsModule} from "../results-area/index";
 import {SidebarModule} from "ng-sidebar";
+import {PracticeModule} from "../practice-area/index";
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import {SidebarModule} from "ng-sidebar";
     AuthModule,
     FirebaseModule,
     ReadingModule,
-    ResultsModule
+    ResultsModule,
+    PracticeModule
   ]
 })
 

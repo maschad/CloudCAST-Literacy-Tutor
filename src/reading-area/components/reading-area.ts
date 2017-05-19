@@ -15,7 +15,8 @@ declare let responsiveVoice: any;
 @Component({
     selector: 'reading-area',
     styles : [
-        require('./reading-area.scss')
+        require('./reading-area.scss'),
+        require('../../common/anim.scss')
     ],
     template: require('./reading-area.html')
 })
@@ -29,6 +30,10 @@ export class ReadingAreaComponent implements OnInit{
     private buttonColor: string;
     private score: Score;
     private currentScore: any;
+    private all_words: string;
+    private bubble= false;
+    private addOn="You are to say:   ";
+
 
     private all_words: string;
     private bubble= false;
@@ -42,6 +47,19 @@ export class ReadingAreaComponent implements OnInit{
         this.score = new Score();
     };
 
+
+    speak(mystring: string): void {
+        console.log('speak getting called');
+        if(!this.bubble)
+        {
+            this.bubble=true;
+            responsiveVoice.speak(this.addOn+mystring,'US English Female',{pitch: 1.32});
+        }
+        else
+        {
+            this.bubble=false;
+        }
+    }
 
 
 
@@ -107,7 +125,7 @@ export class ReadingAreaComponent implements OnInit{
         for(let title of titles){
             this.words.push(new Word(title));
         }
-        
+      
         this.all_words=this.paragraph.text;
     }
 
@@ -121,7 +139,7 @@ export class ReadingAreaComponent implements OnInit{
             if(this.erroneousIndices.includes(+index)){
                 this.words[index].changeColor('red');
                 totalWrong++;
-                incorrectWords.push(this.words[index]);
+                incorrectWords.push(this.words[+index].title);
             }else {
                 totalCorrect++;
                 this.words[index].changeColor('green');
@@ -134,8 +152,8 @@ export class ReadingAreaComponent implements OnInit{
             this.buttonText = 'Try again?';
             this.buttonColor = '#d4ad25';
         }
-
-        this.score.updateScore(totalCorrect,totalWrong,incorrectWords);
+        this.readingService.saveWeakWords(incorrectWords);
+        this.score.updateScore(totalCorrect,totalWrong);
         this.paragraph.setHighestScore(this.score.totalCorrect);
         this.readingService.setHighestScore(this.paragraph.highestScore,this.paragraph.id);
         this.readingService.saveScore(this.score, this.paragraph.id);
@@ -193,7 +211,6 @@ export class ReadingAreaComponent implements OnInit{
         console.log('erroneous words', this.erroneousIndices);
         this.updateWords();
     }
-
 
 
 

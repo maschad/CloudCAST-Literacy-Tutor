@@ -7,7 +7,7 @@ declare let responsiveVoice: any;
 @Component({
   styles: [
     require('./sign-in.scss'),
-    require('../../common/anim2.scss')
+    require('../../common/anim.scss')
   ],
   template: `
    <div class="anim_cont">
@@ -28,16 +28,16 @@ declare let responsiveVoice: any;
 })
 
 export class SignInComponent {
-  
-  speechText= "Welcome to UWI CloudCast literacy tutor";
-  
-  constructor(private auth: AuthService, private router: Router) {responsiveVoice.speak(this.speechText,'US English Female',{pitch: 1.32});}
-  
-  speak(): void {
-    responsiveVoice.speak(this.speechText,'US English Female',{pitch: 1.32});
-  }
-  
-  signInAnonymously(): void {
+    private speechText= "Welcome to UWI CloudCast literacy tutor";
+
+    constructor(private auth: AuthService, private router: Router) {responsiveVoice.speak(this.speechText,'US English Female',{pitch: 1.32});}
+
+    speak(): void {
+        responsiveVoice.speak(this.speechText,'US English Female',{pitch: 1.32});
+    }
+
+    signInAnonymously(): void {
+
     this.auth.signInAnonymously()
       .then(() => this.postSignIn());
   }
