@@ -62,6 +62,7 @@ export class ReadingAreaComponent implements OnInit{
         this.buttonText ='Start';
         this.buttonColor = '#4279BD';
         this.erroneousIndices = [];
+        this.score = new Score();
     }
 
     record() : void {
@@ -77,6 +78,8 @@ export class ReadingAreaComponent implements OnInit{
 
             case 'Well done!':
                 this.paragraph.incrementId();
+                this.score = new Score();
+                this.erroneousIndices = [];
                 this.currentScore = this.readingService.retrieveScore(this.paragraph.id);
                 this.getOnScreenParagraph();
                 this.startConverting();
