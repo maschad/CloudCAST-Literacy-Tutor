@@ -8,9 +8,9 @@
     </div>
 
     <div class="boxed">
-        <div *ngFor="let word of words">
+        <div *ngFor="let word of practiceWords">
             <div class="g-row">
-                <div [ngStyle]= "{'backgroundColor' : word.color}">{{word.title}}</div>
+                <div style="word-wrap: break-word;padding: 5px;" [ngStyle]= "{'backgroundColor' : word.color}">{{word.title}}</div>
             </div>
         </div>
     </div>

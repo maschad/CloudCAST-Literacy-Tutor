@@ -12,14 +12,24 @@ import {Http, Headers, RequestOptions} from "@angular/http";
 export class PracticeService  {
     private headers = new Headers({'Content-Type': 'application/json'});
     private options = new RequestOptions({ headers: this.headers });
-    private sentencesUrl = 'api/onScreenSentences';
+    private dictionaryUrl = '../../common/dictionary.txt';
     private path = `/weakwords/${this.auth.id}`;
 
 
     constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http) {}
 
 
-    getPracticeWords(): FirebaseObjectObservable<string[]>{
-        return this.db.object(this.path);
+    getPracticeWords(success): void {
+        let weakwords = [];
+         this.db.object(this.path, {preserveSnapshot: true }).subscribe(snapshot => {
+             snapshot.forEach(function (word) {
+                 weakwords.push(word.val());
+             });
+             success(weakwords);
+         });
+    }
+
+    searchDictionary() {
+
     }
 }

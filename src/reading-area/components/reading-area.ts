@@ -176,7 +176,12 @@ export class ReadingAreaComponent implements OnInit{
         this.updateWords();
     }
 
-
+    /**
+    retrieveScore(audioFile){
+        let audio = JSON.stringify(audioFile);
+        let scores = [];
+        scores = this.readingService.retrieveKaldiScore(audio);
+    }**/
 
 
 }
