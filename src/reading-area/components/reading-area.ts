@@ -74,6 +74,10 @@ export class ReadingAreaComponent implements OnInit{
     resetState(): void {
         this.buttonText ='Start';
         this.buttonColor = '#4279BD';
+<<<<<<< HEAD
+=======
+        this.words = [];
+>>>>>>> prep for rebase
         this.erroneousIndices = [];
         this.score = new Score();
     }
@@ -128,10 +132,17 @@ export class ReadingAreaComponent implements OnInit{
         }
         if(this.erroneousIndices.length == 0){
             this.buttonText = 'Well done!';
+<<<<<<< HEAD
             this.buttonColor = '#63b648';
         } else {
             this.buttonText = 'Try again?';
             this.buttonColor = '#d4ad25';
+=======
+            this.buttonColor = '#90C369';
+        } else {
+            this.buttonText = 'Try again?';
+            this.buttonColor = '#FF2D0F';
+>>>>>>> prep for rebase
         }
 
         this.score.updateScore(totalCorrect,totalWrong,incorrectWords);
@@ -142,7 +153,11 @@ export class ReadingAreaComponent implements OnInit{
 
     startConverting() {
         this.buttonText = 'Recording';
+<<<<<<< HEAD
         this.buttonColor = '#ba3e4e';
+=======
+        this.buttonColor = '#4279BD';
+>>>>>>> prep for rebase
         let finalTranscripts = '';
         let component = this;
         if ('webkitSpeechRecognition' in window) {
