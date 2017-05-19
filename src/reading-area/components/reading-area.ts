@@ -105,7 +105,7 @@ export class ReadingAreaComponent implements OnInit{
             if(this.erroneousIndices.includes(+index)){
                 this.words[index].changeColor('red');
                 totalWrong++;
-                incorrectWords.push(this.words[index]);
+                incorrectWords.push(this.words[+index].title);
             }else {
                 totalCorrect++;
                 this.words[index].changeColor('green');
@@ -118,8 +118,8 @@ export class ReadingAreaComponent implements OnInit{
             this.buttonText = 'Try again?';
             this.buttonColor = '#d4ad25';
         }
-
-        this.score.updateScore(totalCorrect,totalWrong,incorrectWords);
+        this.readingService.saveWeakWords(incorrectWords);
+        this.score.updateScore(totalCorrect,totalWrong);
         this.paragraph.setHighestScore(this.score.totalCorrect);
         this.readingService.setHighestScore(this.paragraph.highestScore,this.paragraph.id);
         this.readingService.saveScore(this.score, this.paragraph.id);

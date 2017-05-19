@@ -3,15 +3,23 @@
  */
 
 import {Injectable} from "@angular/core";
-import {AngularFire} from "angularfire2";
+import {FirebaseListObservable, AngularFireDatabase, FirebaseObjectObservable} from "angularfire2";
 import {AuthService} from "../../auth/services/auth-service";
-import {Http, Headers} from "@angular/http";
+import {Http, Headers, RequestOptions} from "@angular/http";
 
 
 @Injectable()
 export class PracticeService  {
     private headers = new Headers({'Content-Type': 'application/json'});
+    private options = new RequestOptions({ headers: this.headers });
+    private sentencesUrl = 'api/onScreenSentences';
+    private path = `/weakwords/${this.auth.id}`;
 
-    constructor(af: AngularFire, auth: AuthService, private http: Http) {
+
+    constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http) {}
+
+
+    getPracticeWords(): FirebaseObjectObservable<string[]>{
+        return this.db.object(this.path);
     }
 }

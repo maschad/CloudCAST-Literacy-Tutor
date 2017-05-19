@@ -23,6 +23,8 @@ export class ReadingService {
     private sentencesUrl = 'api/onScreenSentences';
     private results: FirebaseObjectObservable<IScore>;
     private path = `/results/${this.auth.id}`;
+    private weakWordsPath = `/weakwords/${this.auth.id}`;
+
 
 
 
@@ -45,7 +47,7 @@ export class ReadingService {
 
     saveScore(newScore: Score , id:number) {
         this.results = this.db.object(this.path + `/${id}`);
-        this.results.update({score:newScore});
+        this.results.set({score:newScore});
     }
 
     setHighestScore(score:number, id:number): void{
@@ -56,9 +58,13 @@ export class ReadingService {
     }
 
 
-
     retrieveScore(id:number): FirebaseObjectObservable<IScore> {
         return this.db.object(this.path + `/${id}`);
+    }
+
+    saveWeakWords(words: string[]){
+        let saveWeakWords = this.db.object(this.weakWordsPath);
+        saveWeakWords.set(words);
     }
 
     private static handleError(error: any): Promise<any> {
