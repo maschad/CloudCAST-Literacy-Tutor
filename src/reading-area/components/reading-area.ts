@@ -51,10 +51,6 @@ export class ReadingAreaComponent implements OnInit{
     }
 
     addOn="You are to say:   ";
-<<<<<<< HEAD
-=======
-
->>>>>>> 907197dc2b4eb6a565d55358603f01011a5fb763
     speak(mystring: string): void {
         if(!this.bubble)
         {
