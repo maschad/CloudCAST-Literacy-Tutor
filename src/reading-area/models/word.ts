@@ -8,7 +8,7 @@ export interface IWord {
 export class Word implements IWord {
     title: string;
     completed: boolean = false;
-    color: string = 'grey';
+    color: string = 'white';
 
     constructor(title:string){
         this.title = title;
