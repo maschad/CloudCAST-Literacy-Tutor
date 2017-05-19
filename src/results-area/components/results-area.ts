@@ -21,24 +21,26 @@ export class ResultsAreaComponent implements OnInit{
     public barChartType:string = 'bar';
     public barChartLegend:boolean = true;
     public barChartLabels:string[] = [ "Paragraph 1",  "Paragraph 2",  "Paragraph 3" , "Paragraph 4" , "Paragraph 5",  "Paragraph 6" ,  "Paragraph 7",  "Paragraph 8"];
-    /*private barChartData:any[] = [
-     {data: [65, 59, 80, 81, 56, 55, 40], label: 'Your score'},
-     {data: [28, 48, 40, 19, 86, 27, 90], label: 'Highest Score'}
-     ]; */
-    private barChartData: any[] = [];
+    public barChartData:any[] = [
+    {data: [0, 0, 0, 0, 0, 0, 0], label: 'Your score'},
+    {data: [0, 0, 0, 0, 0, 0, 0], label: 'Highest Score'}
+    ];
+    // private barChartData: any[] = [];
 
     constructor(private resultService: ResultService){}
 
     ngOnInit(): void {
-        let highestScoreData = [];
         let userScoreData = [];
-        this.resultService.getLabels().then(response => {
-            for(let index of response){
-                userScoreData.push(this.resultService.getUserScoreforParagraph(index.id));
-                this.resultService.getHighestResult(index.id).then(score => highestScoreData.push(score.highestScore));
-            }
-            this.barChartData.push({data: userScoreData, label: 'Your score'}, {data: highestScoreData, label: 'Highest Score'});
-            console.log('barchart data', this.barChartData);
+        let highestScoreData = [];
+        let component = this;
+        this.resultService.getUserScoreforParagraphs(function (results) {
+            userScoreData = results;
+            component.resultService.getHighestResults().then(sentences => {
+                for(let sentence of sentences){
+                    highestScoreData.push(sentence.highestScore);
+                }
+                component.barChartData = [{data: userScoreData, label: 'Your score'}, {data: highestScoreData, label: 'Highest Score'}];
+            });
         });
 
     }

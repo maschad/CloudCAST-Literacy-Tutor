@@ -6,8 +6,11 @@
     <div class="score">
         <div class="g-row">
             <h3>Here are your total scores for this paragraph</h3>
-            Total Correct : {{(currentScore| async)?.score.totalCorrect}} ,
-            Total Wrong : {{(currentScore| async)?.score.totalWrong}}
+            <div *ngIf="(currentScore | async)?.score">
+                Total Correct : {{(currentScore| async)?.score.totalCorrect}} ,
+                Total Wrong : {{(currentScore| async)?.score.totalWrong}}
+            </div>
+
         </div>
     </div>
     <div class="g-row">

@@ -21,33 +21,25 @@ export class ResultService {
 
     constructor(private db:AngularFireDatabase, private auth:AuthService, private http:Http){}
 
-    getUserScoreforParagraph(id) : any {
-        this.db.object(this.authPath + `/${id}`, { preserveSnapshot: true }).subscribe(snapshot => {
-            console.log('Snapshot type result: ' + snapshot.key);
-            if(snapshot.val()){
-                return snapshot.val().score.totalCorrect;
-            } else {
-                return 0;
-            }
-
+    getUserScoreforParagraphs(success) : void {
+        let scores = [];
+        this.db.object(this.authPath , { preserveSnapshot: true }).subscribe(snapshot => {
+            snapshot.forEach(function (score) {
+                scores.push(score.val().score.totalCorrect);
+            });
+            success(scores);
         });
-
 
     }
 
-    getHighestResult(id) : Promise<any> {
-        return this.http.get(this.sentencesUrl + '/' + id + '/highestScore')
+    getHighestResults() : Promise<any> {
+        return this.http.get(this.sentencesUrl)
             .toPromise()
             .then(response => response.json().data)
             .catch(ResultService.handleError)
+
     }
 
-    getLabels(): Promise<any[]> {
-        return this.http.get(this.sentencesUrl)
-            .toPromise()
-            .then(response => response.json().data as any[])
-            .catch(ResultService.handleError);
-    }
 
     private static handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // for demo purposes only
