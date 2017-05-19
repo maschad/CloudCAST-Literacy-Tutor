@@ -15,7 +15,8 @@ declare let responsiveVoice: any;
 @Component({
     selector: 'reading-area',
     styles : [
-        require('./reading-area.scss')
+        require('./reading-area.scss'),
+        require('../../common/anim.scss')
     ],
     template: require('./reading-area.html')
 })
@@ -29,6 +30,10 @@ export class ReadingAreaComponent implements OnInit{
     private buttonColor: string;
     private score: Score;
     private currentScore: any;
+    private all_words: string;
+    private bubble= false;
+    private addOn="You are to say:   ";
+
 
 
     constructor(private readingService: ReadingService){
@@ -40,6 +45,19 @@ export class ReadingAreaComponent implements OnInit{
         this.score = new Score();
     };
 
+
+    speak(mystring: string): void {
+        console.log('speak getting called');
+        if(!this.bubble)
+        {
+            this.bubble=true;
+            responsiveVoice.speak(this.addOn+mystring,'US English Female',{pitch: 1.32});
+        }
+        else
+        {
+            this.bubble=false;
+        }
+    }
 
 
 
@@ -93,6 +111,8 @@ export class ReadingAreaComponent implements OnInit{
         for(let title of titles){
             this.words.push(new Word(title));
         }
+        this.all_words = this.paragraph.text;
+        console.log('all words', this.all_words);
     }
 
     updateWords(): void {
@@ -176,12 +196,6 @@ export class ReadingAreaComponent implements OnInit{
         this.updateWords();
     }
 
-    /**
-    retrieveScore(audioFile){
-        let audio = JSON.stringify(audioFile);
-        let scores = [];
-        scores = this.readingService.retrieveKaldiScore(audio);
-    }**/
 
 
 }

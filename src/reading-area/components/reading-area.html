@@ -1,5 +1,6 @@
 <div class="anim_cont">
-    <div class="va"></div>
+    <div *ngIf="bubble" class="chat_bubble tri-right btm-left-in"><strong>{{all_words}}</strong></div>
+    <div class="va" (click)="speak(all_words)"></div>
 </div>
 
 <div class="g-col">
