@@ -36,8 +36,8 @@ export class SignInComponent {
         responsiveVoice.speak(this.speechText,'US English Female',{pitch: 1.32});
     }
 
-
     signInAnonymously(): void {
+
     this.auth.signInAnonymously()
       .then(() => this.postSignIn());
   }
