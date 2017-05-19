@@ -34,9 +34,6 @@ export class ReadingAreaComponent implements OnInit{
     private bubble= false;
     private addOn="You are to say:   ";
 
-
-    private all_words: string;
-    private bubble= false;
     
     constructor(private readingService: ReadingService){
         this.paragraph = new onScreenSentence(1, '');
@@ -68,19 +65,7 @@ export class ReadingAreaComponent implements OnInit{
         this.getOnScreenParagraph();
     }
 
-    addOn="You are to say:   ";
-    speak(mystring: string): void {
-        if(!this.bubble)
-        {
-            this.bubble=true;
-            responsiveVoice.speak(this.addOn+mystring,'US English Female',{pitch: 1.32});
-        }
-        else
-        {
-            this.bubble=false;
-        }
-    }
-  
+
     getOnScreenParagraph() : void {
         this.readingService.getOnScreenParagraph(this.paragraph.getCurrentId()).then(paragraph =>
         {
@@ -92,7 +77,6 @@ export class ReadingAreaComponent implements OnInit{
     resetState(): void {
         this.buttonText ='Start';
         this.buttonColor = '#4279BD';
-        this.words = [];
         this.erroneousIndices = [];
         this.score = new Score();
     }
