@@ -1,14 +1,14 @@
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import {AuthGuard} from "../auth/guards/auth-guard";
-import {Routes, RouterModule} from "@angular/router";
-import {HttpModule, JsonpModule} from "@angular/http";
-import {SidebarModule} from "ng-sidebar";
-import {InMemoryDataService} from "../reading-area/services/in-memory-data.service";
-import {InMemoryWebApiModule} from "angular-in-memory-web-api";
-import {PracticeService} from "./services/practice-service";
-import {PracticeAreaComponent} from "./components/practice-area";
+import {AuthGuard} from '../auth/guards/auth-guard';
+import {Routes, RouterModule} from '@angular/router';
+import {HttpModule, JsonpModule} from '@angular/http';
+import {SidebarModule} from 'ng-sidebar';
+import {InMemoryDataService} from '../reading-area/services/in-memory-data.service';
+import {InMemoryWebApiModule} from 'angular-in-memory-web-api';
+import {PracticeService} from './services/practice-service';
+import {PracticeAreaComponent} from './components/practice-area';
 
 /**
  * Created by carlos on 5/7/17.

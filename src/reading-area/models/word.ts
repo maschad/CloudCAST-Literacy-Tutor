@@ -1,8 +1,8 @@
 
 export interface IWord {
-    title: string,
-    color : string,
-    completed: boolean
+    title: string;
+    color: string;
+    completed: boolean;
 }
 
 export class Word implements IWord {
@@ -10,7 +10,7 @@ export class Word implements IWord {
     completed: boolean = false;
     color: string = 'white';
 
-    constructor(title:string){
+    constructor(title: string){
         this.title = title;
     }
 
@@ -18,7 +18,7 @@ export class Word implements IWord {
         this.color = color;
     }
 
-    completeWord() : void {
+    completeWord(): void {
         this.completed = true;
     }
 }

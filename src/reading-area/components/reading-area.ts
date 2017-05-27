@@ -2,11 +2,11 @@
  * Created by carlos on 3/24/17.
  */
 
-import {Component, OnInit} from "@angular/core";
-import {ReadingService} from "../services/reading-service";
-import {onScreenSentence} from "../models/onScreenSentence";
-import {Word} from "../models/word";
-import {Score} from "../models/score";
+import {Component, OnInit} from '@angular/core';
+import {ReadingService} from '../services/reading-service';
+import {OnScreenSentence} from '../models/OnScreenSentence';
+import {Word} from '../models/word';
+import {Score} from '../models/score';
 const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
@@ -25,7 +25,7 @@ declare let responsiveVoice: any;
 export class ReadingAreaComponent implements OnInit{
     private words: Word[];
     private erroneousIndices: number[];
-    private paragraph: onScreenSentence;
+    private paragraph: OnScreenSentence;
     private buttonText: string;
     private buttonColor: string;
     private score: Score;
@@ -33,11 +33,10 @@ export class ReadingAreaComponent implements OnInit{
     private all_words: string;
     private transcriptLength: number;
     private bubble= false;
-    private addOn="You are to say:   ";
-
+    private addOn='You are to say:   ';
     
-    constructor(private readingService: ReadingService){
-        this.paragraph = new onScreenSentence(1, '');
+    constructor(private readingService: ReadingService) {
+        this.paragraph = new OnScreenSentence(1, '');
         this.buttonText ='Start';
         this.buttonColor = '#4279BD';
         this.words = [];
@@ -48,14 +47,11 @@ export class ReadingAreaComponent implements OnInit{
 
     speak(mystring: string): void {
         console.log('speak getting called');
-        if(!this.bubble)
-        {
-            this.bubble=true;
+        if(!this.bubble) {
+            this.bubble = true;
             responsiveVoice.speak(this.addOn+mystring,'US English Female',{pitch: 1.32});
-        }
-        else
-        {
-            this.bubble=false;
+        } else {
+            this.bubble = false;
         }
     }
 
@@ -67,9 +63,8 @@ export class ReadingAreaComponent implements OnInit{
     }
 
 
-    getOnScreenParagraph() : void {
-        this.readingService.getOnScreenParagraph(this.paragraph.getCurrentId()).then(paragraph =>
-        {
+    getOnScreenParagraph(): void {
+        this.readingService.getOnScreenParagraph(this.paragraph.getCurrentId()).then(paragraph => {
             this.paragraph.setText(paragraph.text);
             this.addWords();
         });
@@ -110,7 +105,6 @@ export class ReadingAreaComponent implements OnInit{
         for(let title of titles){
             this.words.push(new Word(title));
         }
-      
         this.all_words=this.paragraph.text;
     }
 
@@ -121,16 +115,15 @@ export class ReadingAreaComponent implements OnInit{
         let incorrectWords = [];
 
         for(let index in this.words){
-            if(this.erroneousIndices.includes(+index)){
+            if(this.erroneousIndices.includes(+index)) {
                 this.words[index].changeColor('red');
                 totalWrong++;
                 incorrectWords.push(this.words[+index].title);
-            } else if (this.words.length == this.transcriptLength){
+            } else if (this.words.length === this.transcriptLength){
                 totalCorrect++;
                 this.words[index].changeColor('green');
             }
-        }
-        if(this.erroneousIndices.length == 0){
+        }if(this.erroneousIndices.length === 0) {
             this.buttonText = 'Well done!';
             this.buttonColor = '#63b648';
         } else {
@@ -144,11 +137,10 @@ export class ReadingAreaComponent implements OnInit{
         this.readingService.saveScore(this.score, this.paragraph.id);
     }
 
-    startConverting() {
+    startConverting(): void {
         this.buttonText = 'Recording';
         this.buttonColor = '#ba3e4e';
         this.buttonColor = '#4279BD';
-        
         let finalTranscripts = '';
         let component = this;
         if ('webkitSpeechRecognition' in window) {
@@ -161,7 +153,7 @@ export class ReadingAreaComponent implements OnInit{
                 let interimTranscripts = '';
                 for (let i = event.resultIndex; i < event.results.length; i++) {
                     let transcript = event.results[i][0].transcript;
-                    transcript.replace("\n", "<br>");
+                    transcript.replace('\n', '<br>');
                     if (event.results[i].isFinal) {
                         finalTranscripts += transcript;
                     } else {
@@ -175,11 +167,11 @@ export class ReadingAreaComponent implements OnInit{
             };
 
             speechRecognizer.onerror = function (event) {
-                console.log('error')
+                console.log('error');
             };
         } else {
             console.log('Your browser is not supported. If google chrome, please upgrade!');
-        }
+        };
 
     }
 
@@ -193,7 +185,7 @@ export class ReadingAreaComponent implements OnInit{
 
 
         for(let index in splitTranscript) {
-            if(text[index].toLowerCase() != splitTranscript[index].toLowerCase()){
+            if(text[index].toLowerCase() !== splitTranscript[index].toLowerCase()) {
                 this.erroneousIndices.push(+index);
             }
         }

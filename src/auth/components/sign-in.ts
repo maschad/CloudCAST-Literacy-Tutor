@@ -10,25 +10,25 @@ declare let responsiveVoice: any;
     require('../../common/anim.scss')
   ],
   template: `
-   <div class="anim_cont">
-        <div class="chat_bubble tri-right btm-left-in"><p>{{speechText}}</p></div>
-        <div class="va" (click)="speak()"></div>
+   <div class='anim_cont'>
+        <div class='chat_bubble tri-right btm-left-in'><p>{{speechText}}</p></div>
+        <div class='va' (click)='speak()'></div>
     </div>
-    <div class="g-row sign-in">
-      <div class="g-col">
-        <h1 class="sign-in__heading">Sign in</h1>
-        <button class="sign-in__button" (click)="signInAnonymously()" type="button">Anonymously</button>
-        <button class="sign-in__button" (click)="signInWithGithub()" type="button">GitHub</button>
-        <button class="sign-in__button" (click)="signInWithGoogle()" type="button">Google</button>
-        <button class="sign-in__button" (click)="signInWithTwitter()" type="button">Twitter</button>
-        <button class="sign-in__button" (click)="signInWithFacebook()" type="button">Facebook</button>
+    <div class='g-row sign-in'>
+      <div class='g-col'>
+        <h1 class='sign-in__heading'>Sign in</h1>
+        <button class='sign-in__button' (click)='signInAnonymously()' type='button'>Anonymously</button>
+        <button class='sign-in__button' (click)='signInWithGithub()' type='button'>GitHub</button>
+        <button class='sign-in__button' (click)='signInWithGoogle()' type='button'>Google</button>
+        <button class='sign-in__button' (click)='signInWithTwitter()' type='button'>Twitter</button>
+        <button class='sign-in__button' (click)='signInWithFacebook()' type='button'>Facebook</button>
       </div>
     </div>
   `
 })
 
 export class SignInComponent {
-    private speechText= "Welcome to UWI CloudCast literacy tutor";
+    private speechText= 'Welcome to UWI CloudCast literacy tutor';
 
     constructor(private auth: AuthService, private router: Router) {responsiveVoice.speak(this.speechText,'US English Female',{pitch: 1.32});}
 

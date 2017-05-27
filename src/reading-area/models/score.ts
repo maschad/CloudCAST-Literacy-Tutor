@@ -18,7 +18,7 @@ export class Score implements IScore {
     }
 
 
-    public updateScore(totalCorrect: number, totalWrong: number) {
+    public updateScore(totalCorrect: number, totalWrong: number): void {
         this.totalCorrect+= totalCorrect;
         this.totalWrong+= totalWrong;
     }

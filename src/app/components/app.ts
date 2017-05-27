@@ -49,7 +49,7 @@ export class AppComponent {
 
 
 
-    private openMenu() {
+    openMenu(): void {
         this._opened = !this._opened;
     }
 

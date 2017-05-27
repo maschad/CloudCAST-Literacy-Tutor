@@ -1,4 +1,3 @@
-///<reference path="../models/word.ts"/>
 /**
  * Created by carlos on 3/15/17.
  */
@@ -7,12 +6,11 @@ import 'rxjs/add/operator/toPromise';
 
 
 import { Injectable } from '@angular/core';
-import {Word, IWord} from "../models/word";
-import {AngularFire, FirebaseListObservable, AngularFireDatabase, FirebaseObjectObservable} from "angularfire2";
-import {AuthService} from "../../auth/services/auth-service";
-import {Http, Response, Headers, RequestOptions} from "@angular/http";
-import {onScreenSentence} from "../models/onScreenSentence";
-import {Score, IScore} from "../models/score";
+import {AngularFireDatabase, FirebaseObjectObservable} from 'angularfire2';
+import {AuthService} from '../../auth/services/auth-service';
+import {Http,Headers, RequestOptions} from '@angular/http';
+import {Score, IScore} from '../models/score';
+import {OnScreenSentence} from '../models/onScreenSentence';
 
 
 @Injectable()
@@ -20,7 +18,7 @@ export class ReadingService {
 
     private headers = new Headers({'Content-Type': 'application/json'});
     private options = new RequestOptions({ headers: this.headers });
-    private sentencesUrl = 'api/onScreenSentences';
+    private sentencesUrl = 'api/OnScreenSentences';
     private results: FirebaseObjectObservable<IScore>;
     private path = `/results/${this.auth.id}`;
     private kaldiPath = 'http://52.34.157.194/home/ubuntu/';
@@ -32,44 +30,38 @@ export class ReadingService {
     constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http){}
 
 
-    getOnScreenSentences(): Promise<onScreenSentence[]> {
+    getOnScreenSentences(): Promise<OnScreenSentence[]> {
         return this.http.get(this.sentencesUrl)
             .toPromise()
-            .then(response => response.json().data as onScreenSentence[])
+            .then(response => response.json().data as OnScreenSentence[])
             .catch(ReadingService.handleError);
     }
 
-    getOnScreenParagraph(id: number): Promise<onScreenSentence> {
+    getOnScreenParagraph(id: number): Promise<OnScreenSentence> {
         return this.http.get(this.sentencesUrl + '/' + id)
             .toPromise()
-            .then(response => response.json().data as onScreenSentence)
+            .then(response => response.json().data as OnScreenSentence)
             .catch(ReadingService.handleError);
     }
 
-    saveScore(newScore: Score , id:number) {
+    saveScore(newScore: Score , id: number): void {
         this.results = this.db.object(this.path + `/${id}`);
         this.results.set({score:newScore});
     }
 
-    setHighestScore(score:number, id:number): void{
+    setHighestScore(score: number, id: number): void{
         console.log('setting highest score');
         this.http.post(this.sentencesUrl + '/' + id, {highestScore:score}, this.options)
             .toPromise()
-            .catch(ReadingService.handleError)
+            .catch(ReadingService.handleError);
     }
 
 
-    retrieveScore(id:number): FirebaseObjectObservable<IScore> {
+    retrieveScore(id: number): FirebaseObjectObservable<IScore> {
         return this.db.object(this.path + `/${id}`);
     }
 
-    retrieveKaldiScore(audio: any) : any {
-        return this.http.post(this.kaldiPath,{audioUrl:audio}, this.options)
-            .toPromise()
-            .catch(ReadingService.handleError)
-    }
-
-    saveWeakWords(words: string[]){
+    saveWeakWords(words: string[]): void {
         let saveWeakWords = this.db.object(this.weakWordsPath);
         saveWeakWords.set(words);
     }
@@ -78,8 +70,6 @@ export class ReadingService {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);
     }
-
-
 
 
 

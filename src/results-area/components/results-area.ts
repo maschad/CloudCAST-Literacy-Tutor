@@ -2,8 +2,8 @@
  * Created by carlos on 5/7/17.
  */
 
-import {Component, OnInit} from "@angular/core";
-import {ResultService} from "../services/result-service";
+import {Component, OnInit} from '@angular/core';
+import {ResultService} from '../services/result-service';
 
 @Component({
     selector: 'results',
@@ -20,7 +20,7 @@ export class ResultsAreaComponent implements OnInit{
     };
     public barChartType:string = 'bar';
     public barChartLegend:boolean = true;
-    public barChartLabels:string[] = [ "Paragraph 1",  "Paragraph 2",  "Paragraph 3" , "Paragraph 4" , "Paragraph 5",  "Paragraph 6" ,  "Paragraph 7",  "Paragraph 8"];
+    public barChartLabels:string[] = [ 'Paragraph 1',  'Paragraph 2',  'Paragraph 3' , 'Paragraph 4' , 'Paragraph 5',  'Paragraph 6' ,  'Paragraph 7',  'Paragraph 8'];
     public barChartData:any[] = [
     {data: [0, 0, 0, 0, 0, 0, 0], label: 'Your score'},
     {data: [0, 0, 0, 0, 0, 0, 0], label: 'Highest Score'}

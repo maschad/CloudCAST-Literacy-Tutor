@@ -7,13 +7,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import {InMemoryDataService} from "./services/in-memory-data.service";
+import {InMemoryDataService} from './services/in-memory-data.service';
 
 import { AuthGuard } from '../auth';
 
-import { ReadingService } from './services/reading-service'
-import {ReadingAreaComponent} from "./components/reading-area";
-import { HttpModule, JsonpModule} from "@angular/http";
+import { ReadingService } from './services/reading-service';
+import {ReadingAreaComponent} from './components/reading-area';
+import { HttpModule, JsonpModule} from '@angular/http';
 
 
 const routes: Routes = [
