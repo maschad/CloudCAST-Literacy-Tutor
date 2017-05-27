@@ -31,6 +31,7 @@ export class ReadingAreaComponent implements OnInit{
     private score: Score;
     private currentScore: any;
     private all_words: string;
+    private transcriptLength: number;
     private bubble= false;
     private addOn="You are to say:   ";
 
@@ -124,7 +125,7 @@ export class ReadingAreaComponent implements OnInit{
                 this.words[index].changeColor('red');
                 totalWrong++;
                 incorrectWords.push(this.words[+index].title);
-            }else {
+            } else if (this.words.length == this.transcriptLength){
                 totalCorrect++;
                 this.words[index].changeColor('green');
             }
@@ -168,6 +169,7 @@ export class ReadingAreaComponent implements OnInit{
                     }
 
                 }
+                console.log('final transcripts', finalTranscripts);
                 component.compareTranscript(finalTranscripts);
 
             };
@@ -186,6 +188,9 @@ export class ReadingAreaComponent implements OnInit{
     compareTranscript (transcript: string) : void {
         let text = this.paragraph.text.split(' ');
         let splitTranscript = transcript.split(' ');
+        this.transcriptLength = splitTranscript.length;
+        console.log('length', splitTranscript.length);
+
 
         for(let index in splitTranscript) {
             if(text[index].toLowerCase() != splitTranscript[index].toLowerCase()){
