@@ -23,7 +23,7 @@ Quick Start
 -----------
 
 ```shell
-$ git clone https://github.com/r-park/todo-angular2-firebase.git
+$ git clone https://github.com/maschad/UWICloudCastWebsite.git
 $ cd todo-angular2-firebase
 $ npm install
 $ npm start
@@ -48,7 +48,7 @@ Commands
 
 |Script|Description|
 |---|---|
-|`npm start`|Start webpack development server @ `localhost:3000`|
+|`npm start`|Start webpack development server @ `localhost:8080`|
 |`npm run build`|Lint, test, and build the application to `./target`|
 |`npm run lint`|Lint `.ts` and `.js` files|
 |`npm run lint:js`|Lint `.js` files with eslint|
