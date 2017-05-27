@@ -1,4 +1,7 @@
 ### UWI CloudCast Literacy Tutor web app  built with Angular2, AngularFire2, and Firebase SDK 3
+
+Built with **Angular2** and **AngularFire2**. The app features a **Firebase** backend with **OAuth** authentication. 
+
 - Angular2 `2.2.0`
 - Angular2 Router `3.2.0`
 - AngularFire2 `2.0.0-beta.5`
@@ -20,13 +23,12 @@ Quick Start
 -----------
 
 ```shell
-$ git clone https://github.com/r-park/todo-angular2-firebase.git
+$ git clone https://github.com/maschad/UWICloudCastWebsite.git
 $ cd todo-angular2-firebase
 $ npm install
 $ npm start
 ```
 
-#
 #### Install firebase-tools:
 ```shell
 $ npm install -g firebase-tools
@@ -46,7 +48,7 @@ Commands
 
 |Script|Description|
 |---|---|
-|`npm start`|Start webpack development server @ `localhost:3000`|
+|`npm start`|Start webpack development server @ `localhost:8080`|
 |`npm run build`|Lint, test, and build the application to `./target`|
 |`npm run lint`|Lint `.ts` and `.js` files|
 |`npm run lint:js`|Lint `.js` files with eslint|
