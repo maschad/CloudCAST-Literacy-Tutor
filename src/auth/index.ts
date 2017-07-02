@@ -6,6 +6,7 @@ import { SignInComponent } from './components/sign-in';
 import { AuthGuard } from './guards/auth-guard';
 import { UnauthGuard } from './guards/unauth-guard';
 import { AuthService } from './services/auth-service';
+import {MdListModule, MdButtonModule, MdGridListModule} from "@angular/material";
 
 
 const routes: Routes = [
@@ -19,6 +20,8 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    MdButtonModule,
+    MdGridListModule,
     RouterModule.forChild(routes)
   ],
   providers: [

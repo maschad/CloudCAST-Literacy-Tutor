@@ -9,22 +9,7 @@ declare let responsiveVoice: any;
     require('./sign-in.scss'),
     require('../../common/anim.scss')
   ],
-  template: `
-   <div class="anim_cont">
-        <div class="chat_bubble tri-right btm-left-in"><p>{{speechText}}</p></div>
-        <div class="va" (click)="speak()"></div>
-    </div>
-    <div class="g-row sign-in">
-      <div class="g-col">
-        <h1 class="sign-in__heading">Sign in</h1>
-        <button class="sign-in__button" (click)="signInAnonymously()" type="button">Anonymously</button>
-        <button class="sign-in__button" (click)="signInWithGithub()" type="button">GitHub</button>
-        <button class="sign-in__button" (click)="signInWithGoogle()" type="button">Google</button>
-        <button class="sign-in__button" (click)="signInWithTwitter()" type="button">Twitter</button>
-        <button class="sign-in__button" (click)="signInWithFacebook()" type="button">Facebook</button>
-      </div>
-    </div>
-  `
+  template: require('./sign-in.html')
 })
 
 export class SignInComponent {

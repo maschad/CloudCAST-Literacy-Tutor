@@ -1,12 +1,8 @@
-<header class="header">
-    <div class="g-row">
-        <div class="g-col">
-            <h1 class="header__title">UWI CloudCast Platform</h1>
-            <div  *ngIf="authenticated">
-                <ul class="header__links">
-                    <li><a class="header__link" (click)="signOut.emit()" href="#">Sign out</a></li>
-                </ul>
-            </div>
-        </div>
+<md-toolbar color="primary">
+    <h1 class="header__title">UWI CloudCast Platform</h1>
+    <div  *ngIf="authenticated">
+        <ul class="header__links">
+            <li><a class="header__link" (click)="signOut.emit()" href="#">Sign out</a></li>
+        </ul>
     </div>
-</header>
+</md-toolbar>

@@ -1,0 +1,23 @@
+<div class="anim_cont">
+    <div class="chat_bubble tri-right btm-left-in"><p>{{speechText}}</p></div>
+    <div class="va" (click)="speak()"></div>
+</div>
+<h1 class="sign-in__heading">Sign in</h1>
+    <md-grid-list cols="1" rowHeight="60px">
+        <md-grid-tile>
+            <button  (click)="signInAnonymously()" md-raised-button>Anonymously</button>
+        </md-grid-tile>
+        <md-grid-tile>
+            <button  (click)="signInWithGithub()" md-raised-button>GitHub</button>
+        </md-grid-tile>
+        <md-grid-tile>
+            <button  (click)="signInWithGoogle()" md-raised-button>Google</button>
+        </md-grid-tile>
+        <md-grid-tile>
+            <button  (click)="signInWithTwitter()" md-raised-button>Twitter</button>
+        </md-grid-tile>
+        <md-grid-tile>
+            <button  (click)="signInWithFacebook()" md-raised-button>Facebook</button>
+        </md-grid-tile>
+    </md-grid-list>
+
