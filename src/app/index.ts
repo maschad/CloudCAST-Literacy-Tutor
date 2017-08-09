@@ -13,7 +13,7 @@ import { ReadingModule } from "../reading-area";
 import {ResultsModule} from "../results-area/index";
 import {SidebarModule} from "ng-sidebar";
 import {PracticeModule} from "../practice-area/index";
-import {MdToolbarModule} from "@angular/material";
+import {MdToolbarModule, MdSidenavModule} from "@angular/material";
 
 
 @NgModule({
@@ -29,6 +29,7 @@ import {MdToolbarModule} from "@angular/material";
     BrowserModule,
     ElasticModule,
     FirebaseModule,
+    MdSidenavModule,
     MdToolbarModule,
     PracticeModule,
     ReadingModule,
