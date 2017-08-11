@@ -7,14 +7,17 @@ import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {Word} from "../models/word";
 import {Score} from "../models/score";
+import {Observable} from "rxjs";
 const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
 declare let responsiveVoice: any;
+const START_TEXT: string = "You are to say:   ";
+
 
 @Component({
     selector: 'reading-area',
-    styles : [
+    styles: [
         require('./reading-area.scss'),
         require('../../common/anim.scss')
     ],
@@ -22,185 +25,51 @@ declare let responsiveVoice: any;
 })
 
 
-export class ReadingAreaComponent implements OnInit{
-    private words: Word[];
-    private erroneousIndices: number[];
-    private paragraph: onScreenSentence;
+export class ReadingAreaComponent implements OnInit {
+    //Current Words and paragraph to be displayed
+    words: Observable<Word[]>;
+    paragraph: onScreenSentence;
+
+    //Related to Data to displayed on screen
     private buttonText: string;
     private buttonColor: string;
+    bubble: boolean = false;
+
+    //Current User score
     private score: Score;
-    private currentScore: any;
-    private all_words: string;
-    private transcriptLength: number;
-    private bubble= false;
-    private addOn="You are to say:   ";
-
-    
-    constructor(private readingService: ReadingService){
-        this.paragraph = new onScreenSentence(1, '');
-        this.buttonText ='Start';
-        this.buttonColor = '#4279BD';
-        this.words = [];
-        this.erroneousIndices = [];
-        this.score = new Score();
-    };
 
 
-    speak(mystring: string): void {
-        console.log('speak getting called');
-        if(!this.bubble)
-        {
-            this.bubble=true;
-            responsiveVoice.speak(this.addOn+mystring,'US English Female',{pitch: 1.32});
-        }
-        else
-        {
-            this.bubble=false;
-        }
-    }
-
+    constructor(private readingService: ReadingService) {};
 
 
     ngOnInit(): void {
-        this.currentScore = this.readingService.retrieveScore(this.paragraph.id);
+        //Initialize Button colors and text
+        this.buttonText = 'Start';
+        this.buttonColor = '#4279BD';
+
+        this.score = this.readingService.retrieveScore(this.paragraph.getCurrentId());
         this.getOnScreenParagraph();
     }
 
-
-    getOnScreenParagraph() : void {
-        this.readingService.getOnScreenParagraph(this.paragraph.getCurrentId()).then(paragraph =>
-        {
-            this.paragraph.setText(paragraph.text);
-            this.addWords();
+    getOnScreenParagraph(): void {
+        this.readingService.getOnScreenParagraph(this.paragraph.getCurrentId()).then(paragraph => {
+            this.paragraph.setText(paragraph.getText());
         });
     }
 
-    resetState(): void {
-        this.buttonText ='Start';
-        this.buttonColor = '#4279BD';
-        this.erroneousIndices = [];
-        this.score = new Score();
-    }
-
-    record() : void {
-        switch (this.buttonText){
-            case 'Start':
-                this.startConverting();
-                break;
-
-            case 'Try again?':
-                this.resetState();
-                this.startConverting();
-                break;
-
-            case 'Well done!':
-                this.paragraph.incrementId();
-                this.score = new Score();
-                this.erroneousIndices = [];
-                this.currentScore = this.readingService.retrieveScore(this.paragraph.id);
-                this.getOnScreenParagraph();
-                this.startConverting();
-                break;
+    /**
+     * Function for the
+     * @param myString string to be said by the tutor
+     */
+    ReadSentenceToStudent(): void {
+        if (!this.bubble) {
+            this.bubble = true;
+            responsiveVoice.speak(START_TEXT + this.paragraph.getText(), 'US English Female', {pitch: 1.32});
+        }
+        else {
+            this.bubble = false;
         }
     }
-
-    addWords() : void {
-        let titles = this.paragraph.text.split(' ');
-        this.words = [];
-        for(let title of titles){
-            this.words.push(new Word(title));
-        }
-      
-        this.all_words=this.paragraph.text;
-    }
-
-    updateWords(): void {
-        console.log('updating words');
-        let totalCorrect = 0;
-        let totalWrong = 0;
-        let incorrectWords = [];
-
-        for(let index in this.words){
-            if(this.erroneousIndices.includes(+index)){
-                this.words[index].changeColor('red');
-                totalWrong++;
-                incorrectWords.push(this.words[+index].title);
-            } else if (this.words.length == this.transcriptLength){
-                totalCorrect++;
-                this.words[index].changeColor('green');
-            }
-        }
-        if(this.erroneousIndices.length == 0){
-            this.buttonText = 'Well done!';
-            this.buttonColor = '#63b648';
-        } else {
-            this.buttonText = 'Try again?';
-            this.buttonColor = '#d4ad25';
-        }
-        this.readingService.saveWeakWords(incorrectWords);
-        this.score.updateScore(totalCorrect,totalWrong);
-        this.paragraph.setHighestScore(this.score.totalCorrect);
-        this.readingService.setHighestScore(this.paragraph.highestScore,this.paragraph.id);
-        this.readingService.saveScore(this.score, this.paragraph.id);
-    }
-
-    startConverting() {
-        this.buttonText = 'Recording';
-        this.buttonColor = '#ba3e4e';
-        this.buttonColor = '#4279BD';
-        
-        let finalTranscripts = '';
-        let component = this;
-        if ('webkitSpeechRecognition' in window) {
-            let speechRecognizer = new webkitSpeechRecognition();
-            speechRecognizer.continuous = false;
-            speechRecognizer.interimResults = false;
-            speechRecognizer.lang = 'en-GB';
-            speechRecognizer.start();
-            speechRecognizer.onresult = function (event) {
-                let interimTranscripts = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    let transcript = event.results[i][0].transcript;
-                    transcript.replace("\n", "<br>");
-                    if (event.results[i].isFinal) {
-                        finalTranscripts += transcript;
-                    } else {
-                        interimTranscripts += transcript;
-                    }
-
-                }
-                console.log('final transcripts', finalTranscripts);
-                component.compareTranscript(finalTranscripts);
-
-            };
-
-            speechRecognizer.onerror = function (event) {
-                console.log('error')
-            };
-        } else {
-            console.log('Your browser is not supported. If google chrome, please upgrade!');
-        }
-
-    }
-
-
-
-    compareTranscript (transcript: string) : void {
-        let text = this.paragraph.text.split(' ');
-        let splitTranscript = transcript.split(' ');
-        this.transcriptLength = splitTranscript.length;
-        console.log('length', splitTranscript.length);
-
-
-        for(let index in splitTranscript) {
-            if(text[index].toLowerCase() != splitTranscript[index].toLowerCase()){
-                this.erroneousIndices.push(+index);
-            }
-        }
-        console.log('erroneous words', this.erroneousIndices);
-        this.updateWords();
-    }
-
 
 
 }

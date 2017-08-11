@@ -3,9 +3,9 @@
  */
 
 export class onScreenSentence {
-    id: number;
-    text: string;
-    highestScore: number;
+    private id: number;
+    private text: string;
+    private highestScore: number;
 
     constructor(id:number, text:string){
         this.id = id;
