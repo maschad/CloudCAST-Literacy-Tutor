@@ -1,17 +1,20 @@
 
 export interface IWord {
-    title: string,
+    title: string
+    phonemes:string[],
     color : string,
     completed: boolean
 }
 
-export class Word implements IWord {
-    title: string;
-    completed: boolean = false;
-    color: string = 'white';
+export class WordVM implements IWord {
+     phonemes: string[];
+     title: string;
+     completed: boolean = false;
+     color: string = 'white';
 
-    constructor(title:string){
+    constructor(title:string, phonemes:string[]){
         this.title = title;
+        this.phonemes = phonemes;
     }
 
     changeColor(color: string): void {
@@ -20,5 +23,9 @@ export class Word implements IWord {
 
     completeWord() : void {
         this.completed = true;
+    }
+
+    getPhonemes() : string[] {
+        return this.phonemes;
     }
 }

@@ -5,9 +5,11 @@
 import {Component, OnInit} from "@angular/core";
 import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
-import {Word} from "../models/word";
-import {Score} from "../models/score";
+import {WordVM} from "../models/word";
+import {IScore} from "../models/score";
 import {Observable} from "rxjs";
+import {FirebaseObjectObservable} from "angularfire2";
+import {IUser} from "../../shared/User";
 const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
@@ -27,8 +29,9 @@ const START_TEXT: string = "You are to say:   ";
 
 export class ReadingAreaComponent implements OnInit {
     //Current Words and paragraph to be displayed
-    words: Observable<Word[]>;
+    words: Observable<WordVM[]>;
     paragraph: onScreenSentence;
+    user: FirebaseObjectObservable<IUser>;
 
     //Related to Data to displayed on screen
     private buttonText: string;
@@ -36,7 +39,7 @@ export class ReadingAreaComponent implements OnInit {
     bubble: boolean = false;
 
     //Current User score
-    private score: Score;
+    private $score: FirebaseObjectObservable<IScore>;
 
 
     constructor(private readingService: ReadingService) {};
@@ -47,9 +50,24 @@ export class ReadingAreaComponent implements OnInit {
         this.buttonText = 'Start';
         this.buttonColor = '#4279BD';
 
-        this.score = this.readingService.retrieveScore(this.paragraph.getCurrentId());
+        //Load User profile
+        this.loadUserProfile();
+
+        //Load the paragraph
         this.getOnScreenParagraph();
     }
+
+    /**
+     * Load the current user Profile
+     */
+
+    loadUserProfile(): void {
+       this.user =  this.readingService.loadUserProfile();
+    }
+
+    /**
+     * Load the latest paragraph to be read by the user
+     */
 
     getOnScreenParagraph(): void {
         this.readingService.getOnScreenParagraph(this.paragraph.getCurrentId()).then(paragraph => {

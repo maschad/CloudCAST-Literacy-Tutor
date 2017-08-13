@@ -7,12 +7,13 @@ import 'rxjs/add/operator/toPromise';
 
 
 import { Injectable } from '@angular/core';
-import {Word, IWord} from "../models/word";
+import {WordVM, IWord} from "../models/word";
 import {AngularFire, FirebaseListObservable, AngularFireDatabase, FirebaseObjectObservable} from "angularfire2";
 import {AuthService} from "../../auth/services/auth-service";
 import {Http, Response, Headers, RequestOptions} from "@angular/http";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {Score, IScore} from "../models/score";
+import {IUser} from "../../shared/User";
 
 
 @Injectable()
@@ -22,15 +23,20 @@ export class ReadingService {
     private options = new RequestOptions({ headers: this.headers });
     //In Memory API #TODO: Change when using actual server
     private sentencesUrl = 'api/onScreenSentences';
-
+    //Firebase Variables and paths
     private results: FirebaseObjectObservable<IScore>;
-    private path = `/results/${this.auth.id}`;
+    private userPath = `/users/${this.auth.id}`;
+    private resultsPath = `/results/${this.auth.id}`;
     private weakWordsPath = `/weakwords/${this.auth.id}`;
 
 
 
     constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http){}
 
+
+    loadUserProfile(): FirebaseObjectObservable<IUser> {
+        return this.db.object(this.userPath);
+    }
 
 
     /**
@@ -52,7 +58,7 @@ export class ReadingService {
      * @param id
      */
     saveScore(newScore: Score , id:number) {
-        this.results = this.db.object(this.path + `/${id}`);
+        this.results = this.db.object(this.resultsPath + `/${id}`);
         this.results.set({ score:newScore });
     }
 
@@ -74,7 +80,7 @@ export class ReadingService {
      * @returns {FirebaseObjectObservable<any>}
      */
     retrieveScore(id:number): FirebaseObjectObservable<IScore> {
-        return this.db.object(this.path + `/${id}`);
+        return this.db.object(this.resultsPath + `/${id}`);
     }
 
     retrieveKaldiScore(audio: any) : any {
