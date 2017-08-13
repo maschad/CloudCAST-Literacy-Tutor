@@ -27,4 +27,8 @@ export class User implements IUser {
         this.weakWords = weakWords;
     }
 
+    getLastReadParagraphId(): number {
+        return this.lastReadParagraphId;
+    }
+
 }

@@ -62,7 +62,9 @@ export class ReadingAreaComponent implements OnInit {
      */
 
     loadUserProfile(): void {
-       this.user =  this.readingService.loadUserProfile();
+       this.user.subscribe(
+           () => this.readingService.loadUserProfile(),
+       )
     }
 
     /**
@@ -70,7 +72,7 @@ export class ReadingAreaComponent implements OnInit {
      */
 
     getOnScreenParagraph(): void {
-        this.readingService.getOnScreenParagraph(this.paragraph.getCurrentId()).then(paragraph => {
+        this.readingService.getLastReadParagraph().then(paragraph => {
             this.paragraph.setText(paragraph.getText());
         });
     }
