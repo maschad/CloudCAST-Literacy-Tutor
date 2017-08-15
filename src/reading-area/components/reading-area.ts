@@ -69,18 +69,21 @@ export class ReadingAreaComponent implements OnInit {
     }
 
     /**
-     * Load the latest paragraph to be read by the user
+     * Load the latest paragraph to be read by the user, if it is the first time it is set to paragraph 1.
      */
 
     getOnScreenParagraph(): void {
         this.readingService
             .getIndex(LAST_READ_PARAGRAPH_ID)
             .subscribe(
-                lastParagraphId => this.readingService
-                    .getLastReadParagraph(lastParagraphId)
-                    .then(paragraph => {
+                lastParagraphId => {
+                    this.readingService
+                        .getLastReadParagraph(lastParagraphId)
+                        .then(paragraph => {
                             this.paragraph.setText(paragraph.getText());
-                    })
+                        });
+                }
+
             );
     }
 

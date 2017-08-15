@@ -13,7 +13,7 @@ import {AuthService} from "../../auth/services/auth-service";
 import {Http, Response, Headers, RequestOptions} from "@angular/http";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {Score, IScore} from "../models/score";
-import {IUser} from "../../shared/User";
+import {IUser, User} from "../../shared/User";
 
 
 @Injectable()
@@ -35,6 +35,16 @@ export class ReadingService {
 
 
     loadUserProfile(): FirebaseObjectObservable<IUser> {
+        console.log('performing check');
+        //For first time users
+        if(this.db.object(this.userPath) == null){
+            console.log(' check failed');
+
+            this.db.object(this.userPath).set({
+                    user : new User(parseInt(this.auth.id))
+            })
+        }
+
         return this.db.object(this.userPath);
     }
 
@@ -104,7 +114,7 @@ export class ReadingService {
 
 
     getIndex(type:string): FirebaseObjectObservable<number>{
-        return this.db.object(this.resultsPath.concat(`${type}`));
+        return this.db.object(this.userPath.concat(`${type}`));
     }
 
 
