@@ -10,6 +10,7 @@ import {IScore} from "../models/score";
 import {Observable} from "rxjs";
 import {FirebaseObjectObservable} from "angularfire2";
 import {IUser} from "../../shared/User";
+import {LAST_READ_PARAGRAPH_ID} from "./UserActions";
 const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
@@ -72,9 +73,15 @@ export class ReadingAreaComponent implements OnInit {
      */
 
     getOnScreenParagraph(): void {
-        this.readingService.getLastReadParagraph().then(paragraph => {
-            this.paragraph.setText(paragraph.getText());
-        });
+        this.readingService
+            .getIndex(LAST_READ_PARAGRAPH_ID)
+            .subscribe(
+                lastParagraphId => this.readingService
+                    .getLastReadParagraph(lastParagraphId)
+                    .then(paragraph => {
+                            this.paragraph.setText(paragraph.getText());
+                    })
+            );
     }
 
     /**

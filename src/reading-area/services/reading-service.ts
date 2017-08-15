@@ -41,13 +41,12 @@ export class ReadingService {
 
     /**
      *Load the paragraph to be read
-     * @param id
+     * @param lastReadParagraphId
      * @returns {Promise<onScreenSentence>}
      */
 
-    getLastReadParagraph(paragraphId: number): Promise<onScreenSentence> {
-
-        return this.http.get(this.sentencesUrl + '/' + paragraphId)
+    getLastReadParagraph(lastReadParagraphId:number): Promise<onScreenSentence> {
+        return this.http.get(this.sentencesUrl + '/' + lastReadParagraphId)
             .toPromise()
             .then(response => response.json().data as onScreenSentence)
             .catch(ReadingService.handleError);
@@ -101,6 +100,11 @@ export class ReadingService {
     private static handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);
+    }
+
+
+    getIndex(type:string): FirebaseObjectObservable<number>{
+        return this.db.object(this.resultsPath.concat(`${type}`));
     }
 
 
