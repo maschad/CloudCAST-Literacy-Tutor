@@ -5,6 +5,11 @@
 
 <br>
 <div class="g-row">
+    <div class="user-details">
+        <div class="g-row">
+            <h3>Hey there {{user$.displayName}} </h3>
+        </div>
+    </div>
     <div class="score">
         <div class="g-row">
             <h3>Here are your total scores for this paragraph</h3>
@@ -15,12 +20,13 @@
 
         </div>
     </div>
+
     <div class="g-row">
         <h3>Welcome to UWI Cloudcast Literacy Tutor</h3>
         <h5>Below a text will appear and you will be instructed to read it.</h5>
         
         <div class="boxed">
-            <div *ngFor="let word of words">
+            <div *ngFor="let word of words$ | async">
                 <div style="padding: 5px;" [ngStyle]= "{'color' : word.color}">{{word.title}}</div>
             </div>
         </div>

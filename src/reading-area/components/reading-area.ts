@@ -30,9 +30,10 @@ const START_TEXT: string = "You are to say:   ";
 
 export class ReadingAreaComponent implements OnInit {
     //Current Words and paragraph to be displayed
-    words: Observable<WordVM[]>;
+    words$: Observable<WordVM[]>;
     paragraph: onScreenSentence;
-    user: FirebaseObjectObservable<IUser>;
+    userProfile$: FirebaseObjectObservable<IUser>;
+    user$: firebase.User;
 
     //Related to Data to displayed on screen
     private buttonText: string;
@@ -51,6 +52,8 @@ export class ReadingAreaComponent implements OnInit {
         this.buttonText = 'Start';
         this.buttonColor = '#4279BD';
 
+        //Load the user
+        this.loadUser();
         //Load User profile
         this.loadUserProfile();
 
@@ -63,9 +66,15 @@ export class ReadingAreaComponent implements OnInit {
      */
 
     loadUserProfile(): void {
-       this.user.subscribe(
-           () => this.readingService.loadUserProfile(),
-       )
+        this.userProfile$ = this.readingService.loadUserProfile()
+
+    }
+
+    /**
+     * Load User
+     */
+    loadUser(): void {
+        this.user$ = this.readingService.loadUser();
     }
 
     /**
@@ -78,13 +87,20 @@ export class ReadingAreaComponent implements OnInit {
             .subscribe(
                 lastParagraphId => {
                     this.readingService
-                        .getLastReadParagraph(lastParagraphId)
+                        .getLastReadParagraph(lastParagraphId.$value)
                         .then(paragraph => {
-                            this.paragraph.setText(paragraph.getText());
+                            this.paragraph = paragraph;
+                            this.createWords();
                         });
                 }
-
             );
+    }
+
+    /**
+     * Function to load the words onto the screen
+     */
+    createWords(): void {
+
     }
 
     /**

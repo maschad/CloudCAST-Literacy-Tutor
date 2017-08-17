@@ -1,2 +1,2 @@
 
-export const LAST_READ_PARAGRAPH_ID = 'LAST_READ_PARAGRAPH_ID';
+export const LAST_READ_PARAGRAPH_ID = 'lastReadParagraphId';

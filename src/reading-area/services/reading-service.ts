@@ -23,8 +23,10 @@ export class ReadingService {
     private options = new RequestOptions({ headers: this.headers });
     //In Memory API #TODO: Change when using actual server
     private sentencesUrl = 'api/onScreenSentences';
-    //Firebase Variables and paths
-    private results: FirebaseObjectObservable<IScore>;
+    //Firebase Variables
+    private results$: FirebaseObjectObservable<IScore>;
+    private users$: FirebaseObjectObservable<IUser>;
+
     private userPath = `/users/${this.auth.id}`;
     private resultsPath = `/results/${this.auth.id}`;
     private weakWordsPath = `/weakwords/${this.auth.id}`;
@@ -33,17 +35,15 @@ export class ReadingService {
 
     constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http){}
 
-
+    /**
+     * Load the user profile for various displays in front end
+     * @returns {FirebaseObjectObservable<IUser>}
+     */
     loadUserProfile(): FirebaseObjectObservable<IUser> {
-        console.log('performing check');
-        //For first time users
-        if(this.db.object(this.userPath) == null){
-            console.log(' check failed');
-
+        if(!this.db.object(this.userPath))
             this.db.object(this.userPath).set({
-                    user : new User(parseInt(this.auth.id))
-            })
-        }
+                    userData :new User(this.auth.id)
+            });
 
         return this.db.object(this.userPath);
     }
@@ -68,8 +68,8 @@ export class ReadingService {
      * @param id
      */
     saveScore(newScore: Score , id:number) {
-        this.results = this.db.object(this.resultsPath + `/${id}`);
-        this.results.set({ score:newScore });
+        this.results$ = this.db.object(this.resultsPath + `/${id}`);
+        this.results$.set({ score:newScore });
     }
 
     /**
@@ -112,9 +112,20 @@ export class ReadingService {
         return Promise.reject(error.message || error);
     }
 
+    /**
+     * Retrieve an index in the user path
+     * @param {string} type
+     * @returns {FirebaseObjectObservable<number>}
+     */
+    getIndex(type:string): FirebaseObjectObservable<any>{
+        return this.db.object(this.userPath + `/userData/${type}`);
+    }
 
-    getIndex(type:string): FirebaseObjectObservable<number>{
-        return this.db.object(this.userPath.concat(`${type}`));
+    /**
+     * Return the current user
+     */
+    loadUser(): firebase.User {
+        return this.auth.getUser();
     }
 
 
