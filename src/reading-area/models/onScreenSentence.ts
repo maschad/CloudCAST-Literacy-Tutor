@@ -3,8 +3,9 @@
  */
 
 export class onScreenSentence {
+
     private id: number;
-    private text: string;
+    public text: string;
     private highestScore: number;
 
     constructor(id:number, text:string){
@@ -18,7 +19,7 @@ export class onScreenSentence {
         this.text = text;
     }
 
-    getText(): string {
+    get Text(): string {
         return this.text;
     }
 

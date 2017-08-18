@@ -1,4 +1,4 @@
-///<reference path="../models/word.ts"/>
+
 /**
  * Created by carlos on 3/15/17.
  */
@@ -7,8 +7,7 @@ import 'rxjs/add/operator/toPromise';
 
 
 import { Injectable } from '@angular/core';
-import {WordVM, IWord} from "../models/word";
-import {AngularFire, FirebaseListObservable, AngularFireDatabase, FirebaseObjectObservable} from "angularfire2";
+import {AngularFireDatabase, FirebaseObjectObservable} from "angularfire2";
 import {AuthService} from "../../auth/services/auth-service";
 import {Http, Response, Headers, RequestOptions} from "@angular/http";
 import {onScreenSentence} from "../models/onScreenSentence";

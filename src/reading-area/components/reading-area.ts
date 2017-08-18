@@ -5,12 +5,13 @@
 import {Component, OnInit} from "@angular/core";
 import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
-import {WordVM} from "../models/word";
+import {WordVM} from "../models/wordVM";
 import {IScore} from "../models/score";
 import {Observable} from "rxjs";
 import {FirebaseObjectObservable} from "angularfire2";
 import {IUser} from "../../shared/User";
 import {LAST_READ_PARAGRAPH_ID} from "./UserActions";
+import map = require("core-js/fn/array/map");
 const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
@@ -30,7 +31,7 @@ const START_TEXT: string = "You are to say:   ";
 
 export class ReadingAreaComponent implements OnInit {
     //Current Words and paragraph to be displayed
-    words$: Observable<WordVM[]>;
+    words: WordVM[] = [];
     paragraph: onScreenSentence;
     userProfile$: FirebaseObjectObservable<IUser>;
     user$: firebase.User;
@@ -40,8 +41,6 @@ export class ReadingAreaComponent implements OnInit {
     private buttonColor: string;
     bubble: boolean = false;
 
-    //Current User score
-    private $score: FirebaseObjectObservable<IScore>;
 
 
     constructor(private readingService: ReadingService) {};
@@ -100,8 +99,12 @@ export class ReadingAreaComponent implements OnInit {
      * Function to load the words onto the screen
      */
     createWords(): void {
-
+        let titles = this.paragraph.text.split(' ');
+        for(let title of titles){
+            this.words.push(new WordVM(title,['']));
+        }
     }
+
 
     /**
      * Function for the
@@ -110,7 +113,7 @@ export class ReadingAreaComponent implements OnInit {
     ReadSentenceToStudent(): void {
         if (!this.bubble) {
             this.bubble = true;
-            responsiveVoice.speak(START_TEXT + this.paragraph.getText(), 'US English Female', {pitch: 1.32});
+            responsiveVoice.speak(START_TEXT + this.paragraph.text, 'US English Female', {pitch: 1.32});
         }
         else {
             this.bubble = false;

@@ -1,18 +1,18 @@
 import {IScore, Score} from "../reading-area/models/score";
-import {IWord} from "../reading-area/models/word";
+import {Word} from "./Word";
 
 export interface IUser {
     id:string,
     lastReadParagraphId: number,
     score : IScore,
-    weakWords: IWord[]
+    weakWords: Word[]
 }
 
 export class User implements IUser {
     id: string;
     lastReadParagraphId: number;
     score: IScore;
-    weakWords: IWord[];
+    weakWords: Word[];
 
     constructor(id:string){
         this.id = id;
@@ -23,7 +23,7 @@ export class User implements IUser {
         this.score = score;
     }
 
-    updateWeakWords(weakWords:IWord[]){
+    updateWeakWords(weakWords:Word[]){
         this.weakWords = weakWords;
     }
 

@@ -5,8 +5,8 @@
 
 import {Component, OnInit} from "@angular/core";
 import {PracticeService} from "../services/practice-service";
-import {WordVM} from "../../reading-area/models/word";
 import {Observable} from "rxjs";
+import {WordVM} from "../../reading-area/models/wordVM";
 
 @Component({
     selector: 'practice-area',
