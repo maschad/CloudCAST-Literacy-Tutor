@@ -39,7 +39,8 @@ export class ReadingService {
      * @returns {FirebaseObjectObservable<IUser>}
      */
     loadUserProfile(): FirebaseObjectObservable<IUser> {
-        if(!this.db.object(this.userPath))
+
+        if(this.db.object(this.userPath) == undefined)
             this.db.object(this.userPath).set({
                     userData :new User(this.auth.id)
             });

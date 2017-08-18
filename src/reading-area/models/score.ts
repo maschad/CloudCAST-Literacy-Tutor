@@ -2,19 +2,16 @@
  * Created by carlos on 5/16/17.
  */
 export interface IScore {
-    id: number
     totalCorrect: number
     totalWrong: number
 }
 
 
 export class Score implements IScore {
-    id: number;
     totalCorrect: number;
     totalWrong: number;
 
-    constructor(id:number) {
-        this.id = id;
+    constructor() {
         this.totalCorrect = 0;
         this.totalWrong = 0;
     }

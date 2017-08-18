@@ -12,10 +12,10 @@
     </div>
     <div class="score">
         <div class="g-row">
+            <div *ngIf="(userProfile$ | async)?.userData">
             <h3>Here are your total scores for this paragraph</h3>
-            <div *ngIf=" userProfile$.score | async ">
-                Total Correct : {{userProfile$.score.totalCorrect | async}} ,
-                Total Wrong : {{userProfile$.score.totalWrong | async }}
+                Total Correct : {{(userProfile$ | async)?.userData.score.totalCorrect }} ,
+                Total Wrong : {{(userProfile$ | async)?.userData.score.totalWrong  }}
             </div>
 
         </div>
@@ -30,8 +30,9 @@
                 <div style="padding: 5px;" [ngStyle]= "{'color' : word.color}">{{word.title}}</div>
             </div>
         </div>
+        <video #audio class="video"></video>
         <h6>To begin reading, click the start button, the microphone will detect when you have finished reading.</h6>
-        <button [ngStyle]="{'backgroundColor': buttonColor}" class="button fa fa-microphone" (click)='record()'>{{buttonText}}</button>
+        <button [ngStyle]="{'backgroundColor': buttonColor}" class="button fa fa-microphone" (click)='startRecording()'>{{buttonText}}</button>
     </div>
 </div>
 

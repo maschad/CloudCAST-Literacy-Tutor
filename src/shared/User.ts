@@ -17,6 +17,8 @@ export class User implements IUser {
     constructor(id:string){
         this.id = id;
         this.lastReadParagraphId = 1;
+        this.score = new Score();
+        this.weakWords = [];
     }
 
     updateScore(score: Score){
