@@ -40,6 +40,7 @@ export class ReadingAreaComponent implements OnInit {
     private buttonText: string;
     private buttonColor: string;
     bubble: boolean = false;
+    private isRecording = false;
 
     //Streaming data
     private stream: MediaStream;
@@ -130,8 +131,10 @@ export class ReadingAreaComponent implements OnInit {
      * Accept user recording
      */
     startRecording(): any {
+        this.isRecording = true;
         let mediaConstraints = {
-            audio: true
+            audio: true,
+            video: false
         };
         navigator
             .mediaDevices
@@ -140,7 +143,6 @@ export class ReadingAreaComponent implements OnInit {
                 this.errorCallback.bind(this)
             );
 
-
     }
 
     /**
@@ -148,12 +150,11 @@ export class ReadingAreaComponent implements OnInit {
      */
     successCallback(stream: MediaStream) {
         let options = {
-            mimeType: 'audio/mpeg', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
-            audioBitsPerSecond: 128000
+            mimeType: 'wav/ogg',
         };
         this.stream = stream;
-        let recordRTC = RecordRTC(stream, options);
-        recordRTC.startRecording();
+        this.recordRTC = RecordRTC(stream,options);
+        this.recordRTC.startRecording();
         let audio: HTMLAudioElement = this.audio.nativeElement;
         audio.src = window.URL.createObjectURL(stream);
 
@@ -168,7 +169,8 @@ export class ReadingAreaComponent implements OnInit {
      */
     stopRecording() {
         let recordRTC = this.recordRTC;
-        recordRTC.stopRecording(this.processVideo.bind(this));
+        console.log('this is', this);
+        recordRTC.stopRecording(this.processAudio.bind(this));
         let stream = this.stream;
         stream.getAudioTracks().forEach(track => track.stop());
     }
@@ -176,10 +178,10 @@ export class ReadingAreaComponent implements OnInit {
     /**
      *
      * Process the audio
-     * @param audioVideoWebMURL
+     * @param audioURL
      */
 
-    processVideo(audioURL) {
+    processAudio(audioURL) {
         let audio: any = this.audio.nativeElement;
         let recordRTC = this.recordRTC;
         audio.src = audioURL;
@@ -191,7 +193,7 @@ export class ReadingAreaComponent implements OnInit {
      * Download the audio to send to the server
      */
     download() {
-        this.recordRTC.save('speech.mp3');
+        this.recordRTC.save('speech.wav');
     }
 
 }
