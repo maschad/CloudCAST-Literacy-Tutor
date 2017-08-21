@@ -13,6 +13,7 @@ import {Http, Response, Headers, RequestOptions} from "@angular/http";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {Score, IScore} from "../models/score";
 import {IUser, User} from "../../shared/User";
+import {KaldiResponse} from "../../shared/kaldiResponse";
 
 
 @Injectable()
@@ -22,10 +23,10 @@ export class ReadingService {
     private options = new RequestOptions({ headers: this.headers });
     //In Memory API #TODO: Change when using actual server
     private sentencesUrl = 'api/onScreenSentences';
+    private kaldiUrl = '';
     //Firebase Variables
     private results$: FirebaseObjectObservable<IScore>;
     private users$: FirebaseObjectObservable<IUser>;
-
     private userPath = `/users/${this.auth.id}`;
     private resultsPath = `/results/${this.auth.id}`;
     private weakWordsPath = `/weakwords/${this.auth.id}`;
@@ -93,8 +94,10 @@ export class ReadingService {
         return this.db.object(this.resultsPath + `/${id}`);
     }
 
-    retrieveKaldiScore(audio: any) : any {
-        //#TODO: Send Audio to Kaldi and retrieve a Score
+    retrieveKaldiResponse(audio: any) : Promise<KaldiResponse> {
+        return this.http.post(this.kaldiUrl, {audio: audio}, this.options)
+            .toPromise()
+            .then(response => response.json().data as KaldiResponse);
     }
 
     /**

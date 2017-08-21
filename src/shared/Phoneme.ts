@@ -18,4 +18,12 @@ export class Phoneme implements IPhoneme{
         this.confidence = confidence;
     }
 
+    getLabel() {
+        return this.label;
+    }
+
+    getConfidence(){
+        return this.confidence;
+    }
+
 }

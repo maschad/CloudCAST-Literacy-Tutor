@@ -12,6 +12,10 @@ import {Observable} from "rxjs";
 import {FirebaseObjectObservable} from "angularfire2";
 import { IUser} from "../../shared/User";
 import {LAST_READ_PARAGRAPH_ID} from "./UserActions";
+import {PhonemeVM} from "../models/phonemeVM";
+import {KaldiResponse} from "../../shared/kaldiResponse";
+import {Hypotheses, KaldiResult} from "../../shared/kaldiResult";
+import {Phoneme} from "../../shared/Phoneme";
 const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
@@ -108,7 +112,8 @@ export class ReadingAreaComponent implements OnInit {
         this.words = [];
         let titles = this.paragraph.text.split(' ');
         for(let title of titles){
-            this.words.push(new WordVM(title,['']));
+            //#TODO:Add phonemes which make up a word
+            this.words.push(new WordVM(title,[]));
         }
     }
 
@@ -194,6 +199,31 @@ export class ReadingAreaComponent implements OnInit {
      */
     download() {
         this.recordRTC.save('speech.wav');
+    }
+
+    /**
+     * Pass audio to kaldi and process score
+     *
+     */
+    sendAudio() {
+        this.readingService.retrieveKaldiResponse(this.recordRTC.save).then(
+                kaldiResponse => {
+
+                    //#TODO: Handle this error
+                    if(kaldiResponse.status != 0)
+                        console.log('error in status', status);
+                    kaldiResponse.result.hypotheses.forEach(kaldiResult => {
+                        this.updateConfidenceScore(kaldiResult.phonemes)
+                    })
+                }
+
+        )
+    }
+
+    updateConfidenceScore(phonemes: Phoneme[]){
+
+        //#TODO: Iterate through the words array and assigne the confidence scores received in order to update screen
+
     }
 
 }
