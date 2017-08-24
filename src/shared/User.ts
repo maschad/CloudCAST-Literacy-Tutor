@@ -1,32 +1,33 @@
 import {IScore, Score} from "../reading-area/models/score";
 import {Word} from "./Word";
+import {Phoneme} from "./Phoneme";
 
 export interface IUser {
     id:string,
     lastReadParagraphId: number,
     score : IScore,
-    weakWords: Word[]
+    weakPhones: Phoneme[]
 }
 
 export class User implements IUser {
     id: string;
     lastReadParagraphId: number;
     score: IScore;
-    weakWords: Word[];
+    weakPhones: Phoneme[];
 
     constructor(id:string){
         this.id = id;
         this.lastReadParagraphId = 1;
         this.score = new Score();
-        this.weakWords = [];
+        this.weakPhones = [];
     }
 
     updateScore(score: Score){
         this.score = score;
     }
 
-    updateWeakWords(weakWords:Word[]){
-        this.weakWords = weakWords;
+    updateWeakPhones(weakPhones:Phoneme[]){
+        this.weakPhones = weakPhones;
     }
 
     getLastReadParagraphId(): number {

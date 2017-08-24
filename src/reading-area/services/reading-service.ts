@@ -14,6 +14,9 @@ import {onScreenSentence} from "../models/onScreenSentence";
 import {Score, IScore} from "../models/score";
 import {IUser, User} from "../../shared/User";
 import {KaldiResponse} from "../../shared/kaldiResponse";
+import {SCORE} from "../components/UserActions";
+import {Word} from "../../shared/Word";
+import {PhonemeVM} from "../models/phonemeVM";
 
 
 @Injectable()
@@ -23,10 +26,11 @@ export class ReadingService {
     private options = new RequestOptions({ headers: this.headers });
     //In Memory API #TODO: Change when using actual server
     private sentencesUrl = 'api/onScreenSentences';
-    private kaldiUrl = '';
+    private cloudCASTUrl = 'https://cloudcast.sheffield.ac.uk/api/v0';
     //Firebase Variables
     private results$: FirebaseObjectObservable<IScore>;
     private users$: FirebaseObjectObservable<IUser>;
+    private score$: FirebaseObjectObservable<IScore>;
     private userPath = `/users/${this.auth.id}`;
     private resultsPath = `/results/${this.auth.id}`;
     private weakWordsPath = `/weakwords/${this.auth.id}`;
@@ -41,12 +45,27 @@ export class ReadingService {
      */
     loadUserProfile(): FirebaseObjectObservable<IUser> {
 
+        //#TODO: Clean up callback hell
+        //if this is a first time user, we create a cloudcast and firebase account
         this.db.object(this.userPath).subscribe(
                 user => {
-                    if(user.userData == undefined)
-                        this.db.object(this.userPath).set({
-                            userData :new User(this.auth.id)
-                        });
+                    //If it's a first time user
+                    if(user.userData == undefined){
+                        this.createCloudUser().then(
+                            response => {
+                                if(response){
+                                    console.log('User successfully created on cloudCAST');
+                                    this.db.object(this.userPath).set({
+                                        userData :new User(this.auth.id)
+                                    });
+                                } else{
+                                    console.log('User failed to create on cloudcast');
+                                }
+                            }
+                        )
+
+                    }
+
                 }
             );
 
@@ -72,9 +91,13 @@ export class ReadingService {
      * @param newScore
      * @param id
      */
-    saveScore(newScore: Score , id:number) {
-        this.results$ = this.db.object(this.resultsPath + `/${id}`);
+    updateScore(newScore: Score): void {
+        //#TODO: Eventually stop updating results and update users only
+        this.results$ = this.db.object(this.resultsPath + `/${this.auth.id}`);
         this.results$.set({ score:newScore });
+
+        this.score$ = this.getIndex(SCORE);
+        this.score$.set({score:Score});
     }
 
     /**
@@ -99,7 +122,7 @@ export class ReadingService {
     }
 
     retrieveKaldiResponse(audio: any) : Promise<KaldiResponse> {
-        return this.http.post(this.kaldiUrl, {audio: audio}, this.options)
+        return this.http.post(this.cloudCASTUrl, {audio: audio}, this.options)
             .toPromise()
             .then(response => response.json().data as KaldiResponse);
     }
@@ -135,5 +158,33 @@ export class ReadingService {
         return this.auth.getUser();
     }
 
+    /**
+     * Create cloudCAST User
+     */
+    createCloudUser(): Promise<boolean> {
+        let accountInfo = {
+            "name": this.auth.getUser().displayName,
+            "email_address": this.auth.getUser().email
+        };
+        return this.http.post(this.cloudCASTUrl + '/users', {accountInfo}, this.options)
+            .toPromise()
+            .then(response => response.status == 201);
+    }
+
+
+    /**
+     * Retrieve the phonemes which make up a word
+     */
+    getPhonemes(word:string) : PhonemeVM[] {
+        let phonemes:PhonemeVM[] = [];
+        this.http.post(this.cloudCASTUrl, {word:word}, this.options)
+            .toPromise()
+            .then(response => {
+                response.json().data.forEach(phoneme => phonemes.push(phoneme));
+            })
+            .catch(ReadingService.handleError);
+
+        return phonemes;
+    }
 
 }

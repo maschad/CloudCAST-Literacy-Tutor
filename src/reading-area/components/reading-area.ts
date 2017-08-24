@@ -7,7 +7,7 @@ import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {WordVM} from "../models/wordVM";
 import * as RecordRTC from 'recordrtc';
-import {IScore} from "../models/score";
+import {IScore, Score} from "../models/score";
 import {Observable} from "rxjs";
 import {FirebaseObjectObservable} from "angularfire2";
 import { IUser} from "../../shared/User";
@@ -212,6 +212,7 @@ export class ReadingAreaComponent implements OnInit {
                     //#TODO: Handle this error
                     if(kaldiResponse.status != 0)
                         console.log('error in status', status);
+
                     kaldiResponse.result.hypotheses.forEach(kaldiResult => {
                         this.updateConfidenceScore(kaldiResult.phonemes)
                     })
@@ -222,8 +223,21 @@ export class ReadingAreaComponent implements OnInit {
 
     updateConfidenceScore(phonemes: Phoneme[]){
 
-        //#TODO: Iterate through the words array and assigne the confidence scores received in order to update screen
+        //#TODO: Iterate through the words array and assign the confidence scores received in order to update screen
+        let score = new Score();
 
+        phonemes.forEach(phoneme => {
+            let confidence = phoneme.getConfidence();
+            let label = phoneme.getLabel();
+
+            if(confidence < 0.7){
+                score.updateScore(0,1);
+            } else {
+                score.updateScore(1,0);
+            }
+
+        });
+        this.readingService.updateScore(score);
     }
 
 }

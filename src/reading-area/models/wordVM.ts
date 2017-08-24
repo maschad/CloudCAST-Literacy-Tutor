@@ -5,8 +5,8 @@ import {PhonemeVM} from "./phonemeVM";
 export interface IWord {
     title: string
     phonemes:PhonemeVM[],
-    color : string,
-    completed: boolean
+    completed: boolean,
+    color: string
 }
 
 export class WordVM implements IWord {
@@ -27,5 +27,23 @@ export class WordVM implements IWord {
 
     getPhonemes() : PhonemeVM[] {
         return this.phonemes;
+    }
+
+    setPhonemes(phonemes: PhonemeVM[]) : void {
+        this.phonemes = phonemes;
+    }
+
+    setColor(): void {
+        let count = 0;
+        this.phonemes.forEach(phoneme => {
+            if(phoneme.confidence > 0.7){
+                count++
+            }
+        });
+        if(count > this.phonemes.length){
+            this.color = 'green';
+        }else {
+            this.color = 'red';
+        }
     }
 }
