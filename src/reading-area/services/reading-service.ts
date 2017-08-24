@@ -17,6 +17,7 @@ import {KaldiResponse} from "../../shared/kaldiResponse";
 import {SCORE} from "../components/UserActions";
 import {Word} from "../../shared/Word";
 import {PhonemeVM} from "../models/phonemeVM";
+import {APPLICATION_ID, RECOGNIZER_ID} from "../../main";
 
 
 @Injectable()
@@ -122,7 +123,8 @@ export class ReadingService {
     }
 
     retrieveKaldiResponse(audio: any) : Promise<KaldiResponse> {
-        return this.http.post(this.cloudCASTUrl, {audio: audio}, this.options)
+        let uid = this.getCloudCASTUserId();
+        return this.http.post(this.cloudCASTUrl + `user/${uid}/app/${APPLICATION_ID}/asr/${RECOGNIZER_ID}/decode`, {audio: audio}, this.options)
             .toPromise()
             .then(response => response.json().data as KaldiResponse);
     }
@@ -169,6 +171,15 @@ export class ReadingService {
         return this.http.post(this.cloudCASTUrl + '/users', {accountInfo}, this.options)
             .toPromise()
             .then(response => response.status == 201);
+    }
+
+    /**
+     * get CloudCAST User id
+     */
+    getCloudCASTUserId(): Promise<number> {
+        return this.http.get(this.cloudCASTUrl + '/user')
+            .toPromise()
+            .then(response => response.json().data.uid)
     }
 
 

@@ -8,6 +8,10 @@ import { AppModule } from './app';
 import './common/styles.scss';
 import './common/anim.scss';
 
+//#TODO: Create an application ID
+export const APPLICATION_ID = 'ID';
+export const RECOGNIZER_ID = 'ID';
+
 
 if (process.env.NODE_ENV === 'production') {
   enableProdMode();
