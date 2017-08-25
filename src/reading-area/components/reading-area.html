@@ -34,7 +34,6 @@
         <h6>To begin reading, click the start button, the microphone will detect when you have finished reading.</h6>
         <button [ngStyle]="{'backgroundColor': buttonColor }" class="button fa fa-microphone" (click)='startRecording()'>{{buttonText}}</button>
         <button [disabled]="!isRecording" class="button fa fa-stop" (click)="stopRecording()">Stop</button>
-        <button (click)="download()">download</button>
     </div>
 </div>
 

@@ -46,11 +46,6 @@ export class ReadingAreaComponent implements OnInit {
     bubble: boolean = false;
     private isRecording = false;
 
-    //Streaming data
-    private stream: MediaStream;
-    private recordRTC: any;
-    @ViewChild('audio') audio;
-
 
     constructor(private readingService: ReadingService) {};
 
@@ -75,7 +70,6 @@ export class ReadingAreaComponent implements OnInit {
 
     loadUserProfile(): void {
         this.userProfile$ = this.readingService.loadUserProfile();
-        console.log('user profile', this.userProfile$);
 
     }
 
@@ -137,89 +131,22 @@ export class ReadingAreaComponent implements OnInit {
      */
     startRecording(): any {
         this.isRecording = true;
-        let mediaConstraints = {
-            audio: true,
-            video: false
-        };
-        navigator
-            .mediaDevices
-            .getUserMedia(mediaConstraints)
-            .then(this.successCallback.bind(this),
-                this.errorCallback.bind(this)
-            );
-
+        this.readingService.startListening();
     }
 
     /**
-     * Recording helper functions
+     * To stop accepting input
      */
-    successCallback(stream: MediaStream) {
-        let options = {
-            mimeType: 'wav/ogg',
-        };
-        this.stream = stream;
-        this.recordRTC = RecordRTC(stream,options);
-        this.recordRTC.startRecording();
-        let audio: HTMLAudioElement = this.audio.nativeElement;
-        audio.src = window.URL.createObjectURL(stream);
 
-    }
-
-    errorCallback() {
-        //##TODO:handle error here
+    stopRecording(): void {
+        this.isRecording = false;
+        this.readingService.stopListening();
     }
 
     /**
-     * Stop Recording input
+     * update the confidence scores
+     * @param {Phoneme[]} phonemes
      */
-    stopRecording() {
-        let recordRTC = this.recordRTC;
-        console.log('this is', this);
-        recordRTC.stopRecording(this.processAudio.bind(this));
-        let stream = this.stream;
-        stream.getAudioTracks().forEach(track => track.stop());
-    }
-
-    /**
-     *
-     * Process the audio
-     * @param audioURL
-     */
-
-    processAudio(audioURL) {
-        let audio: any = this.audio.nativeElement;
-        let recordRTC = this.recordRTC;
-        audio.src = audioURL;
-        let recordedBlob = recordRTC.getBlob();
-        recordRTC.getDataURL(function (dataURL) { });
-    }
-
-    /**
-     * Download the audio to send to the server
-     */
-    download() {
-        this.recordRTC.save('speech.wav');
-    }
-
-    /**
-     * Pass audio to kaldi and process score
-     *
-     */
-    sendAudio() {
-        this.readingService.retrieveKaldiResponse(this.recordRTC.save).then(
-                kaldiResponse => {
-
-                    //#TODO: Handle this error
-                    if(kaldiResponse.status != 0)
-                        console.log('error in status', status);
-
-                    kaldiResponse.result.hypotheses.forEach(kaldiResult => {
-                        this.updateConfidenceScore(kaldiResult.phonemes)
-                    })
-                }
-
-        )
-    }
 
     updateConfidenceScore(phonemes: Phoneme[]){
 
@@ -238,6 +165,8 @@ export class ReadingAreaComponent implements OnInit {
 
         });
         this.readingService.updateScore(score);
+
+
     }
 
 }

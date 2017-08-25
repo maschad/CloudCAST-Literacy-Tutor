@@ -15,9 +15,10 @@ import {Score, IScore} from "../models/score";
 import {IUser, User} from "../../shared/User";
 import {KaldiResponse} from "../../shared/kaldiResponse";
 import {SCORE} from "../components/UserActions";
-import {Word} from "../../shared/Word";
-import {PhonemeVM} from "../models/phonemeVM";
 import {APPLICATION_ID, RECOGNIZER_ID} from "../../main";
+
+declare const CloudCAST:any;
+declare let cloudcast:any;
 
 
 @Injectable()
@@ -28,6 +29,8 @@ export class ReadingService {
     //In Memory API #TODO: Change when using actual server
     private sentencesUrl = 'api/onScreenSentences';
     private cloudCASTUrl = 'https://cloudcast.sheffield.ac.uk/api/v0';
+    private kaldiReponse: KaldiResponse;
+
     //Firebase Variables
     private results$: FirebaseObjectObservable<IScore>;
     private users$: FirebaseObjectObservable<IUser>;
@@ -38,7 +41,32 @@ export class ReadingService {
 
 
 
-    constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http){}
+
+    constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http){
+        //Initialize Cloud cast Object
+        cloudcast = new CloudCAST({
+            recorderWorkerPath: '../../../shared/recorderWorker.js',
+            baseURL: this.cloudCASTUrl,
+            username: 'foo',
+            application: 'bar',
+            onReady: function() {
+                this.cloudcast.startListening();
+            },
+            onResults : function(result) {
+                console.log('result', result);
+            },
+            onError: function(code, data) {
+                console.log('Error %s: %s', code, data);
+                this.cloudcast.cancel();
+            },
+            onEvent: function(code, data) {
+                console.log('%s: %o', code, data);
+            }
+        });
+        cloudcast.init();
+        console.log('cloudcast ', cloudcast);
+
+    }
 
     /**
      * Load the user profile for various displays in front end
@@ -122,12 +150,22 @@ export class ReadingService {
         return this.db.object(this.resultsPath + `/${id}`);
     }
 
-    retrieveKaldiResponse(audio: any) : Promise<KaldiResponse> {
-        let uid = this.getCloudCASTUserId();
-        return this.http.post(this.cloudCASTUrl + `user/${uid}/app/${APPLICATION_ID}/asr/${RECOGNIZER_ID}/decode`, {audio: audio}, this.options)
-            .toPromise()
-            .then(response => response.json().data as KaldiResponse);
+    /**
+     * Begin streaming audio to kaldi server
+     */
+    startListening() {
+        console.log('cloudcast', cloudcast);
+        cloudcast.open();
     }
+
+    /**
+     * End streaming audio to kaldi server
+     */
+    stopListening() {
+        cloudcast.close();
+    }
+
+
 
     /**
      * Store the words the user is weak in
@@ -182,20 +220,5 @@ export class ReadingService {
             .then(response => response.json().data.uid)
     }
 
-
-    /**
-     * Retrieve the phonemes which make up a word
-     */
-    getPhonemes(word:string) : PhonemeVM[] {
-        let phonemes:PhonemeVM[] = [];
-        this.http.post(this.cloudCASTUrl, {word:word}, this.options)
-            .toPromise()
-            .then(response => {
-                response.json().data.forEach(phoneme => phonemes.push(phoneme));
-            })
-            .catch(ReadingService.handleError);
-
-        return phonemes;
-    }
 
 }

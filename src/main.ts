@@ -9,8 +9,9 @@ import './common/styles.scss';
 import './common/anim.scss';
 
 //#TODO: Create an application ID
-export const APPLICATION_ID = 'ID';
-export const RECOGNIZER_ID = 'ID';
+export const APPLICATION_ID = '1';
+export const RECOGNIZER_ID = '1';
+export const DECODER_ID = '';
 
 
 if (process.env.NODE_ENV === 'production') {
