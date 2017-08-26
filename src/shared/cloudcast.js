@@ -320,7 +320,7 @@
                 window.AudioContext =
                     window.AudioContext ||
                     window.webkitAudioContext;
-
+                //#TODO: Remove this as getUsermedia is now browser independent
                 // navigator.getUserMedia =
                 //     navigator.getUserMedia              ||
                 //     navigator.webkitGetUserMedia        ||

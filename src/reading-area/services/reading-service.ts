@@ -61,7 +61,7 @@ export class ReadingService {
                 cloudcast.cancel();
             },
             onEvent: function(code, data) {
-                console.log('%s: %o', code, data);
+                console.log('%s: %o', code, data );
             }
         });
 
@@ -163,6 +163,8 @@ export class ReadingService {
     stopListening() {
        this.cloudcast.close();
     }
+
+
 
 
 
