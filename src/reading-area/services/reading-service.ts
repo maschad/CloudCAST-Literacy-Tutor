@@ -15,21 +15,20 @@ import {Score, IScore} from "../models/score";
 import {IUser, User} from "../../shared/User";
 import {KaldiResponse} from "../../shared/kaldiResponse";
 import {SCORE} from "../components/UserActions";
-import {APPLICATION_ID, RECOGNIZER_ID} from "../../main";
 
 declare const CloudCAST:any;
-declare let cloudcast:any;
-
 
 @Injectable()
 export class ReadingService {
+
     //JSON Headers and Options for HTTP requests
     private headers = new Headers({'Content-Type': 'application/json'});
     private options = new RequestOptions({ headers: this.headers });
     //In Memory API #TODO: Change when using actual server
     private sentencesUrl = 'api/onScreenSentences';
-    private cloudCASTUrl = 'https://cloudcast.sheffield.ac.uk/api/v0';
+    private cloudCASTUrl = 'https://this.cloudcast.sheffield.ac.uk/api/v0';
     private kaldiReponse: KaldiResponse;
+    private cloudcast: any;
 
     //Firebase Variables
     private results$: FirebaseObjectObservable<IScore>;
@@ -44,28 +43,30 @@ export class ReadingService {
 
     constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http){
         //Initialize Cloud cast Object
-        cloudcast = new CloudCAST({
-            recorderWorkerPath: '../../../shared/recorderWorker.js',
-            baseURL: this.cloudCASTUrl,
+        this.cloudcast = new CloudCAST({
+            recorderWorkerPath: '../../shared/recorderWorker.js',
             username: 'foo',
             application: 'bar',
             onReady: function() {
-                this.cloudcast.startListening();
+                cloudcast.startListening();
             },
-            onResults : function(result) {
+            onPartialResult: function (result) {
+                console.log('partial result', result);
+            },
+            onResult: function(result) {
                 console.log('result', result);
             },
             onError: function(code, data) {
                 console.log('Error %s: %s', code, data);
-                this.cloudcast.cancel();
+                cloudcast.cancel();
             },
             onEvent: function(code, data) {
                 console.log('%s: %o', code, data);
             }
         });
-        cloudcast.init();
-        console.log('cloudcast ', cloudcast);
 
+        this.cloudcast.init();
+        let cloudcast = this.cloudcast;
     }
 
     /**
@@ -75,7 +76,7 @@ export class ReadingService {
     loadUserProfile(): FirebaseObjectObservable<IUser> {
 
         //#TODO: Clean up callback hell
-        //if this is a first time user, we create a cloudcast and firebase account
+        //if this is a first time user, we create a this.cloudcast and firebase account
         this.db.object(this.userPath).subscribe(
                 user => {
                     //If it's a first time user
@@ -135,7 +136,6 @@ export class ReadingService {
      * @param id
      */
     setHighestScore(score:number, id:number): void{
-        console.log('setting highest score');
         this.http.post(this.sentencesUrl + '/' + id, {highestScore:score}, this.options)
             .toPromise()
             .catch(ReadingService.handleError)
@@ -154,15 +154,14 @@ export class ReadingService {
      * Begin streaming audio to kaldi server
      */
     startListening() {
-        console.log('cloudcast', cloudcast);
-        cloudcast.open();
+        this.cloudcast.open();
     }
 
     /**
      * End streaming audio to kaldi server
      */
     stopListening() {
-        cloudcast.close();
+       this.cloudcast.close();
     }
 
 

@@ -321,10 +321,10 @@
                     window.AudioContext ||
                     window.webkitAudioContext;
 
-                navigator.getUserMedia =
-                    navigator.getUserMedia              ||
-                    navigator.webkitGetUserMedia        ||
-                    navigator.mozGetUserMedia;
+                // navigator.getUserMedia =
+                //     navigator.getUserMedia              ||
+                //     navigator.webkitGetUserMedia        ||
+                //     navigator.mozGetUserMedia;
 
                 window.URL = window.URL || window.webkitURL;
                 audioContext = new AudioContext();
