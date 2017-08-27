@@ -2,12 +2,11 @@
  * Created by carlos on 3/24/17.
  */
 
-import {Component, OnInit, ViewChild} from "@angular/core";
+import {Component, OnInit, Output} from "@angular/core";
 import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {WordVM} from "../models/wordVM";
-import * as RecordRTC from 'recordrtc';
-import {IScore, Score} from "../models/score";
+import { Score} from "../models/score";
 import {Observable} from "rxjs";
 import {FirebaseObjectObservable} from "angularfire2";
 import { IUser} from "../../shared/User";
@@ -44,7 +43,7 @@ export class ReadingAreaComponent implements OnInit {
     private buttonText: string;
     private buttonColor: string;
     bubble: boolean = false;
-    private isRecording = false;
+    @Output() isRecording;
 
 
     constructor(private readingService: ReadingService) {};
@@ -130,7 +129,6 @@ export class ReadingAreaComponent implements OnInit {
      * Accept user recording
      */
     startRecording(): any {
-        this.isRecording = true;
         this.readingService.startListening();
     }
 
@@ -139,7 +137,6 @@ export class ReadingAreaComponent implements OnInit {
      */
 
     stopRecording(): void {
-        this.isRecording = false;
         this.readingService.stopListening();
     }
 

@@ -6,7 +6,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/toPromise';
 
 
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {AngularFireDatabase, FirebaseObjectObservable} from "angularfire2";
 import {AuthService} from "../../auth/services/auth-service";
 import {Http, Response, Headers, RequestOptions} from "@angular/http";
@@ -15,6 +15,8 @@ import {Score, IScore} from "../models/score";
 import {IUser, User} from "../../shared/User";
 import {KaldiResponse} from "../../shared/kaldiResponse";
 import {SCORE} from "../components/UserActions";
+import {ReplaySubject} from "rxjs/ReplaySubject";
+import {Observable} from "rxjs/Observable";
 
 declare const CloudCAST:any;
 
@@ -28,6 +30,7 @@ export class ReadingService {
     private sentencesUrl = 'api/onScreenSentences';
     private cloudCASTUrl = 'https://this.cloudcast.sheffield.ac.uk/api/v0';
     private kaldiReponse: KaldiResponse;
+    private recording: EventEmitter<boolean> = new EventEmitter(false);
     private cloudcast: any;
 
     //Firebase Variables
@@ -49,6 +52,7 @@ export class ReadingService {
             application: 'bar',
             onReady: function() {
                 cloudcast.startListening();
+                this.recording.emit(true);
             },
             onPartialResult: function (result) {
                 console.log('partial result', result);
@@ -61,7 +65,9 @@ export class ReadingService {
                 cloudcast.cancel();
             },
             onEvent: function(code, data) {
-                console.log('%s: %o', code, data );
+                if(code == 11){
+                    this.recording.emit(false);
+                }
             }
         });
 
@@ -163,8 +169,6 @@ export class ReadingService {
     stopListening() {
        this.cloudcast.close();
     }
-
-
 
 
 
