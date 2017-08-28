@@ -17,6 +17,8 @@ import {KaldiResponse} from "../../shared/kaldiResponse";
 import {SCORE} from "../components/UserActions";
 import {ReplaySubject} from "rxjs/ReplaySubject";
 import {Observable} from "rxjs/Observable";
+import {KaldiResult} from "../../shared/kaldiResult";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 declare const CloudCAST:any;
 
@@ -30,7 +32,10 @@ export class ReadingService {
     private sentencesUrl = 'api/onScreenSentences';
     private cloudCASTUrl = 'https://this.cloudcast.sheffield.ac.uk/api/v0';
     private kaldiReponse: KaldiResponse;
-    private recording: EventEmitter<boolean> = new EventEmitter(false);
+    //Recording behaviour subject
+    private isRecording: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    //Observable recording stream
+    public isRecording$: Observable<boolean>;
     private cloudcast: any;
 
     //Firebase Variables
@@ -52,27 +57,35 @@ export class ReadingService {
             application: 'bar',
             onReady: function() {
                 cloudcast.startListening();
-                this.recording.emit(true);
+                self.updateRecording(true);
             },
             onPartialResult: function (result) {
                 console.log('partial result', result);
             },
             onResult: function(result) {
-                console.log('result', result);
+                if(result.length > 1){
+                    // cloudcast.sendKaldiResponse(result);
+                    self.updateRecording(false);
+                    console.log('result', result);
+                }
             },
             onError: function(code, data) {
                 console.log('Error %s: %s', code, data);
+                self.updateRecording(false);
                 cloudcast.cancel();
             },
             onEvent: function(code, data) {
                 if(code == 11){
-                    this.recording.emit(false);
+                    self.updateRecording(false);
                 }
+                console.log('code ' , code, ' data ', data);
             }
         });
-
+        this.cloudcast.decoder('tedlium');
         this.cloudcast.init();
         let cloudcast = this.cloudcast;
+        let self = this;
+        this.isRecording$ = this.isRecording.asObservable();
     }
 
     /**
@@ -161,6 +174,7 @@ export class ReadingService {
      */
     startListening() {
         this.cloudcast.open();
+        this.updateRecording(true);
     }
 
     /**
@@ -168,6 +182,8 @@ export class ReadingService {
      */
     stopListening() {
        this.cloudcast.close();
+        this.updateRecording(false);
+
     }
 
 
@@ -223,6 +239,20 @@ export class ReadingService {
         return this.http.get(this.cloudCASTUrl + '/user')
             .toPromise()
             .then(response => response.json().data.uid)
+    }
+
+    /**
+     * send confidence scores
+     */
+    getConfidence(result:KaldiResult){
+        return
+    }
+
+    /**
+     * Update the recording observable
+     */
+    updateRecording(value:boolean): void {
+        this.isRecording.next(value);
     }
 
 
