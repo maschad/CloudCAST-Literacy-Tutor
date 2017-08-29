@@ -2,10 +2,11 @@
  * Created by carlos on 4/18/17.
  */
 
-export class OnScreenSentence {
-    id: number;
-    text: string;
-    highestScore: number;
+export class onScreenSentence {
+
+    private id: number;
+    public text: string;
+    private highestScore: number;
 
     constructor(id: number, text: string){
         this.id = id;
@@ -18,7 +19,7 @@ export class OnScreenSentence {
         this.text = text;
     }
 
-    getText(): string {
+    get Text(): string {
         return this.text;
     }
 

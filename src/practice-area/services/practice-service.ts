@@ -10,12 +10,18 @@ import {Http} from '@angular/http';
 
 @Injectable()
 export class PracticeService  {
+<<<<<<< HEAD
     private path = `/weakwords/${this.auth.id}`;
+=======
+     headers: Headers = new Headers({'Content-Type': 'application/json'});
+     options: RequestOptions = new RequestOptions({ headers: this.headers });
+>>>>>>> dev
+
 
 
     constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http) {}
 
-
+<<<<<<< HEAD
     getPracticeWords(success: any): void {
         let weakwords = [];
          this.db.object(this.path, {preserveSnapshot: true }).subscribe(snapshot => {
@@ -26,3 +32,16 @@ export class PracticeService  {
          });
     }
 }
+=======
+    retrieveSentence(sentenceId: number): string[] {
+        let sentence:string [] = [];
+        //#TODO: Perform sentence transformation
+        return sentence;
+    }
+
+    sendAudio(audio: any): void {
+
+    }
+
+}
+>>>>>>> dev
