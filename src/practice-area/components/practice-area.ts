@@ -28,5 +28,5 @@ export class PracticeAreaComponent implements OnInit{
 
     addWords() : void {
 
-
+    }
 }
