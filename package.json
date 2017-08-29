@@ -54,7 +54,7 @@
     "@types/core-js": "0.9.35",
     "@types/jasmine": "~2.5.36",
     "@types/node": "~6.0.46",
-    "@types/request": "0.0.30",
+    "@types/request": "0.0.30"
   },
   "devDependencies": {
     "autoprefixer": "~6.5.1",
