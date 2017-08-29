@@ -7,7 +7,8 @@
   "private": true,
   "engines": {
     "node": ">=6.8",
-    "yarn": "0.24.6"
+    "yarn": "0.24.6",
+    "npm":"5.3.0"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --display-chunks --progress",
