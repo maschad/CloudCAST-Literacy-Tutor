@@ -64,7 +64,7 @@ export class ReadingService {
             },
             onResult: function(result) {
                 if(result.length > 1){
-                    // cloudcast.sendKaldiResponse(result);
+                    // cloudcast.updateConfidenceScores(result[0]);
                     self.updateRecording(false);
                     console.log('result', result);
                 }
