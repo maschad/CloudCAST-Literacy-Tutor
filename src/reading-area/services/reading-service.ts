@@ -34,7 +34,6 @@ export class ReadingService {
     private path = `/results/${this.auth.id}`;
     private kaldiPath = 'http://52.34.157.194/home/ubuntu/';
     //In Memory API #TODO: Change when using actual server
-    private sentencesUrl = 'api/onScreenSentences';
     private cloudCASTUrl = 'https://this.cloudcast.sheffield.ac.uk/api/v0';
     private kaldiReponse: KaldiResponse;
     //Recording behaviour subject
@@ -135,7 +134,7 @@ export class ReadingService {
     getLastReadParagraph(lastReadParagraphId:number): Promise<onScreenSentence> {
         return this.http.get(this.sentencesUrl + '/' + lastReadParagraphId)
             .toPromise()
-            .then(response => response.json().data as OnScreenSentence)
+            .then(response => response.json().data as onScreenSentence)
             .catch(ReadingService.handleError);
     }
 
