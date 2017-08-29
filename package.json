@@ -61,7 +61,7 @@
     "del-cli": "~0.2.0",
     "eslint": "~3.10.2",
     "express": "~4.14.0",
-    "webpack-md5-hash": "~0.0.5",
+    "webpack-md5-hash": "~0.0.5"
 
   },
   "devDependencies": {
