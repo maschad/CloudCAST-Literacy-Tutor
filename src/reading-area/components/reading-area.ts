@@ -15,7 +15,6 @@ import {PhonemeVM} from "../models/phonemeVM";
 import {KaldiResponse} from "../../shared/kaldiResponse";
 import {Hypotheses, KaldiResult} from "../../shared/kaldiResult";
 import {Phoneme} from "../../shared/Phoneme";
-import {Subscription} from "rxjs/Subscription";
 const {webkitSpeechRecognition} = (window as any);
 
 //for avatar speech
@@ -44,7 +43,7 @@ export class ReadingAreaComponent implements OnInit {
     private buttonText: string;
     private buttonColor: string;
     bubble: boolean = false;
-    isRecording: boolean;
+    @Output() isRecording;
 
 
     constructor(private readingService: ReadingService) {};
@@ -55,10 +54,6 @@ export class ReadingAreaComponent implements OnInit {
         this.buttonText = 'Start';
         this.buttonColor = '#4279BD';
 
-        //Set recording observable
-        this.readingService.isRecording$.subscribe(
-            isRecording => this.isRecording = isRecording
-        );
         //Load the user
         this.loadUser();
         //Load User profile
