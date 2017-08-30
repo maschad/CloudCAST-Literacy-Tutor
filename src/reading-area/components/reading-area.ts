@@ -62,6 +62,7 @@ export class ReadingAreaComponent implements OnInit {
         //Load the paragraph
         this.getOnScreenParagraph();
 
+
         //Set recording observable
         this.readingService.isRecording$.subscribe(
             isRecording => this.isRecording = isRecording
@@ -98,6 +99,8 @@ export class ReadingAreaComponent implements OnInit {
                         .then(paragraph => {
                             this.paragraph = paragraph;
                             this.createWords();
+                            //Load Phonemes which make up paragraph
+                            this.loadPhonemes();
                         });
                 }
             );
@@ -115,6 +118,19 @@ export class ReadingAreaComponent implements OnInit {
         }
     }
 
+    /**
+     * Load Phonemes that the sentence is comprised of
+     */
+    loadPhonemes(){
+        this.readingService.getPhonemes()
+            .then(
+                phoneMapping => {
+                    //#TODO: Iterate through and find corresponding phonemes based on paragraph text
+                }
+            );
+
+    }
+
 
     /**
      * Function for the
@@ -123,7 +139,7 @@ export class ReadingAreaComponent implements OnInit {
     ReadSentenceToStudent(): void {
         if (!this.bubble) {
             this.bubble = true;
-            responsiveVoice.speak(START_TEXT + this.paragraph.text, 'US English Female', {pitch: 1.32});
+            responsiveVoice.speak(START_TEXT + this.paragraph.text, 'UK English Female', {pitch: 0.7});
         }
         else {
             this.bubble = false;

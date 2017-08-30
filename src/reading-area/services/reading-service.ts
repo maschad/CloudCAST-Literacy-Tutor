@@ -79,6 +79,7 @@ export class ReadingService {
             onError: function(code, data) {
                 console.log('Error %s: %s', code, data);
                 self.updateRecording(false);
+                self.stopLoading();
                 cloudcast.cancel();
             },
             onEvent: function(code, data) {
@@ -238,12 +239,13 @@ export class ReadingService {
     }
 
     /**
-     * get CloudCAST User id
+     * Get the phonemes which make up the sentence
      */
-    getCloudCASTUserId(): Promise<number> {
-        return this.http.get(this.cloudCASTUrl + '/user')
+    getPhonemes(): Promise<any> {
+        return this.http.get('phone_to_word_map.txt')
             .toPromise()
-            .then(response => response.json().data.uid)
+            .then(response => response.json().data)
+            .catch(ReadingService.handleError);
     }
 
     /**

@@ -11,8 +11,8 @@ export class Phoneme implements IPhoneme{
     length: number;
     confidence: number;
 
-    constructor(label: string, start: number, length: number, confidence: number) {
-        this.phone = label;
+    constructor(phone: string, start: number, length: number, confidence: number) {
+        this.phone = phone;
         this.start = start;
         this.length = length;
         this.confidence = confidence;
