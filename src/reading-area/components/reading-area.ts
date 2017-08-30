@@ -43,7 +43,7 @@ export class ReadingAreaComponent implements OnInit {
     private buttonText: string;
     private buttonColor: string;
     bubble: boolean = false;
-    @Output() isRecording;
+    isRecording: boolean;
 
 
     constructor(private readingService: ReadingService) {};
@@ -61,6 +61,11 @@ export class ReadingAreaComponent implements OnInit {
 
         //Load the paragraph
         this.getOnScreenParagraph();
+
+        //Set recording observable
+        this.readingService.isRecording$.subscribe(
+            isRecording => this.isRecording = isRecording
+        )
     }
 
     /**

@@ -21,6 +21,7 @@ import {KaldiResult} from "../../shared/kaldiResult";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 declare const CloudCAST:any;
+declare const pleaseWait:any;
 
 @Injectable()
 export class ReadingService {
@@ -36,7 +37,11 @@ export class ReadingService {
     private isRecording: BehaviorSubject<boolean> = new BehaviorSubject(false);
     //Observable recording stream
     public isRecording$: Observable<boolean>;
+    //Cloudcast.js library var
     private cloudcast: any;
+    //Loading screen
+    private loadingScreen:any;
+
 
     //Firebase Variables
     private results$: FirebaseObjectObservable<IScore>;
@@ -50,6 +55,8 @@ export class ReadingService {
 
 
     constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http){
+        //#TODO: Handle this better , assigning the self to make it accessible in the cloudcast scope
+        let self = this;
         //Initialize Cloud cast Object
         this.cloudcast = new CloudCAST({
             recorderWorkerPath: '../../shared/recorderWorker.js',
@@ -75,16 +82,13 @@ export class ReadingService {
                 cloudcast.cancel();
             },
             onEvent: function(code, data) {
-                if(code == 11){
-                    self.updateRecording(false);
-                }
+                self.manageDecoding(code);
                 console.log('code ' , code, ' data ', data);
             }
         });
         this.cloudcast.decoder('tedlium');
         this.cloudcast.init();
         let cloudcast = this.cloudcast;
-        let self = this;
         this.isRecording$ = this.isRecording.asObservable();
     }
 
@@ -174,6 +178,7 @@ export class ReadingService {
      */
     startListening() {
         this.cloudcast.open();
+        this.startLoading();
         this.updateRecording(true);
     }
 
@@ -182,8 +187,8 @@ export class ReadingService {
      */
     stopListening() {
        this.cloudcast.close();
-        this.updateRecording(false);
-
+       this.stopLoading();
+       this.updateRecording(false);
     }
 
 
@@ -255,5 +260,42 @@ export class ReadingService {
         this.isRecording.next(value);
     }
 
+    /**
+     * Manage the decoder
+     */
+    manageDecoding(code:number) {
+        switch (code) {
+            case 11:
+                this.updateRecording(false);
+                break;
+
+            case 9:
+                this.stopLoading();
+                break;
+            default:
+
+        }
+    }
+
+    /**
+     * Loading functions
+     */
+    startLoading() {
+        this.loadingScreen = pleaseWait({
+            backgroundColor: '#f8fcff',
+            loadingHtml: ` Loading Cloudcast
+                            <div class='sk-wave'>
+                            <div class="sk-rect sk-rect1"></div>
+                            <div class="sk-rect sk-rect2"></div>
+                            <div class="sk-rect sk-rect3"></div>
+                            <div class="sk-rect sk-rect4"></div>
+                            <div class="sk-rect sk-rect5"></div>
+                          </div>`
+        });
+    }
+
+    stopLoading(){
+        this.loadingScreen.finish();
+    }
 
 }

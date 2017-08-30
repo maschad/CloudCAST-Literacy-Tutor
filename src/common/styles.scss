@@ -148,3 +148,11 @@
 @keyframes play{
   100% {background-position: -300px;}
 }
+
+body > .inner {
+  display: none;
+}
+
+body.pg-loaded > .inner {
+  display: block;
+}
