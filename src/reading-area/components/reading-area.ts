@@ -2,20 +2,17 @@
  * Created by carlos on 3/24/17.
  */
 
-import {Component, OnInit, Output} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {ReadingService} from "../services/reading-service";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {WordVM} from "../models/wordVM";
 import { Score} from "../models/score";
-import {Observable} from "rxjs";
 import {FirebaseObjectObservable} from "angularfire2";
 import { IUser} from "../../shared/User";
 import {LAST_READ_PARAGRAPH_ID} from "./UserActions";
 import {PhonemeVM} from "../models/phonemeVM";
-import {KaldiResponse} from "../../shared/kaldiResponse";
-import {Hypotheses, KaldiResult} from "../../shared/kaldiResult";
 import {Phoneme} from "../../shared/Phoneme";
-const {webkitSpeechRecognition} = (window as any);
+import {KaldiResult} from "../../shared/kaldiResult";
 
 //for avatar speech
 declare let responsiveVoice: any;
@@ -45,6 +42,9 @@ export class ReadingAreaComponent implements OnInit {
     bubble: boolean = false;
     isRecording: boolean;
 
+    //Kaldi Results to be compared to current word
+    private kaldiResult$:KaldiResult;
+
 
     constructor(private readingService: ReadingService) {};
 
@@ -54,6 +54,13 @@ export class ReadingAreaComponent implements OnInit {
         this.buttonText = 'Start';
         this.buttonColor = '#4279BD';
 
+        //Subscribe to the result
+        this.readingService.kaldiResult$.subscribe(
+            kaldiResult => {
+                this.kaldiResult$ = kaldiResult
+                this.parsePhonemes();
+            }
+        );
         //Load the user
         this.loadUser();
         //Load User profile
@@ -61,7 +68,6 @@ export class ReadingAreaComponent implements OnInit {
 
         //Load the paragraph
         this.getOnScreenParagraph();
-
 
         //Set recording observable
         this.readingService.isRecording$.subscribe(
@@ -99,8 +105,7 @@ export class ReadingAreaComponent implements OnInit {
                         .then(paragraph => {
                             this.paragraph = paragraph;
                             this.createWords();
-                            //Load Phonemes which make up paragraph
-                            this.loadPhonemes();
+
                         });
                 }
             );
@@ -113,23 +118,18 @@ export class ReadingAreaComponent implements OnInit {
         this.words = [];
         let titles = this.paragraph.text.split(' ');
         for(let title of titles){
-            //#TODO:Add phonemes which make up a word
-            this.words.push(new WordVM(title,[]));
-        }
-    }
-
-    /**
-     * Load Phonemes that the sentence is comprised of
-     */
-    loadPhonemes(){
-        this.readingService.getPhonemes()
-            .then(
+            this.readingService.getPhonemes(title.toLocaleLowerCase()).then(
+                //Pass the phone mappings into each wordVM
                 phoneMapping => {
-                    //#TODO: Iterate through and find corresponding phonemes based on paragraph text
+                    let phonemes = [];
+                    phoneMapping.phones.forEach(phone => phonemes.push(new PhonemeVM(phone)));
+                    this.words.push(new WordVM(title,phonemes));
                 }
             );
-
+        }
+        console.log('words', this.words);
     }
+
 
 
     /**
@@ -162,10 +162,30 @@ export class ReadingAreaComponent implements OnInit {
     }
 
     /**
+     * To parse the kaldi Result
+     */
+    parsePhonemes(){
+        let nonSilencePhones = [];
+        //#TODO: Test this, then update color
+
+        //Clean up phones to exclude silence phones
+        this.kaldiResult$.phonemes.forEach((phoneme) => {
+           if(phoneme.getPhone() != 'SIL'){
+                nonSilencePhones.push(phoneme);
+           }
+        });
+        //Compare the non silence phones
+        nonSilencePhones.forEach((phoneme,index) => {
+            this.words.forEach(word => {
+                word.comparePhones(phoneme,index);
+            })
+        })
+    }
+
+    /**
      * update the confidence scores
      * @param {Phoneme[]} phonemes
      */
-
     updateConfidenceScore(phonemes: Phoneme[]){
 
         //#TODO: Iterate through the words array and assign the confidence scores received in order to update screen

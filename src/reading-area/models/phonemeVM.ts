@@ -1,17 +1,19 @@
 export  class  PhonemeVM {
     confidence: number;
-    title: string;
+    phone: string;
 
-    constructor(title:string){
+    constructor(phone:string){
         this.confidence = 0;
-        this.title = title;
+        this.phone = phone;
     }
 
-    updateTitle(title:string) {
-        this.title = title;
+    updatePhone(phone:string) {
+        this.phone = phone;
     }
 
     updateConfidence(confidence: number): void {
         this.confidence = confidence;
     }
+
+
 }

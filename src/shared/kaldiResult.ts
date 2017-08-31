@@ -1,19 +1,9 @@
 import {Phoneme} from "./Phoneme";
 
-export  class KaldiResult{
-    final: boolean;
-    hypotheses: Hypotheses[];
-
-    constructor(final:boolean, hypotheses: Hypotheses[]){
-        this.final = final;
-        this.hypotheses = hypotheses;
-    }
-}
-
-export class Hypotheses {
-    transcript:string;
-    phonemes: Phoneme[];
+export class KaldiResult {
     likelihood: number;
+    phonemes: Phoneme[];
+    transcript:string;
     wordAlignment: Phoneme[];
 
 

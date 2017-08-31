@@ -6,19 +6,18 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/toPromise';
 
 
-import {EventEmitter, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AngularFireDatabase, FirebaseObjectObservable} from "angularfire2";
 import {AuthService} from "../../auth/services/auth-service";
-import {Http, Response, Headers, RequestOptions} from "@angular/http";
+import {Http, Headers, RequestOptions} from "@angular/http";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {Score, IScore} from "../models/score";
 import {IUser, User} from "../../shared/User";
-import {KaldiResponse} from "../../shared/kaldiResponse";
 import {SCORE} from "../components/UserActions";
-import {ReplaySubject} from "rxjs/ReplaySubject";
 import {Observable} from "rxjs/Observable";
 import {KaldiResult} from "../../shared/kaldiResult";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {Subject} from "rxjs/Subject";
 
 declare const CloudCAST:any;
 declare const pleaseWait:any;
@@ -31,8 +30,10 @@ export class ReadingService {
     private options = new RequestOptions({ headers: this.headers });
     //In Memory API #TODO: Change when using actual server
     private sentencesUrl = 'api/onScreenSentences';
+    private phonemeMappingUrl = 'api/phoneMapping';
     private cloudCASTUrl = 'https://this.cloudcast.sheffield.ac.uk/api/v0';
-    private kaldiReponse: KaldiResponse;
+    //Kaldi Result Observable as is updated based on response
+    public kaldiResult$: Subject<KaldiResult>;
     //Recording behaviour subject
     private isRecording: BehaviorSubject<boolean> = new BehaviorSubject(false);
     //Observable recording stream
@@ -71,9 +72,8 @@ export class ReadingService {
             },
             onResult: function(result) {
                 if(result.length > 1){
-                    // cloudcast.updateConfidenceScores(result[0]);
+                    self.updateKaldiResult(result[0] as KaldiResult);
                     self.updateRecording(false);
-                    console.log('result', result);
                 }
             },
             onError: function(code, data) {
@@ -239,10 +239,11 @@ export class ReadingService {
     }
 
     /**
-     * Get the phonemes which make up the sentence
+     * Retrieve the phonemes which make up a word using the mapping
+     * @returns {Promise<any>}
      */
-    getPhonemes(): Promise<any> {
-        return this.http.get('phone_to_word_map.txt')
+    getPhonemes(word:string): Promise<any> {
+        return this.http.get(this.phonemeMappingUrl + '/' + word)
             .toPromise()
             .then(response => response.json().data)
             .catch(ReadingService.handleError);
@@ -251,8 +252,8 @@ export class ReadingService {
     /**
      * send confidence scores
      */
-    getConfidence(result:KaldiResult){
-        return
+    updateKaldiResult(result:KaldiResult){
+         this.kaldiResult$.next(result);
     }
 
     /**
