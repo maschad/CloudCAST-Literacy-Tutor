@@ -33,7 +33,7 @@ export class ReadingService {
     private phonemeMappingUrl = 'api/phoneMapping';
     private cloudCASTUrl = 'https://this.cloudcast.sheffield.ac.uk/api/v0';
     //Kaldi Result Observable as is updated based on response
-    public kaldiResult$: Subject<KaldiResult>;
+    public kaldiResult$: Subject<KaldiResult> = new Subject();
     //Recording behaviour subject
     private isRecording: BehaviorSubject<boolean> = new BehaviorSubject(false);
     //Observable recording stream
@@ -67,13 +67,11 @@ export class ReadingService {
                 cloudcast.startListening();
                 self.updateRecording(true);
             },
-            onPartialResult: function (result) {
-                console.log('partial result', result);
-            },
             onResult: function(result) {
+                console.log('result', result);
                 if(result.length > 1){
-                    self.updateKaldiResult(result[0] as KaldiResult);
                     self.updateRecording(false);
+                    self.updateKaldiResult(new KaldiResult(result[0].transcript,result[0]['phone-alignment'],result[0].likelihood,result[0]['word-alignment']));
                 }
             },
             onError: function(code, data) {
@@ -82,11 +80,11 @@ export class ReadingService {
                 self.stopLoading();
                 cloudcast.cancel();
             },
-            onEvent: function(code, data) {
+            onEvent: function(code) {
                 self.manageDecoding(code);
-                console.log('code ' , code, ' data ', data);
             }
         });
+        //#TODO: Change decoder?
         this.cloudcast.decoder('tedlium');
         this.cloudcast.init();
         let cloudcast = this.cloudcast;
@@ -102,26 +100,17 @@ export class ReadingService {
         //#TODO: Clean up callback hell
         //if this is a first time user, we create a this.cloudcast and firebase account
         this.db.object(this.userPath).subscribe(
-                user => {
-                    //If it's a first time user
-                    if(user.userData == undefined){
-                        this.createCloudUser().then(
-                            response => {
-                                if(response){
-                                    console.log('User successfully created on cloudCAST');
-                                    this.db.object(this.userPath).set({
-                                        userData :new User(this.auth.id)
-                                    });
-                                } else{
-                                    console.log('User failed to create on cloudcast');
-                                }
-                            }
-                        )
+        user => {
+            //If it's a first time user
+            if(user.userData == undefined){
+                    this.db.object(this.userPath).set({
+                        userData :new User(this.auth.id)
+                    });
 
-                    }
+            }
 
-                }
-            );
+
+        });
 
         return this.db.object(this.userPath);
     }
@@ -143,7 +132,6 @@ export class ReadingService {
     /**
      * When a reader has finished a paragraph, we want to store that score in firebase
      * @param newScore
-     * @param id
      */
     updateScore(newScore: Score): void {
         //#TODO: Eventually stop updating results and update users only
@@ -187,9 +175,9 @@ export class ReadingService {
      * End streaming audio to kaldi server
      */
     stopListening() {
-       this.cloudcast.close();
-       this.stopLoading();
-       this.updateRecording(false);
+       this.cloudcast.stopListening();
+        this.updateRecording(false);
+        this.stopLoading();
     }
 
 
@@ -286,7 +274,7 @@ export class ReadingService {
     startLoading() {
         this.loadingScreen = pleaseWait({
             backgroundColor: '#f8fcff',
-            loadingHtml: ` Loading Cloudcast
+            loadingHtml: ` Loading Acoustic Model
                             <div class='sk-wave'>
                             <div class="sk-rect sk-rect1"></div>
                             <div class="sk-rect sk-rect2"></div>

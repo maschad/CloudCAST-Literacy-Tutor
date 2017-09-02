@@ -57,7 +57,8 @@ export class ReadingAreaComponent implements OnInit {
         //Subscribe to the result
         this.readingService.kaldiResult$.subscribe(
             kaldiResult => {
-                this.kaldiResult$ = kaldiResult
+                this.kaldiResult$ = kaldiResult;
+                console.log('this kaldi result', this.kaldiResult$);
                 this.parsePhonemes();
             }
         );
@@ -171,6 +172,7 @@ export class ReadingAreaComponent implements OnInit {
         //Clean up phones to exclude silence phones
         this.kaldiResult$.phonemes.forEach((phoneme) => {
            if(phoneme.getPhone() != 'SIL'){
+               console.log('phoneme', phoneme.getPhone());
                 nonSilencePhones.push(phoneme);
            }
         });
@@ -180,6 +182,7 @@ export class ReadingAreaComponent implements OnInit {
                 word.comparePhones(phoneme,index);
             })
         })
+
     }
 
     /**
