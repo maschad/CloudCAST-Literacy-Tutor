@@ -171,8 +171,8 @@ export class ReadingAreaComponent implements OnInit {
 
         //Clean up phones to exclude silence phones
         this.kaldiResult$.phonemes.forEach((phoneme) => {
-           if(phoneme.getPhone() != 'SIL'){
-               console.log('phoneme', phoneme.getPhone());
+           if(phoneme.phone != 'SIL'){
+               console.log('phoneme', phoneme.phone);
                 nonSilencePhones.push(phoneme);
            }
         });

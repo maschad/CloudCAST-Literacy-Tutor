@@ -48,11 +48,14 @@ export class WordVM implements IWord {
     }
 
     comparePhones(phoneme:PhonemeVM, index:number){
-        if(this.phonemes[index].phone == phoneme.phone) {
-            this.phonemes[index].confidence = phoneme.confidence;
-        } else {
-            this.phonemes[index].confidence = 0;
-        }
-        this.setColor();
+        this.phonemes.forEach(vmPhoneme => {
+            if(vmPhoneme.phone == phoneme.phone) {
+                vmPhoneme.confidence = phoneme.confidence;
+            } else {
+                vmPhoneme.confidence = 0;
+            }
+            this.setColor();
+        });
+
     }
 }
