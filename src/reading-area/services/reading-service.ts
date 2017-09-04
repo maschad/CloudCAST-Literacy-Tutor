@@ -80,7 +80,8 @@ export class ReadingService {
                 self.stopLoading();
                 cloudcast.cancel();
             },
-            onEvent: function(code) {
+            onEvent: function(code,data) {
+                console.log('code', code, 'data', data);
                 self.manageDecoding(code);
             }
         });
