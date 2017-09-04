@@ -206,8 +206,6 @@ export class ReadingAreaComponent implements OnInit {
 
         });
         this.readingService.updateScore(score);
-
-
     }
 
 }

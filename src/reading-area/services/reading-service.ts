@@ -142,6 +142,7 @@ export class ReadingService {
                     this.results$.set({score: newScore});
                     this.score$ = this.getIndex(SCORE);
                     this.score$.set({score:Score});
+                    this.setHighestScore(newScore,lastParagraphId)
                 });
 
     }
@@ -149,11 +150,25 @@ export class ReadingService {
     /**
      * Once that score has been completed we want to set it if it's the high score
      * @param score
-     * @param id
+     * @param lastParagraphId
      */
-    setHighestScore(score:number, id:number): void{
-        this.http.post(this.sentencesUrl + '/' + id, {highestScore:score}, this.options)
+    setHighestScore(score:Score, lastParagraphId:number): void{
+        this.getHighestScore(lastParagraphId).then(
+            highScore => {
+                if (score.totalCorrect > highScore) {
+                    this.http.post(this.sentencesUrl + '/' + lastParagraphId, {highestScore: score}, this.options)
+                        .toPromise()
+                        .catch(ReadingService.handleError)
+                }
+            }
+        );
+    }
+
+
+    getHighestScore(id:number): Promise<number>{
+        return this.http.get(this.sentencesUrl + `/${id}`)
             .toPromise()
+            .then(response => response.json().data as number)
             .catch(ReadingService.handleError)
     }
 
@@ -215,19 +230,6 @@ export class ReadingService {
      */
     loadUser(): firebase.User {
         return this.auth.getUser();
-    }
-
-    /**
-     * Create cloudCAST User
-     */
-    createCloudUser(): Promise<boolean> {
-        let accountInfo = {
-            "name": this.auth.getUser().displayName,
-            "email_address": this.auth.getUser().email
-        };
-        return this.http.post(this.cloudCASTUrl + '/users', {accountInfo}, this.options)
-            .toPromise()
-            .then(response => response.status == 201);
     }
 
     /**
