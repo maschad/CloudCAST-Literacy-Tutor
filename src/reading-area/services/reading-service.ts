@@ -13,7 +13,7 @@ import {Http, Headers, RequestOptions} from "@angular/http";
 import {onScreenSentence} from "../models/onScreenSentence";
 import {Score, IScore} from "../models/score";
 import {IUser, User} from "../../shared/User";
-import {SCORE} from "../components/UserActions";
+import {LAST_READ_PARAGRAPH_ID, SCORE} from "../components/UserActions";
 import {Observable} from "rxjs/Observable";
 import {KaldiResult} from "../../shared/kaldiResult";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
@@ -135,11 +135,15 @@ export class ReadingService {
      */
     updateScore(newScore: Score): void {
         //#TODO: Eventually stop updating results and update users only
-        this.results$ = this.db.object(this.resultsPath + `/${this.auth.id}`);
-        this.results$.set({ score:newScore });
+        this.getIndex(LAST_READ_PARAGRAPH_ID)
+            .subscribe(
+                lastParagraphId => {
+                    this.results$ = this.db.object(this.resultsPath + `/${this.auth.id}/${lastParagraphId}`);
+                    this.results$.set({score: newScore});
+                    this.score$ = this.getIndex(SCORE);
+                    this.score$.set({score:Score});
+                });
 
-        this.score$ = this.getIndex(SCORE);
-        this.score$.set({score:Score});
     }
 
     /**
