@@ -276,7 +276,9 @@ export class ReadingService {
     }
 
     /**
+     * =================
      * Loading functions
+     * ==================
      */
     startLoading() {
         this.loadingScreen = pleaseWait({

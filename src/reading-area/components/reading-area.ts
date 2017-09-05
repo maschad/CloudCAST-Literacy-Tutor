@@ -74,6 +74,8 @@ export class ReadingAreaComponent implements OnInit {
         this.readingService.isRecording$.subscribe(
             isRecording => this.isRecording = isRecording
         )
+
+
     }
 
     /**
@@ -150,7 +152,9 @@ export class ReadingAreaComponent implements OnInit {
     /**
      * Accept user recording
      */
-    startRecording(): any {
+    startRecording(): void {
+        //Change button text
+        this.buttonText = 'Listening';
         this.readingService.startListening();
     }
 
@@ -159,6 +163,7 @@ export class ReadingAreaComponent implements OnInit {
      */
 
     stopRecording(): void {
+        this.buttonText = 'Start';
         this.readingService.stopListening();
     }
 
@@ -180,6 +185,7 @@ export class ReadingAreaComponent implements OnInit {
         nonSilencePhones.forEach((phoneme,index) => {
             this.words.forEach(word => {
                 word.comparePhones(phoneme,index);
+                word.completeWord();
             })
         })
 
