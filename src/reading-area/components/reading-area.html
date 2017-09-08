@@ -32,7 +32,7 @@
         </div>
         <div #audio></div>
         <h6>To begin reading, click the start button, the microphone will detect when you have finished reading.</h6>
-        <button [disabled]="isRecording" [ngStyle]="{'backgroundColor': buttonColor }" [ngClass]="isRecording? 'button glowing-button fa fa-microphone': 'button fa fa-microphone ' " (click)='startRecording()'> {{buttonText}} </button>
+        <button [disabled]="isRecording" [ngStyle]="{'backgroundColor': buttonColor }" [ngClass]="isRecording? 'button glowing-button fa fa-microphone': 'button fa fa-microphone ' " (click)='startRecording()'> {{isRecording ? 'Listening': 'Start' }} </button>
         <button [disabled]="!isRecording" class="button fa fa-stop" (click)="stopRecording()"> Stop </button>
     </div>
 </div>

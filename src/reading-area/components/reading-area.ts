@@ -37,8 +37,6 @@ export class ReadingAreaComponent implements OnInit {
     user$: firebase.User;
 
     //Related to Data to displayed on screen
-    private buttonText: string;
-    private buttonColor: string;
     bubble: boolean = false;
     isRecording: boolean;
 
@@ -50,9 +48,6 @@ export class ReadingAreaComponent implements OnInit {
 
 
     ngOnInit(): void {
-        //Initialize Button colors and text
-        this.buttonText = 'Start';
-        this.buttonColor = '#4279BD';
 
         //Subscribe to the result
         this.readingService.kaldiResult$.subscribe(
@@ -153,8 +148,6 @@ export class ReadingAreaComponent implements OnInit {
      * Accept user recording
      */
     startRecording(): void {
-        //Change button text
-        this.buttonText = 'Listening';
         this.readingService.startListening();
     }
 
@@ -163,7 +156,6 @@ export class ReadingAreaComponent implements OnInit {
      */
 
     stopRecording(): void {
-        this.buttonText = 'Start';
         this.readingService.stopListening();
     }
 
@@ -182,13 +174,13 @@ export class ReadingAreaComponent implements OnInit {
            }
         });
         //Compare the non silence phones
-        nonSilencePhones.forEach((phoneme,index) => {
+        nonSilencePhones.forEach((phoneme) => {
             this.words.forEach(word => {
-                word.comparePhones(phoneme,index);
+                word.comparePhones(phoneme);
                 word.completeWord();
             })
-        })
-
+        });
+        this.checkUserStatus();
     }
 
     /**
@@ -212,6 +204,20 @@ export class ReadingAreaComponent implements OnInit {
 
         });
         this.readingService.updateScore(score);
+    }
+
+    /**
+     * Check to see if User would like re-try if incorrect, move on if correct
+     */
+    checkUserStatus(){
+        let nextParagraph = true;
+        this.words.forEach(word => {
+            if(word.getColor() == 'red'){
+                nextParagraph = false;
+            }
+        });
+        // if(nextParagraph)
+            this.readingService.updateLastReadParagraph();
     }
 
 }

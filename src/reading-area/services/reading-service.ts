@@ -70,7 +70,6 @@ export class ReadingService {
             onResult: function(result) {
                 console.log('result', result);
                 if(result.length > 1){
-                    self.updateRecording(false);
                     self.updateKaldiResult(new KaldiResult(result[0].transcript,result[0]['phone-alignment'],result[0].likelihood,result[0]['word-alignment']));
                 }
             },
@@ -128,6 +127,15 @@ export class ReadingService {
             .toPromise()
             .then(response => response.json().data as onScreenSentence)
             .catch(ReadingService.handleError);
+    }
+
+    /**
+     * Update the last readParagraph
+     */
+
+    updateLastReadParagraph(): void {
+        console.log('updating');
+        this.getIndex(LAST_READ_PARAGRAPH_ID).transaction(lastReadParagphId => lastReadParagphId + 1);
     }
 
     /**

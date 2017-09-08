@@ -47,7 +47,11 @@ export class WordVM implements IWord {
         }
     }
 
-    comparePhones(phoneme:PhonemeVM, index:number){
+    getColor(): string {
+        return this.color;
+    }
+
+    comparePhones(phoneme:PhonemeVM){
         this.phonemes.forEach(vmPhoneme => {
             if(vmPhoneme.phone == phoneme.phone) {
                 vmPhoneme.confidence = phoneme.confidence;
