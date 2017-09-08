@@ -187,21 +187,23 @@ export class ReadingAreaComponent implements OnInit {
      * update the confidence scores
      * @param {Phoneme[]} phonemes
      */
-    updateConfidenceScore(phonemes: Phoneme[]){
+    updateConfidenceScore(){
 
         //#TODO: Iterate through the words array and assign the confidence scores received in order to update screen
         let score = new Score();
 
-        phonemes.forEach(phoneme => {
-            let confidence = phoneme.getConfidence();
-            let label = phoneme;
+        this.words.forEach(word => {
+            word.phonemes.forEach(phoneme => {
+                let confidence = phoneme.getConfidence();
+                let label = phoneme;
 
-            if(confidence < 0.7){
-                score.updateScore(0,1);
-            } else {
-                score.updateScore(1,0);
-            }
+                if(confidence < 0.7){
+                    score.updateScore(0,1);
+                } else {
+                    score.updateScore(1,0);
+                }
 
+            });
         });
         this.readingService.updateScore(score);
     }
@@ -216,8 +218,17 @@ export class ReadingAreaComponent implements OnInit {
                 nextParagraph = false;
             }
         });
-        if(nextParagraph)
+        if(nextParagraph){
             this.readingService.updateLastReadParagraph();
+            this.updateConfidenceScore();
+        } else {
+            this.tryAgain();
+        }
+
+    }
+
+    tryAgain(){
+        //#TODO: Render popup to try again
     }
 
 }

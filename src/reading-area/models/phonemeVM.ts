@@ -15,5 +15,9 @@ export  class  PhonemeVM {
         this.confidence = confidence;
     }
 
+    getConfidence(){
+        return this.confidence;
+    }
+
 
 }
