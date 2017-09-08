@@ -216,7 +216,7 @@ export class ReadingAreaComponent implements OnInit {
                 nextParagraph = false;
             }
         });
-        // if(nextParagraph)
+        if(nextParagraph)
             this.readingService.updateLastReadParagraph();
     }
 

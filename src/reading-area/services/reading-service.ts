@@ -52,6 +52,9 @@ export class ReadingService {
     private resultsPath = `/results/${this.auth.id}`;
     private weakWordsPath = `/weakwords/${this.auth.id}`;
 
+    //#TODO:Temporary
+    private lastReadParagraph:number;
+
 
 
 
@@ -123,6 +126,8 @@ export class ReadingService {
      */
 
     getLastReadParagraph(lastReadParagraphId:number): Promise<onScreenSentence> {
+        //#TODO: Temporary
+        this.lastReadParagraph = lastReadParagraphId;
         return this.http.get(this.sentencesUrl + '/' + lastReadParagraphId)
             .toPromise()
             .then(response => response.json().data as onScreenSentence)
@@ -135,7 +140,11 @@ export class ReadingService {
 
     updateLastReadParagraph(): void {
         console.log('updating');
-        this.getIndex(LAST_READ_PARAGRAPH_ID).transaction(lastReadParagphId => lastReadParagphId + 1);
+        //#TODO: When upgrading to angularFire2 v4 this will be far less cumbersome,
+        // but that upgrade has too many breaking changes at the moment
+        this.getIndex(LAST_READ_PARAGRAPH_ID).set(this.lastReadParagraph + 1);
+
+
     }
 
     /**
@@ -147,11 +156,11 @@ export class ReadingService {
         this.getIndex(LAST_READ_PARAGRAPH_ID)
             .subscribe(
                 lastParagraphId => {
-                    this.results$ = this.db.object(this.resultsPath + `/${this.auth.id}/${lastParagraphId}`);
+                    this.results$ = this.db.object(this.resultsPath + `/${this.auth.id}/${lastParagraphId.$value}`);
                     this.results$.set({score: newScore});
                     this.score$ = this.getIndex(SCORE);
                     this.score$.set({score:Score});
-                    this.setHighestScore(newScore,lastParagraphId)
+                    this.setHighestScore(newScore,lastParagraphId.$value)
                 });
 
     }
