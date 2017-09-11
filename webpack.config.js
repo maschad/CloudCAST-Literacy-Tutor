@@ -125,7 +125,9 @@ if (ENV_DEVELOPMENT || ENV_PRODUCTION) {
       minChunks: Infinity
     }),
     new CopyWebpackPlugin([
-        {from: './assets/favicons', to: '.'}
+        {from: './assets/favicons', to: '/tutor'},
+        {from: './src/shared/cloudcast.js', to: '/tutor'},
+        {from: './src/shared/recorder.js', to: '/tutor'}
     ]),
     new HtmlWebpackPlugin({
       chunkSortMode: 'dependency',
