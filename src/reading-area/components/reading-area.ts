@@ -218,9 +218,9 @@ export class ReadingAreaComponent implements OnInit {
                 nextParagraph = false;
             }
         });
+        this.updateConfidenceScore();
         if(nextParagraph){
             this.readingService.updateLastReadParagraph();
-            this.updateConfidenceScore();
         } else {
             this.tryAgain();
         }

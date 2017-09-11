@@ -13,6 +13,7 @@ import { ReadingModule } from "../reading-area";
 import {ResultsModule} from "../results-area/index";
 import {SidebarModule} from "ng-sidebar";
 import {PracticeModule} from "../practice-area/index";
+import {APP_BASE_HREF} from "@angular/common";
 
 
 @NgModule({
@@ -33,7 +34,9 @@ import {PracticeModule} from "../practice-area/index";
     ReadingModule,
     ResultsModule,
     PracticeModule
-  ]
+  ],
+    providers: [{provide: APP_BASE_HREF, useValue: '/tutor'}]
+
 })
 
 export class AppModule {}
