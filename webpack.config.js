@@ -116,7 +116,7 @@ if (ENV_DEVELOPMENT || ENV_PRODUCTION) {
   config.output = {
     filename: '[name].js',
     path: path.resolve('./target'),
-    publicPath: '/'
+    publicPath: '/tutor'
   };
 
   config.plugins.push(
