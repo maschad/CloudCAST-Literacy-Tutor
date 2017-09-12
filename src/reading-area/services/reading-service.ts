@@ -64,7 +64,7 @@ export class ReadingService {
         let self = this;
         //Initialize Cloud cast Object
         this.cloudcast = new CloudCAST({
-            recorderWorkerPath: '../../shared/recorderWorker.js',
+            recorderWorkerPath: '../../tutor/recorderWorker.js',
             username: 'foo',
             application: 'bar',
             onReady: function() {
