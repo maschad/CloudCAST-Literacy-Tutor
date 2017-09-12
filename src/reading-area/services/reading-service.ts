@@ -78,6 +78,7 @@ export class ReadingService {
                     console.log('good');
                     self.updateKaldiResult(new KaldiResult(result[0].transcript,result[0]['phone-alignment'],result[0].likelihood,result[0]['word-alignment']));
                 }else {
+                    cloudcast.stopListening();
                     console.log('woops');
                     self.renderModal('It seems as if streaming stopped before a result was sent');
                 }

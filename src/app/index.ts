@@ -15,14 +15,7 @@ import {SidebarModule} from "ng-sidebar";
 import {PracticeModule} from "../practice-area/index";
 import {APP_BASE_HREF} from "@angular/common";
 
-//Temporary to re-direct after signout
-const routes = [
-    {
-        path: '',
-        redirectTo: '/tutor',
-        pathMatch: 'full'
-    }
-];
+
 
 @NgModule({
   bootstrap: [
@@ -35,7 +28,7 @@ const routes = [
   imports: [
     BrowserModule,
     ElasticModule,
-    RouterModule.forRoot(routes, {useHash: false}),
+    RouterModule.forRoot([], {useHash: false}),
     SidebarModule.forRoot(),
     AuthModule,
     FirebaseModule,

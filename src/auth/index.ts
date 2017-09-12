@@ -9,7 +9,11 @@ import { AuthService } from './services/auth-service';
 
 
 const routes: Routes = [
-  {path: '', component: SignInComponent, canActivate: [UnauthGuard]}
+  {
+      path: '',
+      component: SignInComponent,
+      canActivate: [UnauthGuard]
+  }
 ];
 
 
