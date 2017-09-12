@@ -25,7 +25,11 @@ export class ResultService {
         let scores = [];
         this.db.object(this.authPath , { preserveSnapshot: true }).subscribe(snapshot => {
             snapshot.forEach(function (score) {
-                scores.push(score.val().score.totalCorrect);
+                if(score.val()){
+                    scores.push(score.val().score.totalCorrect);
+                } else {
+                    console.log('invalid path');
+                }
             });
             success(scores);
         });

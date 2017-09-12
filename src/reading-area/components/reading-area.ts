@@ -198,7 +198,7 @@ export class ReadingAreaComponent implements OnInit {
                 let confidence = phoneme.getConfidence();
                 let label = phoneme;
 
-                if(confidence < 0.7){
+                if(confidence < 0.5){
                     score.updateScore(0,1);
                 } else {
                     score.updateScore(1,0);

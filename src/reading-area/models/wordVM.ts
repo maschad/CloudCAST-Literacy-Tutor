@@ -37,15 +37,16 @@ export class WordVM implements IWord {
     setColor(): void {
         let count = 0;
         this.phonemes.forEach(phoneme => {
-            if(phoneme.confidence > 0.4){
-                count++
-            }
+           if(phoneme.confidence > 0.5){
+               count++
+           }
         });
-        if(count > this.phonemes.length){
+        if(count > (this.phonemes.length/2)){
             this.color = 'green';
-        }else {
+        }else{
             this.color = 'red';
         }
+
     }
 
     getColor(): string {
@@ -59,8 +60,8 @@ export class WordVM implements IWord {
             } else {
                 vmPhoneme.confidence = 0;
             }
-            this.setColor();
         });
+        this.setColor();
 
     }
 }

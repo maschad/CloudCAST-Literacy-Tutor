@@ -162,7 +162,7 @@ export class ReadingService {
         this.getIndex(LAST_READ_PARAGRAPH_ID)
             .subscribe(
                 lastParagraphId => {
-                    this.results$ = this.db.object(this.resultsPath + `/${this.auth.id}/${lastParagraphId.$value}`);
+                    this.results$ = this.db.object(this.resultsPath + `/${lastParagraphId.$value}`);
                     this.results$.set({score: newScore});
                     this.score$ = this.getIndex(SCORE);
                     this.score$.set({score:Score});
