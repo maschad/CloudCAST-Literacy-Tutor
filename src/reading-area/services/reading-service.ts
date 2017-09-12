@@ -163,9 +163,9 @@ export class ReadingService {
             .subscribe(
                 lastParagraphId => {
                     this.results$ = this.db.object(this.resultsPath + `/${lastParagraphId.$value}`);
-                    this.results$.set({score: newScore});
+                    this.results$.update({score:newScore});
                     this.score$ = this.getIndex(SCORE);
-                    this.score$.set({score:Score});
+                    this.score$.set(newScore);
                     this.setHighestScore(newScore,lastParagraphId.$value)
                 });
 
