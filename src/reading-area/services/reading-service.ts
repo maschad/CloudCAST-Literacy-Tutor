@@ -93,7 +93,7 @@ export class ReadingService {
             }
         });
         //#TODO: Change decoder?
-        this.cloudcast.decoder('voxforge');
+        this.cloudcast.decoder('tedlium');
         this.cloudcast.init();
         let cloudcast = this.cloudcast;
         this.isRecording$ = this.isRecording.asObservable();
