@@ -18,6 +18,7 @@ import {Observable} from "rxjs/Observable";
 import {KaldiResult} from "../../shared/kaldiResult";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Subject} from "rxjs/Subject";
+import {Modal} from "ngx-modialog/plugins/bootstrap";
 
 declare const CloudCAST:any;
 declare const pleaseWait:any;
@@ -58,7 +59,7 @@ export class ReadingService {
 
 
 
-    constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http){
+    constructor(private db: AngularFireDatabase, private auth: AuthService, private http: Http, public modal: Modal){
         //#TODO: Handle this better , assigning the self to make it accessible in the cloudcast scope
         let self = this;
         //Initialize Cloud cast Object
@@ -73,7 +74,11 @@ export class ReadingService {
             onResult: function(result) {
                 console.log('result', result);
                 if(result.length > 1){
+                    console.log('good');
                     self.updateKaldiResult(new KaldiResult(result[0].transcript,result[0]['phone-alignment'],result[0].likelihood,result[0]['word-alignment']));
+                }else {
+                    console.log('woops');
+                    self.renderModal('It seems as if streaming stopped before a result was sent');
                 }
             },
             onError: function(code, data) {
@@ -213,8 +218,7 @@ export class ReadingService {
      */
     stopListening() {
        this.cloudcast.stopListening();
-        this.updateRecording(false);
-        this.stopLoading();
+       this.updateRecording(false);
     }
 
 
@@ -314,5 +318,15 @@ export class ReadingService {
     stopLoading(){
         this.loadingScreen.finish();
     }
+
+    renderModal(message:string): void {
+        console.log('calling method');
+        this.modal.alert()
+            .title('Woops')
+            .body(message)
+            .open();
+    }
+
+
 
 }

@@ -52,6 +52,7 @@ export class ReadingAreaComponent implements OnInit {
         //Subscribe to the result
         this.readingService.kaldiResult$.subscribe(
             kaldiResult => {
+                console.log('this kaldi result before subscribe,', kaldiResult);
                 this.kaldiResult$ = kaldiResult;
                 console.log('this kaldi result', this.kaldiResult$);
                 this.parsePhonemes();

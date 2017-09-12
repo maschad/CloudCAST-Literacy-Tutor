@@ -14,6 +14,10 @@ import { AuthGuard } from '../auth';
 import { ReadingService } from './services/reading-service'
 import {ReadingAreaComponent} from "./components/reading-area";
 import { HttpModule, JsonpModule} from "@angular/http";
+import {ModalModule} from "ngx-modialog";
+import {BootstrapModalModule, Modal, bootstrap4Mode} from "ngx-modialog/plugins/bootstrap";
+
+bootstrap4Mode();
 
 
 const routes: Routes = [
@@ -25,12 +29,14 @@ const routes: Routes = [
         ReadingAreaComponent
     ],
     imports: [
+        BootstrapModalModule,
         CommonModule,
         FormsModule,
         HttpModule,
-        JsonpModule,
         InMemoryWebApiModule.forRoot(InMemoryDataService),
-        RouterModule.forChild(routes)
+        JsonpModule,
+        ModalModule.forRoot(),
+        RouterModule.forChild(routes),
     ],
     providers: [
         ReadingService
