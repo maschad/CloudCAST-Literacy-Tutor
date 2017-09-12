@@ -164,7 +164,7 @@ export class ReadingAreaComponent implements OnInit {
      * To parse the kaldi Result
      */
     parsePhonemes(){
-        let nonSilencePhones = [];
+        let nonSilencePhones:Phoneme[] = [];
         //#TODO: Test this, then update color
 
         //Clean up phones to exclude silence phones

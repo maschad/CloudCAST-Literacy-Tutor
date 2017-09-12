@@ -74,6 +74,7 @@ export class ReadingService {
             onResult: function(result) {
                 console.log('result', result);
                 if(result.length > 1){
+                    cloudcast.stopListening();
                     console.log('good');
                     self.updateKaldiResult(new KaldiResult(result[0].transcript,result[0]['phone-alignment'],result[0].likelihood,result[0]['word-alignment']));
                 }else {

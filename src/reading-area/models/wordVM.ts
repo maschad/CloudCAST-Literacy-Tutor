@@ -1,6 +1,7 @@
 
 
 import {PhonemeVM} from "./phonemeVM";
+import {Phoneme} from "../../shared/Phoneme";
 
 export interface IWord {
     title: string
@@ -36,7 +37,7 @@ export class WordVM implements IWord {
     setColor(): void {
         let count = 0;
         this.phonemes.forEach(phoneme => {
-            if(phoneme.confidence > 0.7){
+            if(phoneme.confidence > 0.4){
                 count++
             }
         });
@@ -51,7 +52,7 @@ export class WordVM implements IWord {
         return this.color;
     }
 
-    comparePhones(phoneme:PhonemeVM){
+    comparePhones(phoneme:Phoneme){
         this.phonemes.forEach(vmPhoneme => {
             if(vmPhoneme.phone == phoneme.phone) {
                 vmPhoneme.confidence = phoneme.confidence;
