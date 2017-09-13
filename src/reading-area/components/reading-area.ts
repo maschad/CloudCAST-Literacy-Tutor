@@ -52,9 +52,7 @@ export class ReadingAreaComponent implements OnInit {
         //Subscribe to the result
         this.readingService.kaldiResult$.subscribe(
             kaldiResult => {
-                console.log('this kaldi result before subscribe,', kaldiResult);
                 this.kaldiResult$ = kaldiResult;
-                console.log('this kaldi result', this.kaldiResult$);
                 this.parsePhonemes();
             }
         );
@@ -174,12 +172,16 @@ export class ReadingAreaComponent implements OnInit {
            }
         });
         //Compare the non silence phones
-        nonSilencePhones.forEach((phoneme) => {
-            this.words.forEach(word => {
-                word.comparePhones(phoneme);
-                word.completeWord();
-            })
+        this.words.forEach((word) => {
+            if(word.phonemes.length < nonSilencePhones.length)
+                word.comparePhones(nonSilencePhones.slice(0,word.phonemes.length));
         });
+        // this.words.forEach(word => {
+        //     nonSilencePhones.forEach((phoneme) => {
+        //         word.comparePhones(phoneme);
+        //         word.completeWord();
+        //     })
+        // });
         this.checkUserStatus();
     }
 

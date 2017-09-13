@@ -55,15 +55,11 @@ export class WordVM implements IWord {
         return this.color;
     }
 
-    comparePhones(phoneme:Phoneme){
-        this.phonemes.forEach(vmPhoneme => {
-            if(vmPhoneme.phone == phoneme.phone) {
-                console.log('phone ', vmPhoneme.phone, 'is equal to' , phoneme.phone);
-                console.log('the confidence for this phone is ', phoneme.confidence);
-                vmPhoneme.confidence = phoneme.confidence;
-            } else {
-                vmPhoneme.confidence = 0;
-            }
+    comparePhones(kaldiResultPhonemes:Phoneme[]){
+        this.phonemes.forEach((phoneme, index) => {
+           if(phoneme.phone == kaldiResultPhonemes[index].phone){
+               phoneme.confidence = kaldiResultPhonemes[index].confidence;
+           }
         });
         this.setColor();
     }
