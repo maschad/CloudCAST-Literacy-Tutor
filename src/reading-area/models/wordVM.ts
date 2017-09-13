@@ -37,11 +37,13 @@ export class WordVM implements IWord {
     setColor(): void {
         let count = 0;
         this.phonemes.forEach(phoneme => {
-           if(phoneme.confidence > 0.5){
-               count++
+           if(phoneme.confidence > 0.3){
+               count++;
+               console.log('incrementing count');
            }
         });
-        if(count > (this.phonemes.length/2)){
+        console.log('count is equal to', count);
+        if(count > (this.phonemes.length)/2){
             this.color = 'green';
         }else{
             this.color = 'red';
@@ -56,12 +58,13 @@ export class WordVM implements IWord {
     comparePhones(phoneme:Phoneme){
         this.phonemes.forEach(vmPhoneme => {
             if(vmPhoneme.phone == phoneme.phone) {
+                console.log('phone ', vmPhoneme.phone, 'is equal to' , phoneme.phone);
+                console.log('the confidence for this phone is ', phoneme.confidence);
                 vmPhoneme.confidence = phoneme.confidence;
             } else {
                 vmPhoneme.confidence = 0;
             }
         });
         this.setColor();
-
     }
 }

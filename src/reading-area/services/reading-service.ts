@@ -43,6 +43,8 @@ export class ReadingService {
     private cloudcast: any;
     //Loading screen
     private loadingScreen:any;
+    //Still processing variable
+    private stillProcessing:boolean;
 
 
     //Firebase Variables
@@ -69,18 +71,17 @@ export class ReadingService {
             application: 'bar',
             onReady: function() {
                 cloudcast.startListening();
+                self.stillProcessing = true;
                 self.updateRecording(true);
+
             },
             onResult: function(result) {
                 console.log('result', result);
                 if(result.length > 1){
+                    self.stillProcessing = false;
                     cloudcast.stopListening();
                     console.log('good');
                     self.updateKaldiResult(new KaldiResult(result[0].transcript,result[0]['phone-alignment'],result[0].likelihood,result[0]['word-alignment']));
-                }else {
-                    cloudcast.stopListening();
-                    console.log('woops');
-                    self.renderModal('It seems as if streaming stopped before a result was sent');
                 }
             },
             onError: function(code, data) {
@@ -288,6 +289,14 @@ export class ReadingService {
         switch (code) {
             case 11:
                 this.updateRecording(false);
+                break;
+
+            case 10:
+                if(this.stillProcessing){
+                    console.log('woops');
+                    this.renderModal('It seems as if streaming stopped before a result was sent');
+                }
+                this.cloudcast.stopListening();
                 break;
 
             case 9:

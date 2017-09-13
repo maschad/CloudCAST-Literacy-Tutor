@@ -126,7 +126,6 @@ export class ReadingAreaComponent implements OnInit {
                 }
             );
         }
-        console.log('words', this.words);
     }
 
 
