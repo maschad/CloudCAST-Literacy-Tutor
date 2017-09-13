@@ -173,8 +173,10 @@ export class ReadingAreaComponent implements OnInit {
         });
         //Compare the non silence phones
         this.words.forEach((word) => {
-            if(word.phonemes.length < nonSilencePhones.length)
+            if(word.phonemes.length < nonSilencePhones.length){
                 word.comparePhones(nonSilencePhones.slice(0,word.phonemes.length));
+                word.completeWord();
+            }
         });
         // this.words.forEach(word => {
         //     nonSilencePhones.forEach((phoneme) => {
